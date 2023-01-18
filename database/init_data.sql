@@ -17,3 +17,8 @@ INSERT INTO order_details (order_id,product_id,amount,price_per_item,discount_am
 	 (1,10,6,69.0,0.0,414.0,'2023-01-02 00:00:00+08','2023-01-02 00:00:00+08'),
 	 (2,3,7,68.0,0.0,476.0,'2023-01-02 00:00:00+08','2023-01-02 00:00:00+08'),
 	 (3,9,6,60.0,0.0,540.0,'2023-01-02 00:00:00+08','2023-01-02 00:00:00+08');
+
+-- KAY
+insert into chats (id, sender, receiver, content, content_type, created_at, updated_at) VALUES (1,1,2,'Why my product did not delivery on time?','text','2023-01-24','2023-01-31');
+insert into chats (id, sender, receiver, content, content_type, created_at, updated_at) VALUES (2,2,3,'How many stock of bell_bone do you have? ','text','2023-01-12','2023-01-19');
+insert into chats (id, sender, receiver, content, content_type, created_at, updated_at) VALUES (3,3,1,'Can you deliver the order by today?','text','2023-01-01','2023-01-08');
