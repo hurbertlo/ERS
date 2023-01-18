@@ -1,5 +1,11 @@
 import express from 'express'
 let app  = express()
-app.listen(8080,()=>{
-    console.log('up')
-})
+
+
+
+
+app.use(express.static("public"));
+
+app.listen(1212,()=>{
+    console.log(`server listening on http://localhost:1212`);})
+

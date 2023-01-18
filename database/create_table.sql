@@ -13,10 +13,13 @@ CREATE TABLE user_types (
     updated_at TIMESTAMP with time zone
 );
 
+
+
+
 CREATE TABLE users (
     id SERIAL primary key,
     user_type_id INTEGER not null,
-         foreign key (user_type_id) references user_types(id),
+    foreign key (user_type_id) references user_types(id),
     name TEXT not null,
     address TEXT not null,
     mobile TEXT not null,
@@ -25,6 +28,9 @@ CREATE TABLE users (
     created_at TIMESTAMP with time zone,
     updated_at TIMESTAMP with time zone
 );
+
+
+
 CREATE TABLE orders (
     id SERIAL primary key,
     ordered_by INTEGER not null,
@@ -39,7 +45,7 @@ CREATE TABLE orders (
 CREATE TABLE order_details (
     id serial primary key,
     order_id INTEGER not null,
-        foreign key (ordered_id) references orders(id),
+        foreign key (order_id) references orders(id),
     product_id INT not null,
         foreign key (product_id) references products(id),
     amount INTEGER not null,
@@ -60,7 +66,6 @@ CREATE TABLE products (
     created_at TIMESTAMP with time zone,
     updated_at TIMESTAMP with time zone
 );
-
 
 
 CREATE TABLE chats (
