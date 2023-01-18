@@ -1,6 +1,17 @@
+CREATE TABLE users (
+    id SERIAL primary key,
+    name TEXT not null,
+    address TEXT not null,
+    mobile TEXT not null,
+    email TEXT not null,
+    password TEXT not null,
+    created_at TIMESTAMP with time zone,
+    updated_at TIMESTAMP with time zone
+);
 CREATE TABLE orders (
     id SERIAL primary key,
     ordered_by INTEGER not null,
+    foreign key ordered_by references uers(id),
     address TEXT not null,
     total_price FLOAT not null,
     status TEXT not null,
@@ -30,16 +41,7 @@ CREATE TABLE products (
     updated_at TIMESTAMP with time zone
 );
 
-CREATE TABLE users (
-    id SERIAL primary key,
-    name TEXT not null,
-    address TEXT not null,
-    mobile TEXT not null,
-    email TEXT not null,
-    password TEXT not null,
-    created_at TIMESTAMP with time zone,
-    updated_at TIMESTAMP with time zone
-);
+
 
 CREATE TABLE chats (
     id SERIAL primary key,
