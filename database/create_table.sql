@@ -36,19 +36,7 @@ CREATE TABLE orders (
     updated_at TIMESTAMP with time zone
 );
 
-CREATE TABLE order_details (
-    id serial primary key,
-    order_id INTEGER not null,
-        foreign key (ordered_id) references orders(id),
-    product_id INT not null,
-        foreign key (product_id) references products(id),
-    amount INTEGER not null,
-    price_per_item FLOAT not null,
-    discount_amount FLOAT not null,
-    price FLOAT not null,
-    created_at TIMESTAMP with time zone,
-    updated_at TIMESTAMP with time zone
-);
+
 
 CREATE TABLE products (
     id SERIAL primary key,
@@ -61,7 +49,19 @@ CREATE TABLE products (
     updated_at TIMESTAMP with time zone
 );
 
-
+CREATE TABLE order_details (
+    id serial primary key,
+    order_id INTEGER not null,
+        foreign key (order_id) references orders(id),
+    product_id INT not null,
+        foreign key (product_id) references products(id),
+    amount INTEGER not null,
+    price_per_item FLOAT not null,
+    discount_amount FLOAT not null,
+    price FLOAT not null,
+    created_at TIMESTAMP with time zone,
+    updated_at TIMESTAMP with time zone
+);
 
 CREATE TABLE chats (
     id SERIAL primary key,
