@@ -50,3 +50,5 @@ INSERT	INTO order_details (order_id,product_id,amount,price_per_item,discount_am
 	(2,3,7,68.0,0.0,476.0,'2023-01-02 00:00:00+08','2023-01-02 00:00:00+08'),
 	(3,9,6,60.0,0.0,540.0,'2023-01-02 00:00:00+08','2023-01-02 00:00:00+08');
 
+INSERT INTO product_images (name, product_id, created_at, updated_at) VALUES ('abc', 1,'2023-01-16', '2023-01-18');
+INSERT INTO product_images (name, product_id, created_at, updated_at) VALUES ('xyz', 2,'2023-01-16', '2023-01-18');
