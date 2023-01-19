@@ -4,11 +4,14 @@ import formidable from "formidable";
 import fs from 'fs';
 import { form, formParsePromise, uploadDir } from './util/formidable';
 import path from "path";
-import jsonfile from "jsonfile";
 import { client } from './util/db';
 import { defaultMaxListeners } from 'events';
-
-let app = express();
+import http from "http";
+import { Server as SocketIO } from "socket.io";
+import expressSession from 'express-session'
+const app = express();
+const server = new http.Server(app);
+const io = new SocketIO(server);
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -17,6 +20,21 @@ fs.mkdirSync(uploadDir, { recursive: true });
 
 
 app.use(express.json());
+
+const sessionMiddleware = expressSession({
+    secret: "Tecky Academy teaches typescript",
+    resave: true,
+    saveUninitialized: true,
+    cookie: { secure: false },
+});
+
+app.use(sessionMiddleware);
+
+io.use((socket, next) => {
+    let req = socket.request as express.Request;
+    let res = req.res as express.Response;
+    sessionMiddleware(req, res, next as express.NextFunction);
+});
 // sign up
 app.post("/user/signup", async (req, res, next) => {
     try {
@@ -31,7 +49,7 @@ app.post("/user/signup", async (req, res, next) => {
         }
         let fileName = files.image["newFilename"];
         console.log(fileName);
-        
+
         await client.query(`
        
        INSERT INTO users
@@ -51,23 +69,23 @@ app.post("/user/signup", async (req, res, next) => {
 app.post("/products/categoty/launch", async (req, res, next) => {
     try {
         let { fields, files } = await formParsePromise(req);
-        let {category_id, name, price, unit_size} = fields
+        let { category_id, name, price, unit_size } = fields
         console.log('fields = ', fields)
 
-        if (!category_id || !name|| !price || !unit_size) {
+        if (!category_id || !name || !price || !unit_size) {
             res.status(400).json({
                 message: "Invalid input"
             })
         }
         let fileName = files.image["newFilename"];
         console.log(fileName);
-        
+
         await client.query(`
        
        INSERT INTO products
             ("catagory_id","name", "price", "unit_size", created_at, updated_at)
             VALUES($1, $2, $3, $4, now(), now());
-       `, [category_id,name,price ,unit_size])
+       `, [category_id, name, price, unit_size])
 
         res.end("Product launching sucess");
     } catch (error: any) {
@@ -112,13 +130,36 @@ app.post("order/:o_id/order_details/p_id/a")
 // indivual chat boxs (async)
 
 
+io.on("connection", function (socket) {
+    // You can set any values you want to session here.
+    console.log('socket connected:', socket.id);
+    const req = socket.request as express.Request;
+    // req.session["key"] = "sam";
+    socket.join('room1')
+    // There is no auto save for session.
+    // socket.request.session.save();
+
+    // You can also send data using socket.emit() although it is not very useful
+    // socket.emit("any-key", "values");
+    // socket.on("disconnect", () => {
+    //... rest of the code
+});
+
+app.get('/everyone', (req, res) => {
+    console.log('io everyone triggered');
+    io.emit('everyone', '原來係你');
+    res.end('io everyone triggered');
+})
+
+app.get('/chat-with-admin/:roomName', (req, res) => {
+    let roomName = req.params.roomName;
+    io.to(roomName).emit(`in-room`, `${roomName} hello im ben`);
+    res.end("ok")
+})
 
 
-
-
-
-app.use(express.static("public2"));
-app.listen(8080, () => {
+app.use(express.static("public"));
+server.listen(8080, () => {
     console.log('up')
 })
 
