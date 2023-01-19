@@ -10,6 +10,7 @@ import http from "http";
 import { Server as SocketIO } from "socket.io";
 import expressSession from 'express-session'
 
+
 const app = express();
 const server = new http.Server(app);
 const io = new SocketIO(server);
@@ -36,68 +37,65 @@ io.use((socket, next) => {
     let res = req.res as express.Response;
     sessionMiddleware(req, res, next as express.NextFunction);
 });
+
 // sign up
-app.post("/user/signup", async (req, res, next) => {
-    try {
-        let { fields, files } = await formParsePromise(req);
-        let { name, mobile, email, address, password } = fields
-        console.log('fields = ', fields)
+// app.post("/user/signup", async (req, res, next) => {
+//     try {
+//         let { fields, files } = await formParsePromise(req);
+//         let { name, mobile, email, address, password } = fields
+//         console.log('fields = ', fields)
 
-        if (!name || !mobile || !email || !address) {
-            res.status(400).json({
-                message: "Invalid input"
-            })
-        }
-        let fileName = files.image["newFilename"];
-        console.log(fileName);
+//         if (!name || !mobile || !email || !address) {
+//             res.status(400).json({
+//                 message: "Invalid input"
+//             })
+//         }
+//         let fileName = files.image["newFilename"];
+//         console.log(fileName);
 
-        await client.query(`
-       
-       INSERT INTO users
-            ("name", address, mobile, email, "password", created_at, updated_at, user_type_id)
-            VALUES($1, $2, $3, $4, $5, now(), now(),2);
-       `, [name, address, mobile, email, password])
+//         await client.query(`
 
-        res.end("create user sucess");
-    } catch (error: any) {
-        res.status(500).end(error.message)
-    }
+//        INSERT INTO users
+//             ("name", address, mobile, email, "password", created_at, updated_at, user_type_id)
+//             VALUES($1, $2, $3, $4, $5, now(), now(),2);
+//        `, [name, address, mobile, email, password])
 
-})
-// login
-//            --- admin ---
-// launch a product
-app.post("/products/categoty/launch", async (req, res, next) => {
-    try {
-        let { fields, files } = await formParsePromise(req);
-        let { category_id, name, price, unit_size } = fields
-        console.log('fields = ', fields)
+//         res.end("create user sucess");
+//     } catch (error: any) {
+//         res.status(500).end(error.message)
+//     }
 
-        if (!category_id || !name || !price || !unit_size) {
-            res.status(400).json({
-                message: "Invalid input"
-            })
-        }
-        let fileName = files.image["newFilename"];
-        console.log(fileName);
+// })
+// // login
+// //            --- admin ---
+// // launch a product
+// app.post("/products/categoty/launch", async (req, res, next) => {
+//     try {
+//         let { fields, files } = await formParsePromise(req);
+//         let { category_id, name, price, unit_size } = fields
+//         console.log('fields = ', fields)
 
-        await client.query(`
-       
-       INSERT INTO products
-            ("catagory_id","name", "price", "unit_size", created_at, updated_at)
-            VALUES($1, $2, $3, $4, now(), now());
-       `, [category_id, name, price, unit_size])
+//         if (!category_id || !name || !price || !unit_size) {
+//             res.status(400).json({
+//                 message: "Invalid input"
+//             })
+//         }
+//         let fileName = files.image["newFilename"];
+//         console.log(fileName);
 
-        res.end("Product launching sucess");
-    } catch (error: any) {
-        res.status(500).end(error.message)
-    }
+//         await client.query(`
 
-})
+//        INSERT INTO products
+//             ("catagory_id","name", "price", "unit_size", created_at, updated_at)
+//             VALUES($1, $2, $3, $4, now(), now());
+//        `, [category_id, name, price, unit_size])
 
+//         res.end("Product launching sucess");
+//     } catch (error: any) {
+//         res.status(500).end(error.message)
+//     }
 
-
-
+// })
 
 
 // // terminate a product form client
@@ -130,20 +128,15 @@ app.post("/products/categoty/launch", async (req, res, next) => {
 // customers overview and chats status
 // indivual chat boxs (async)
 
+io.on('connection', (socket) => {
+    console.log('new connection');
+    socket.on('message', (msg) => {
+        console.log('Got message from client: ' + msg);
+    });
+});
 
-io.on("connection", function (socket) {
-    // You can set any values you want to session here.
-    console.log('socket connected:', socket.id);
-    const req = socket.request as express.Request;
-    // req.session["key"] = "sam";
-    socket.join('room1')
-    // There is no auto save for session.
-    // socket.request.session.save();
-
-    // You can also send data using socket.emit() although it is not very useful
-    // socket.emit("any-key", "values");
-    // socket.on("disconnect", () => {
-    //... rest of the code
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/chat.html');
 });
 
 app.get('/everyone', (req, res) => {
