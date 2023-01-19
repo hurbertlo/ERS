@@ -9,6 +9,7 @@ import { defaultMaxListeners } from 'events';
 import http from "http";
 import { Server as SocketIO } from "socket.io";
 import expressSession from 'express-session'
+
 const app = express();
 const server = new http.Server(app);
 const io = new SocketIO(server);
@@ -99,25 +100,25 @@ app.post("/products/categoty/launch", async (req, res, next) => {
 
 
 
-// terminate a product form client
-app.delete("product/category/")
-// record terminated product
-app.post("product/category/archieve")
+// // terminate a product form client
+// app.delete("product/category/")
+// // record terminated product
+// app.post("product/category/archieve")
 
-//             --- TPS---
-// browse & sort all products
-app.get("product")
-app.get("product/category_id/:c_id")
-// check product details
-app.get("product/category:c_id/product_id/:p_id")
-// order different products
-app.post("order/:o_id/order_details/p_id/a")
-// confirmation and check out
-// generate a receipt
-// generate internal sales order
-// delivery
-// check order status
-// close an order
+// //             --- TPS---
+// // browse & sort all products
+// app.get("product")
+// app.get("product/category_id/:c_id")
+// // check product details
+// app.get("product/category:c_id/product_id/:p_id")
+// // order different products
+// app.post("order/:o_id/order_details/p_id/a")
+// // confirmation and check out
+// // generate a receipt
+// // generate internal sales order
+// // delivery
+// // check order status
+// // close an order
 
 //             ---CRS---common
 // browse history
@@ -160,6 +161,6 @@ app.get('/chat-with-admin/:roomName', (req, res) => {
 
 app.use(express.static("public"));
 server.listen(8080, () => {
-    console.log('up')
+    console.log(`server listening on http://localhost:8080`);
 })
 
