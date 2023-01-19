@@ -1,16 +1,16 @@
 
-CREATE TABLE catagories (
+CREATE TABLE categories (
     id SERIAL primary key,
     name TEXT not null,
-    created_at TIMESTAMP with time zone,
-    updated_at TIMESTAMP with time zone
+    created_at TIMESTAMP with time zone default now(),
+    updated_at TIMESTAMP with time zone default now()
 );
 
 CREATE TABLE user_types (
     id SERIAL primary key,
     name TEXT not null,
-    created_at TIMESTAMP with time zone,
-    updated_at TIMESTAMP with time zone
+    created_at TIMESTAMP with time zone default now(),
+    updated_at TIMESTAMP with time zone default now()
 );
 
 
@@ -23,10 +23,11 @@ CREATE TABLE users (
     name TEXT not null,
     address TEXT not null,
     mobile TEXT not null,
-    email TEXT not null,
+    email TEXT not null unique,
     password TEXT not null,
-    created_at TIMESTAMP with time zone,
-    updated_at TIMESTAMP with time zone
+    profile_picture TEXT,
+    created_at TIMESTAMP with time zone default now(),
+    updated_at TIMESTAMP with time zone default now()
 );
 
 
@@ -37,9 +38,23 @@ CREATE TABLE orders (
         foreign key (ordered_by) references users(id),
     address TEXT not null,
     total_price FLOAT not null,
-    status TEXT not null,
-    created_at TIMESTAMP with time zone,
-    updated_at TIMESTAMP with time zone
+    status TEXT not null default 'requested', -- requested, on the way , delivered
+    created_at TIMESTAMP with time zone default now(),
+    updated_at TIMESTAMP with time zone default now()
+);
+
+
+
+CREATE TABLE products (
+    id SERIAL primary key,
+    category_id INTEGER not null,
+        foreign key (catagory_id) references catagories(id),
+    name TEXT not null,
+    price FLOAT not null,
+
+    unit_size INTEGER not null,
+    created_at TIMESTAMP with time zone default now(),
+    updated_at TIMESTAMP with time zone default now()
 );
 
 CREATE TABLE order_details (
@@ -52,19 +67,8 @@ CREATE TABLE order_details (
     price_per_item FLOAT not null,
     discount_amount FLOAT not null,
     price FLOAT not null,
-    created_at TIMESTAMP with time zone,
-    updated_at TIMESTAMP with time zone
-);
-
-CREATE TABLE products (
-    id SERIAL primary key,
-    catagory_id INTEGER not null,
-        foreign key (catagory_id) references catagories(id),
-    name TEXT not null,
-    price FLOAT not null,
-    unit_size INTEGER not null,
-    created_at TIMESTAMP with time zone,
-    updated_at TIMESTAMP with time zone
+    created_at TIMESTAMP with time zone default now(),
+    updated_at TIMESTAMP with time zone default now()
 );
 
 
@@ -76,6 +80,15 @@ CREATE TABLE chats (
         foreign key (receiver) references users(id),
     content TEXT not null,
     content_type TEXT not null,
-    created_at TIMESTAMP with time zone,
-    updated_at TIMESTAMP with time zone
+    created_at TIMESTAMP with time zone default now(),
+    updated_at TIMESTAMP with time zone default now()
+);
+
+CREATE TABLE product_images (
+    id SERIAL primary key,
+    name TEXT not null unique,
+    product_id INTEGER not null,
+        foreign key (product_id) references products(id),
+    created_at TIMESTAMP with time zone default now(),
+    updated_at TIMESTAMP with time zone default now()
 );
