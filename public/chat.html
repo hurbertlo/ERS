@@ -5,26 +5,342 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lecture</title>
+
+    <!-- CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
+        rel="stylesheet">
+
+    <!-- CSS File -->
+    <link rel="stylesheet" href="/home.css" />
+    <link rel="stylesheet" href="/header.css" />
+    <link rel="stylesheet" href="/chat.css" />
+
+    <!-- title -->
+    <title>Pet</title>
 </head>
 
 <body>
-    <h1>pet</h1>
+    <!-- moblie Responsive -->
+    <nav class="navbar bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">Pet World</a>
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Pet World</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
 
+                    <div class="menu-container">
+                        <div class="menu-item">聊天</div>
+                        <div class="menu-item">x</div>
+                        <div class="menu-item">x</div>
+                        <div class="menu-item">x</div>
+                        <div class="menu-item">x</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- nav bar -->
+    <div class="main-container">
+        <div class="head-container">
+            <img class="logo" src="https://i.pinimg.com/564x/d1/c7/d5/d1c7d52effae25506859147b6039b7fe.jpg" />
+            <div class="icon-group">
+                <div class="icon-group-item"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                        fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                        <path
+                            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
+                    </svg></i></div>
+                <div class="icon-group-item"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                        fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                    </svg></div>
+                <div class="icon-group-item"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                        fill="currentColor" class="bi bi-chat" viewBox="0 0 16 16">
+                        <path
+                            d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z" />
+                    </svg></div>
+            </div>
+        </div>
+
+        <div class="menu-container-2">
+            <div class="menu-item"><a href="#">聊天</a></div>
+            <div class="menu-item">x</div>
+            <div class="menu-item">x</div>
+            <div class="menu-item">x</div>
+            <div class="menu-item">x</div>
+        </div>
+    </div>
+
+    <!-- <h3 class=" text-center">Messaging</h3> -->
+
+    <div class="messaging">
+        <div class="inbox_msg">
+
+            <!-- chat left -->
+            <div class="inbox_people">
+
+                <!-- inbox header -->
+                <div class="headind_srch">
+                    <div class="recent_heading">
+                        <h4>Recent</h4>
+                    </div>
+                    <div class="srch_bar">
+                        <div class="stylish-input-group">
+                            <input type="text" class="search-bar" placeholder="Search">
+                            <span class="input-group-addon">
+                                <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- inbox_chat -->
+                <div class="inbox_chat">
+                    <div class="chat_list active_chat">
+                        <div class="chat_people">
+                            <div class="chat_img"> <img src="" alt=""> </div>
+                            <div class="chat_ib">
+                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
+                                <p>hello</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- chat list -->
+                    <div class="chat_list">
+                        <div class="chat_people">
+                            <div class="chat_img"> <img src="" alt=""> </div>
+                            <div class="chat_ib">
+                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
+                                <p>hello</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat_list">
+                        <div class="chat_people">
+                            <div class="chat_img"> <img src="" alt=""> </div>
+                            <div class="chat_ib">
+                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
+                                <p>hello</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat_list">
+                        <div class="chat_people">
+                            <div class="chat_img"> <img src="" alt=""> </div>
+                            <div class="chat_ib">
+                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
+                                <p>hello</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat_list">
+                        <div class="chat_people">
+                            <div class="chat_img"> <img src="" alt=""> </div>
+                            <div class="chat_ib">
+                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
+                                <p>hello</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat_list">
+                        <div class="chat_people">
+                            <div class="chat_img"> <img src="" alt=""> </div>
+                            <div class="chat_ib">
+                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
+                                <p>hello</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat_list">
+                        <div class="chat_people">
+                            <div class="chat_img"> <img src="" alt=""> </div>
+                            <div class="chat_ib">
+                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
+                                <p>hello</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat_list">
+                        <div class="chat_people">
+                            <div class="chat_img"> <img src="" alt=""> </div>
+                            <div class="chat_ib">
+                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
+                                <p>hello</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat_list">
+                        <div class="chat_people">
+                            <div class="chat_img"> <img src="" alt=""> </div>
+                            <div class="chat_ib">
+                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
+                                <p>hello</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- massage  -->
+            <div class="mesgs">
+
+                <!-- msg_history -->
+                <div class="msg_history">
+
+                    <div class="incoming_msg">
+                        <div class="incoming_msg_img"> <img src="" alt=""> </div>
+                        <div class="received_msg">
+                            <div class="received_withd_msg">
+                                <p>hello</p>
+                                <span class="time_date"> 11:01 AM | June 9</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="incoming_msg">
+                        <div class="incoming_msg_img"> <img src="" alt=""> </div>
+                        <div class="received_msg">
+                            <div class="received_withd_msg">
+                                <p>hello</p>
+                                <span class="time_date"> 11:01 AM | June 9</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="outgoing_msg">
+                        <div class="sent_msg">
+                            <p>hello</p>
+                            <span class="time_date"> 11:01 AM | June 9</span>
+                        </div>
+                    </div>
+
+                    <div class="incoming_msg">
+                        <div class="incoming_msg_img"> <img src=" " alt=""> </div>
+                        <div class="received_msg">
+                            <div class="received_withd_msg">
+                                <p>hello</p>
+                                <span class="time_date"> 11:01 AM | Yesterday</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="outgoing_msg">
+                        <div class="sent_msg">
+                            <p>hello</p>
+                            <span class="time_date"> 11:01 AM | Today</span>
+                        </div>
+                    </div>
+
+                    <div class="outgoing_msg">
+                        <div class="sent_msg">
+                            <p>hello</p>
+                            <span class="time_date"> 11:01 AM | Today</span>
+                        </div>
+                    </div>
+
+                    <div class="outgoing_msg">
+                        <div class="sent_msg">
+                            <p>hello</p>
+                            <span class="time_date"> 11:01 AM | Today</span>
+                        </div>
+                    </div>
+
+                    <div class="outgoing_msg">
+                        <div class="sent_msg">
+                            <p>hello</p>
+                            <span class="time_date"> 11:01 AM | Today</span>
+                        </div>
+                    </div>
+
+                    <div class="incoming_msg">
+                        <div class="incoming_msg_img"> <img src="" alt=""> </div>
+                        <div class="received_msg">
+                            <div class="received_withd_msg">
+                                <p>hello</p>
+                                <span class="time_date"> 11:01 AM | Today</span>
+                            </div>
+                        </div>
+                    </div> -->
+
+                </div>
+
+                <!-- type massage -->
+                <form class="type_msg">
+                    <div class="input_msg_write">
+                        <input name='message' type="text" class="write_msg" placeholder="Type a message" />
+                        <button class="msg_send_btn" type="submit"><i class="fa fa-paper-plane-o"
+                                aria-hidden="true"></i></button>
+                    </div>
+            </div>
+        </div>
+    </div>
+    </form>
+
+    <!-- JS File -->
+    <script src="/header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/b635d6dc2e.js" crossorigin="anonymous"></script>
+
+    </script>
+
+    <!-- Socket setUp-->
     <script src="/socket.io/socket.io.js"></script>
+
+
+    <!-- message -->
     <script>
         const socket = io.connect();
-        socket.on('everyone', (data) => { // 監聽咩事件
-            alert(data)
+
+        let params = new URLSearchParams(window.location.search)
+
+        let targetUser = params.get('user')
+
+        let messageForm = document.querySelector('form.type_msg')
+        messageForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+            let res = await fetch(`/talk-to/${targetUser}`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: messageForm.message.value
+                })
+            })
+            if (res.ok) {
+                document.querySelector('.msg_history').innerHTML += `<div>${messageForm.message.value}</div>`
+                messageForm.reset();
+            }
         })
 
-        socket.on('say hi', (data) => {
-            alert(data)
+        socket.on('new-message', (message) => { // 監聽咩事件
+            document.querySelector('.msg_history').innerHTML += `<div>${message}</div>`
         })
 
-        socket.on('in-room', (data) => {
-            alert(data)
-        })
     </script>
 </body>
 

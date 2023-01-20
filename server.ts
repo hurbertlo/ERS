@@ -17,9 +17,7 @@ const io = new SocketIO(server);
 
 app.use(express.urlencoded({ extended: true }));
 
-
 fs.mkdirSync(uploadDir, { recursive: true });
-
 
 app.use(express.json());
 
@@ -31,6 +29,43 @@ const sessionMiddleware = expressSession({
 });
 
 app.use(sessionMiddleware);
+
+
+// set up users 
+let counter = 1
+
+app.use((req, res, next) => {
+
+    if (req.session['user']) {
+        next()
+        return
+    }
+    if (counter % 2 === 0) {
+        req.session['user'] = {
+            name: 'Odd Person',
+            id: 'user_' + counter,
+            createDate: new Date()
+        }
+        console.log('Odd person logged in')
+    } else {
+        req.session['user'] = {
+            name: 'Even Person',
+            id: 'user_' + counter,
+            createDate: new Date()
+        }
+        console.log('even person logged in')
+    }
+    console.log('current count = ', counter)
+    counter++
+
+    next()
+})
+
+app.get('/me', (req, res) => {
+    res.json(
+        req.session['user']
+    )
+})
 
 io.use((socket, next) => {
     let req = socket.request as express.Request;
@@ -97,7 +132,6 @@ io.use((socket, next) => {
 
 // })
 
-
 // // terminate a product form client
 // app.delete("product/category/")
 // // record terminated product
@@ -128,16 +162,37 @@ io.use((socket, next) => {
 // customers overview and chats status
 // indivual chat boxs (async)
 
+
+
+// user connection
 io.on('connection', (socket) => {
-    console.log('new connection');
-    socket.on('message', (msg) => {
-        console.log('Got message from client: ' + msg);
-    });
+
+    let req = socket.request as express.Request
+
+    if (!req.session || !req.session['user']) {
+        socket.disconnect()
+        return
+    }
+
+    console.log('io identity check :', req.session['user'])
+    socket.join(req.session['user'].id)
+
+
+
 });
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/chat.html');
 });
+
+app.post('/talk-to/:roomId', (req, res) => {
+
+    let roomId = req.params.roomId
+    console.log('talk to triggered:', roomId);
+
+    io.to(roomId).emit('new-message', req.body.message)
+    res.end('talk ok')
+})
 
 app.get('/everyone', (req, res) => {
     console.log('io everyone triggered');
@@ -148,9 +203,8 @@ app.get('/everyone', (req, res) => {
 app.get('/chat-with-admin/:roomName', (req, res) => {
     let roomName = req.params.roomName;
     io.to(roomName).emit(`in-room`, `${roomName} hello im ben`);
-    res.end("ok")
+    res.end("Welcome")
 })
-
 
 app.use(express.static("public"));
 server.listen(8080, () => {
