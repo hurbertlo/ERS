@@ -36,31 +36,45 @@ io.use((socket, next) => {
     let res = req.res as express.Response;
     sessionMiddleware(req, res, next as express.NextFunction);
 });
+
 // sign up
 app.post("/user/signup", async (req, res, next) => {
     try {
+
+
         let { fields, files } = await formParsePromise(req);
         let { name, mobile, email, address, password } = fields
         console.log('fields = ', fields)
-
+        console.log("files =",files)
         if (!name || !mobile || !email || !address) {
             res.status(400).json({
                 message: "Invalid input"
             })
         }
-        let fileName = files.image["newFilename"];
-        console.log(fileName);
+        // handle the case if file is not existed
+        let profile_picture
+        if (files.image){
+            profile_picture = files.image["newFilename"];
+            console.log("profile pic : ",profile_picture);
+        }        
 
+        const result = await client.query(
+            `SELECT  * from user_types WHERE name =$1 `,
+            ["user"]
+          )
+        const userTypeId = result.rows[0].id;
+        
         await client.query(`
        
        INSERT INTO users
-            ("name", address, mobile, email, "password", created_at, updated_at, user_type_id)
-            VALUES($1, $2, $3, $4, $5, now(), now(),2);
-       `, [name, address, mobile, email, password])
+            (user_type_id, name, address, mobile, email, password, profile_picture, created_at, updated_at)
+            VALUES($1, $2, $3, $4, $5, $6, $7, now(), now());
+       `, [userTypeId, name, address, mobile, email, password, profile_picture || ""])
 
         res.end("create user sucess");
     } catch (error: any) {
         res.status(500).end(error.message)
+        console.log(error.message)
     }
 
 })

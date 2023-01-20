@@ -4,7 +4,7 @@ TRUNCATE users RESTART IDENTITY CASCADE;
 TRUNCATE order_details  RESTART IDENTITY CASCADE;
 TRUNCATE orders RESTART IDENTITY CASCADE;
 TRUNCATE products RESTART IDENTITY CASCADE;
-TRUNCATE catagories  RESTART IDENTITY CASCADE;
+TRUNCATE categories  RESTART IDENTITY CASCADE;
 -- willy
 INSERT INTO user_types (name, created_at, updated_at) VALUES ('admin', '2023-01-16', '2023-01-18');
 INSERT INTO user_types (name, created_at, updated_at) VALUES ('user', '2023-01-16', '2023-01-18');
