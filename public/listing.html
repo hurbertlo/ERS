@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="/header.css" />
     <link rel="stylesheet" href="/footer.css" />
     <link rel="stylesheet" href="/page.css" />
+    <link rel="stylesheet" href="/listing.css" />
 
 </head>
 
@@ -25,7 +26,7 @@
    <script src="/header.js"></script>
 
 <!-- Shop Product Start -->
-<div class="col-lg-9 col-md-12">
+<div class="post-container">
     <div class="row pb-3">
        
         <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
@@ -59,7 +60,7 @@
         <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
             <div class="card product-item border-0 mb-4">
                 <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                    <img class="img-fluid w-100" src="https://i.pinimg.com/564x/26/5a/54/265a54d26686a19e7002277bae7bf5f3.jpg" alt="">
+                    <a href="http://localhost:8080/product_detail.html?id=3"><img class="img-fluid w-100" src="https://i.pinimg.com/564x/26/5a/54/265a54d26686a19e7002277bae7bf5f3.jpg" alt=""></a>
                 </div>
                 <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                     <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
@@ -79,6 +80,7 @@
         
         
     </div>
+    
 </div>
 <!-- Shop Product End -->
 </div>
@@ -94,6 +96,48 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"></script>
   <script src="https://kit.fontawesome.com/b635d6dc2e.js" crossorigin="anonymous"></script>
+
+
+  <script>
+async function getPosts(){
+
+        let res = await fetch('/products')
+        if(res.ok){
+            let data = await res.json()
+            let posts = data.data
+            console.table(posts)
+            updatePostListingUI(posts)
+        }
+
+}
+function updatePostListingUI(posts){
+    let postContainer = document.querySelector('.post-container')
+    postContainer.innerHTML =''
+    for (let post of posts){
+        postContainer.innerHTML +=
+        `
+                <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
+                    <div class="card product-item border-0 mb-4">
+                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                            <a href="http://localhost:8080/product_detail.html?id=${post.id}"><img class="img-fluid w-100" src="${post.image}" alt=""></a>
+                        </div>
+                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                            <h6 class="text-truncate mb-3">${post.name}</h6>
+                            <div class="d-flex justify-content-center">
+                                <h6>$${post.price}</h6><h6 class="text-muted ml-2"></h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        `
+    }
+}
+
+
+(function init(){
+    getPosts()
+})()
+  </script>
 </body>
 
 </html>

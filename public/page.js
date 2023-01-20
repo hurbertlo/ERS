@@ -1,6 +1,6 @@
 // (function ($) {
 //     "use strict";
-    
+
 //     // Dropdown on mouse hover
 //     $(document).ready(function () {
 //         function toggleNavbarMethod() {
@@ -17,8 +17,7 @@
 //         toggleNavbarMethod();
 //         $(window).resize(toggleNavbarMethod);
 //     });
-    
-    
+
 //     // Back to top button
 //     $(window).scroll(function () {
 //         if ($(this).scrollTop() > 100) {
@@ -31,7 +30,6 @@
 //         $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
 //         return false;
 //     });
-
 
 //     // Vendor carousel
 //     $('.vendor-carousel').owlCarousel({
@@ -59,7 +57,6 @@
 //         }
 //     });
 
-
 //     // Related carousel
 //     $('.related-carousel').owlCarousel({
 //         loop: true,
@@ -83,7 +80,6 @@
 //         }
 //     });
 
-
 //     // Product Quantity
 //     $('.quantity button').on('click', function () {
 //         var button = $(this);
@@ -99,9 +95,8 @@
 //         }
 //         button.parent().parent().find('input').val(newVal);
 //     });
-    
-// })(jQuery);
 
+// })(jQuery);
 
 // let button = 0
 
@@ -113,4 +108,3 @@
 //     }
 //     button++
 // })
-
