@@ -10,15 +10,14 @@ import http from "http";
 import { Server as SocketIO } from "socket.io";
 import expressSession from 'express-session'
 
+
 const app = express();
 const server = new http.Server(app);
 const io = new SocketIO(server);
 
 app.use(express.urlencoded({ extended: true }));
 
-
 fs.mkdirSync(uploadDir, { recursive: true });
-
 
 app.use(express.json());
 
@@ -30,6 +29,43 @@ const sessionMiddleware = expressSession({
 });
 
 app.use(sessionMiddleware);
+
+
+// set up users 
+let counter = 1
+
+app.use((req, res, next) => {
+
+    if (req.session['user']) {
+        next()
+        return
+    }
+    if (counter % 2 === 0) {
+        req.session['user'] = {
+            name: 'Odd Person',
+            id: 'user_' + counter,
+            createDate: new Date()
+        }
+        console.log('Odd person logged in')
+    } else {
+        req.session['user'] = {
+            name: 'Even Person',
+            id: 'user_' + counter,
+            createDate: new Date()
+        }
+        console.log('even person logged in')
+    }
+    console.log('current count = ', counter)
+    counter++
+
+    next()
+})
+
+app.get('/me', (req, res) => {
+    res.json(
+        req.session['user']
+    )
+})
 
 io.use((socket, next) => {
     let req = socket.request as express.Request;
@@ -45,7 +81,7 @@ app.post("/user/signup", async (req, res, next) => {
         let { fields, files } = await formParsePromise(req);
         let { name, mobile, email, address, password } = fields
         console.log('fields = ', fields)
-        console.log("files =",files)
+        console.log("files =", files)
         if (!name || !mobile || !email || !address) {
             res.status(400).json({
                 message: "Invalid input"
@@ -53,17 +89,17 @@ app.post("/user/signup", async (req, res, next) => {
         }
         // handle the case if file is not existed
         let profile_picture
-        if (files.image){
+        if (files.image) {
             profile_picture = files.image["newFilename"];
-            console.log("profile pic : ",profile_picture);
-        }        
+            console.log("profile pic : ", profile_picture);
+        }
 
         const result = await client.query(
             `SELECT  * from user_types WHERE name =$1 `,
             ["user"]
-          )
+        )
         const userTypeId = result.rows[0].id;
-        
+
         await client.query(`
        
        INSERT INTO users
@@ -77,88 +113,39 @@ app.post("/user/signup", async (req, res, next) => {
         console.log(error.message)
     }
 
+
 })
-// login
-//            --- admin ---
-// launch a product
-app.post("/products/categoty/launch", async (req, res, next) => {
-    try {
-        let { fields, files } = await formParsePromise(req);
-        let { category_id, name, price, unit_size } = fields
-        console.log('fields = ', fields)
 
-        if (!category_id || !name || !price || !unit_size) {
-            res.status(400).json({
-                message: "Invalid input"
-            })
-        }
-        let fileName = files.image["newFilename"];
-        console.log(fileName);
+// user connection
+io.on('connection', (socket) => {
 
-        await client.query(`
-       
-       INSERT INTO products
-            ("catagory_id","name", "price", "unit_size", created_at, updated_at)
-            VALUES($1, $2, $3, $4, now(), now());
-       `, [category_id, name, price, unit_size])
+    let req = socket.request as express.Request
 
-        res.end("Product launching sucess");
-    } catch (error: any) {
-        res.status(500).end(error.message)
+    if (!req.session || !req.session['user']) {
+        socket.disconnect()
+        return
     }
 
-})
+    console.log('io identity check :', req.session['user'])
+    socket.join(req.session['user'].id)
 
 
 
 
-
-
-// // terminate a product form client
-// app.delete("product/category/")
-// // record terminated product
-// app.post("product/category/archieve")
-
-// //             --- TPS---
-// // browse & sort all products
-// app.get("product")
-// app.get("product/category_id/:c_id")
-// // check product details
-// app.get("product/category:c_id/product_id/:p_id")
-// // order different products
-// app.post("order/:o_id/order_details/p_id/a")
-// // confirmation and check out
-// // generate a receipt
-// // generate internal sales order
-// // delivery
-// // check order status
-// // close an order
-
-//             ---CRS---common
-// browse history
-// initiate a chat
-// chat
-//             ---CRS---customer
-
-//             ---CRS---admin
-// customers overview and chats status
-// indivual chat boxs (async)
-
-
-io.on("connection", function (socket) {
-    // You can set any values you want to session here.
-    console.log('socket connected:', socket.id);
-    const req = socket.request as express.Request;
-    // req.session["key"] = "sam";
-    socket.join('room1')
-    // There is no auto save for session.
-    // socket.request.session.save();
-
-    // You can also send data using socket.emit() although it is not very useful
-    // socket.emit("any-key", "values");
-    // socket.on("disconnect", () => {
-    //... rest of the code
 });
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/chat.html');
+});
+
+app.post('/talk-to/:roomId', (req, res) => {
+
+    let roomId = req.params.roomId
+    console.log('talk to triggered:', roomId);
+
+    io.to(roomId).emit('new-message', req.body.message)
+    res.end('talk ok')
+})
 
 app.get('/everyone', (req, res) => {
     console.log('io everyone triggered');
@@ -169,9 +156,8 @@ app.get('/everyone', (req, res) => {
 app.get('/chat-with-admin/:roomName', (req, res) => {
     let roomName = req.params.roomName;
     io.to(roomName).emit(`in-room`, `${roomName} hello im ben`);
-    res.end("ok")
+    res.end("Welcome")
 })
-
 
 app.use(express.static("public"));
 server.listen(8080, () => {
