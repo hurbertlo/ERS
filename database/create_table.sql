@@ -48,11 +48,11 @@ CREATE TABLE orders (
 CREATE TABLE products (
     id SERIAL primary key,
     category_id INTEGER not null,
-        foreign key (catagory_id) references catagories(id),
+        foreign key (category_id) references categories(id),
     name TEXT not null,
     price FLOAT not null,
-
     unit_size INTEGER not null,
+    product_image TEXT not null,
     created_at TIMESTAMP with time zone default now(),
     updated_at TIMESTAMP with time zone default now()
 );
