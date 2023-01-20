@@ -45,26 +45,18 @@ $('.tab a').on('click', function (e) {
 
 
 let newUserElm = document.querySelector(`#signup`)
-
 newUserElm.addEventListener('submit', async (e) => {
 	e.preventDefault()
-
 	// prep
 	let formData = new FormData(newUserElm)
-
 	// send
 	let res = await fetch('/user/signup', {
 		method: 'POST',
 		body: formData
 	})
-
-
 	// post handling
 	if (res.ok) {
 		newUserElm.reset()
-		// let data = await res.json()
-		// console.log('post ok', data)
-		// loadMemos()
 	} else {
 		console.log('post fail')
 	}
@@ -74,28 +66,18 @@ newUserElm.addEventListener('submit', async (e) => {
 
 
 
+// let signInElm = document.querySelector(`#login`)
 // signinElm.addEventListener(`sumit`,async(e)=>{
 //   e.preventDefault()
+//   let formData = new FormData(signInElm)
 
-//   let uploadData = {
-//     user_type_id: newUserElm.user_type_id.value,
-//     name:  newUserElm.name.value,
-//     address: newUserElm.address.value,
-//     mobile: newUserElm.mobile.value, 
-//     email: newUserElm.email.value,
-//     password: newUserElm.password.value,
-//     profile_picture: newUserElm.profile_picture.value
-//   }
-//   let res = await fetch(`/user/signin`,{
+//   let res = await fetch(`/user/login`,{
 //     method: 'POST',
-//     headers:{
-//       'Content-Type': 'application/jsom'
-//     },
-//     body: JSON.stringify(uploadData)
+//     body: formData
 //   })
 //   // post handling
 // 	if (!res.ok) {
-// 		return
+		
 // 	}
 
 // 	let data = res.json()
