@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev app.ts",
+    "start": "ts-node-dev server.ts",
     "test-db": "ts-node ./database/test_db.ts",
     "dev": "ts-node-dev server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
