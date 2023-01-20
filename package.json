@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev app.ts",
+    "start": "ts-node-dev server.ts",
     "test-db": "ts-node ./database/test_db.ts",
     "dev": "ts-node-dev server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -39,5 +39,6 @@
   "devDependencies": {
     "@types/express": "^4.17.15",
     "@types/express-session": "^1.17.5"
-  }
+  },
+  "description": ""
 }

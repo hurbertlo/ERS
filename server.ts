@@ -158,9 +158,40 @@ app.get('/chat-with-admin/:roomName', (req, res) => {
     res.end("ok")
 })
 
+//KAY
+// get all products
+app.get('/products',async (req,res,next) => {
+    let result = await client.query(`select * from products`)
+    res.json({
+        data:result.rows ,
+        message: "select success" 
+    });
+});
+
+// get product
+app.get('/products/:productId',async (req,res,next) => {
+    const productId = req.params.productId
+    console.log('finding product :', productId);
+    
+    if(!Number(productId)){
+        res.status(400).end('invalid product id')
+        return
+    }
+    let result = await client.query(`select * from products where id = $1`,[productId])
+    let product = result.rows[0]
+    if (!product){
+        res.status(400).end('invalid product id')
+        return   
+    }
+    res.json({
+        data:product ,
+        message: product 
+    });
+});
+//
 
 app.use(express.static("public"));
+app.use(express.static("image"));
 server.listen(8080, () => {
     console.log(`server listening on http://localhost:8080`);
 })
-

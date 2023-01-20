@@ -44,19 +44,19 @@ CREATE TABLE orders (
 );
 
 
-
 CREATE TABLE products (
     id SERIAL primary key,
     category_id INTEGER not null,
-        foreign key (catagory_id) references catagories(id),
+        foreign key (category_id) references categories(id),
     name TEXT not null,
     price FLOAT not null,
-
+    place_of_origin TEXT,
+    discription TEXT,
+    image TEXT ,
     unit_size INTEGER not null,
     created_at TIMESTAMP with time zone default now(),
     updated_at TIMESTAMP with time zone default now()
 );
-
 CREATE TABLE order_details (
     id serial primary key,
     order_id INTEGER not null,
