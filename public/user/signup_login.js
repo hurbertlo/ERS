@@ -44,7 +44,7 @@ $('.tab a').on('click', function (e) {
 
 
 
-let newUserElm = document.querySelector(`#signup`)
+let newUserElm = document.querySelector(`.signupform`)
 newUserElm.addEventListener('submit', async (e) => {
 	e.preventDefault()
 	// prep
@@ -66,22 +66,24 @@ newUserElm.addEventListener('submit', async (e) => {
 
 
 
-// let signInElm = document.querySelector(`#login`)
-// signinElm.addEventListener(`sumit`,async(e)=>{
-//   e.preventDefault()
-//   let formData = new FormData(signInElm)
+let signInElm = document.querySelector(`.signform`)
+signInElm.addEventListener(`sumit`,async(e)=>{
+  e.preventDefault()
+  let formData = new FormData(signInElm)
 
-//   let res = await fetch(`/user/login`,{
-//     method: 'POST',
-//     body: formData
-//   })
+  let res = await fetch(`/user/signin`,{
+    method: 'POST',
+    body: formData
+  })
 //   // post handling
-// 	if (!res.ok) {
-		
-// 	}
+	if (!res.ok) {
+		console.log(success)
+	}else{
+		console.log("sign in fail")
+	}
 
 // 	let data = res.json()
 // 	console.log(data)
-// 	window.location = '/index.html'
+	// window.location = '/index.html'
 
-// })
+})

@@ -95,8 +95,7 @@ app.post("/user/signup", async (req, res, next) => {
         }
 
         const result = await client.query(
-            `SELECT  * from user_types WHERE name =$1 `,
-            ["user"]
+            `SELECT  * from user_types WHERE name ='user' `
         )
         const userTypeId = result.rows[0].id;
 
@@ -113,8 +112,51 @@ app.post("/user/signup", async (req, res, next) => {
         console.log(error.message)
     }
 
+})
+//sign in
+app.post("/user/signin", async(req, res,) => {
+    async function login(req: express.Request, res: express.Response) {
+        try {
+            logger.info('body = ', req.body)
+            let { email, password } = req.body
+            if (!email || !password) {
+                res.status(402).json({
+                    message: 'Invalid input'
+                })
+                return
+            }    
+            let selectUserResult = await client.query(
+                `select * from users where email = $1 `,
+                [email]
+            )    
+            let foundUser = selectUserResult.rows[0]    
+            if (!foundUser) {
+                res.status(402).json({
+                    message: 'Invalid username'
+                })
+                return
+            }
+            if (foundUser.password !== password) {
+                res.status(402).json({
+                    message: 'Invalid password'
+                })
+                return
+            }    
+            delete foundUser.password
+            req.session.email = foundUser    
+            console.log('foundUser = ', foundUser)    
+            res.redirect('/admin.html')
+        } catch (error) {
+            logger.error(error)
+            res.status(500).json({
+                message: '[USR001] - Server error'
+            })
+        }
+    }   
 
 })
+
+
 
 // user connection
 io.on('connection', (socket) => {
