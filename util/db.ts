@@ -8,3 +8,5 @@ export const client = new Client({
 });
 
 client.connect();
+
+// client.query(`select * from chat_room`)

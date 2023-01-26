@@ -117,6 +117,10 @@ img {
     background: #ebebeb;
 }
 
+.incoming_msg {
+    animation: slide-in-left 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
+}
+
 .incoming_msg_img {
     display: inline-block;
     width: 6%;
@@ -156,6 +160,16 @@ img {
     width: 60%;
 }
 
+.received_withd_msg p {
+    background: #ebebeb none repeat scroll 0 0;
+    border-radius: 3px;
+    color: #646464;
+    font-size: 14px;
+    padding: 5px 10px 5px 12px;
+    width: 100%;
+    margin: 0;
+}
+
 .sent_msg p {
     background: #05728f none repeat scroll 0 0;
     border-radius: 3px;
@@ -169,6 +183,7 @@ img {
 .outgoing_msg {
     overflow: hidden;
     margin: 26px 0 26px;
+    animation: slide-in-right 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
 }
 
 .sent_msg {
@@ -239,3 +254,28 @@ img {
 .msg_send_btn i:hover::after {
     opacity: 1;
 } */
+
+
+@keyframes slide-in-left {
+    0% {
+        transform: translateX(-1000px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-right {
+    0% {
+        transform: translateX(1000px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
