@@ -176,13 +176,13 @@ io.on('connection', (socket) => {
 
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/chat.html');
+    // res.sendFile(__dirname + '/public/chat.html');
     // if(!req.session || !req.session['user']){
     //     res.redirect('/login.html');
     // }else{
     //     res.redirect('/index.html');
     // }
-    // res.redirect('/chat.html');
+    res.redirect('/home.html');
 });
 
 
