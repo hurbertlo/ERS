@@ -75,6 +75,9 @@ io.use((socket, next) => {
 });
 
 // sign up
+app.get("/user/signup",(req,res)=>{
+    res.sendFile(__dirname + "/public/user/index.html");
+})
 app.post("/user/signup", async (req, res, next) => {
     try {
 
@@ -116,16 +119,17 @@ app.post("/user/signup", async (req, res, next) => {
 })
 //sign in
 app.post("/user/signin", async(req, res,) => {
-    async function login(req: express.Request, res: express.Response) {
         try {
-            logger.info('body = ', req.body)
+            console.log( req.body)
             let { email, password } = req.body
             if (!email || !password) {
                 res.status(402).json({
-                    message: 'Invalid input'
+                    message: 'Invalid login input'
                 })
                 return
             }    
+
+
             let selectUserResult = await client.query(
                 `select * from users where email = $1 `,
                 [email]
@@ -144,9 +148,11 @@ app.post("/user/signin", async(req, res,) => {
                 return
             }    
             delete foundUser.password
-            req.session.email = foundUser    
+            req.session['email'] = foundUser    
             console.log('foundUser = ', foundUser)    
-            res.redirect('/admin.html')
+            res.json({
+                message: "login success"
+            })
         } catch (error) {
             logger.error(error)
             res.status(500).json({
@@ -154,9 +160,7 @@ app.post("/user/signin", async(req, res,) => {
             })
         }
     }   
-
-})
-
+)
 
 
 // user connection
