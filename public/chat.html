@@ -362,7 +362,10 @@
         // chatList.addEventListener('click', () => {
 
         // })
+        let msgList = document.querySelector('chat_list active_chat')
+        msgList.addEventListener('submit', () => {
 
+        })
 
         socket.on('new-message', (message) => { // 監聽咩事件
             // incoming messages

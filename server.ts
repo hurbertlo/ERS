@@ -161,7 +161,7 @@ io.use((socket, next) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/home.html');
+    res.sendFile(__dirname + '/public');
 });
 
 app.get('/chat', (req, res) => {
@@ -169,9 +169,7 @@ app.get('/chat', (req, res) => {
     // if(!req.session || !req.session['user']){
     //     res.redirect('/login.html');
     // }else{
-    //     res.redirect('/index.html');
-    // }
-    // res.redirect('/home.html');
+    //     res.redirect('/home.html');
 });
 
 // user connection
