@@ -48,6 +48,19 @@ CREATE TABLE products (
     created_at TIMESTAMP with time zone default now(),
     updated_at TIMESTAMP with time zone default now()
 );
+CREATE TABLE baskets (
+    id serial primary key,
+    order_by INTEGER not null,
+    foreign key (order_by) references users(id),
+    product_id INT not null,
+    foreign key (product_id) references products(id),
+    amount INTEGER not null,
+    price_per_item FLOAT not null,
+    discount_amount FLOAT not null,
+    price FLOAT not null,
+    created_at TIMESTAMP with time zone default now(),
+    updated_at TIMESTAMP with time zone default now()
+);
 CREATE TABLE order_details (
     id serial primary key,
     order_id INTEGER not null,

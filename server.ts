@@ -76,7 +76,7 @@ io.use((socket, next) => {
 
 // sign up
 app.get("/user/signup",(req,res)=>{
-    res.sendFile(__dirname + "/public/user/index.html");
+    res.sendFile(__dirname + "/public/user/signup_login.html");
 })
 app.post("/user/signup", async (req, res, next) => {
     try {
@@ -253,7 +253,8 @@ app.get('/products/:productId', async (req, res, next) => {
         message: product
     });
 });
-//
+//Put items into basket
+app.post('')
 
 app.use(express.static("public"));
 app.use(express.static("image"));
