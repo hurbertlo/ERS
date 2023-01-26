@@ -172,6 +172,10 @@ app.get('/chat', (req, res) => {
     //     res.redirect('/home.html');
 });
 
+//Kay update index
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public');
+})
 // user connection
 io.on('connection', (socket) => {
     let req = socket.request as express.Request
@@ -207,9 +211,29 @@ app.post('/talk-to/:roomId', (req, res) => {
 // })
 
 //KAY
+
+
 // get all products
 app.get('/products', async (req, res, next) => {
     let result = await client.query(`select * from products`)
+    res.json({
+        data: result.rows,
+        message: "select success"
+    });
+
+});
+
+app.get('/products/listing/:category', async (req, res, next) => {
+    let category = req.params.category
+    let query = ''
+    if (category === 'all') {
+        query = 'select * from products'
+    } else {
+        query = `
+        select * from categories inner join products on categories.id  = products.category_id where categories.name = '${category}' 
+        `
+    }
+    let result = await client.query(query)
     res.json({
         data: result.rows,
         message: "select success"
