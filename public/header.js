@@ -1,4 +1,4 @@
-document.querySelector('#header').innerHTML = /*html*/`
+document.querySelector("#header").innerHTML = /*html*/ `
 <nav class="navbar bg-light">
 <div class="container-fluid">
    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
@@ -13,7 +13,8 @@ document.querySelector('#header').innerHTML = /*html*/`
     <div class="offcanvas-body">
        
         <div class="menu-container">
-            <div class="menu-item">首頁1</div>
+            <div class="menu-item">首頁</div>
+            <div class="menu-item">全部</div>
             <div class="menu-item">食品</div>
             <div class="menu-item">衣服</div>
             <div class="menu-item">玩具</div>
@@ -74,22 +75,19 @@ document.querySelector('#header').innerHTML = /*html*/`
 
         <div class="menu-container-2">
         <div class="menu-item">首頁</div>
+        <div class="menu-item">全部</div>
         <div class="menu-item">食品</div>
         <div class="menu-item">衣服</div>
         <div class="menu-item">玩具</div>
         <div class="menu-item">工具</div>
         </div>
-</div>
+</div>`;
 
-`
-
-
-window.addEventListener('scroll',()=>{
-    console.log(window.scrollY)
-    if (window.scrollY > 10){
-        document.querySelector('#header').classList.add('header-shadow')
-    }else{
-        
-        document.querySelector('#header').classList.remove('header-shadow')
-    }
-})
+window.addEventListener("scroll", () => {
+  console.log(window.scrollY);
+  if (window.scrollY > 10) {
+    document.querySelector("#header").classList.add("header-shadow");
+  } else {
+    document.querySelector("#header").classList.remove("header-shadow");
+  }
+});

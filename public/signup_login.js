@@ -41,3 +41,47 @@ $('.tab a').on('click', function (e) {
   $(target).fadeIn(800);
   
 });
+
+
+
+let newUserElm = document.querySelector(`#signup`)
+newUserElm.addEventListener('submit', async (e) => {
+	e.preventDefault()
+	// prep
+	let formData = new FormData(newUserElm)
+	// send
+	let res = await fetch('/user/signup', {
+		method: 'POST',
+		body: formData
+	})
+	// post handling
+	if (res.ok) {
+		newUserElm.reset()
+	} else {
+		console.log('post fail')
+	}
+})
+
+
+
+
+
+// let signInElm = document.querySelector(`#login`)
+// signinElm.addEventListener(`sumit`,async(e)=>{
+//   e.preventDefault()
+//   let formData = new FormData(signInElm)
+
+//   let res = await fetch(`/user/login`,{
+//     method: 'POST',
+//     body: formData
+//   })
+//   // post handling
+// 	if (!res.ok) {
+		
+// 	}
+
+// 	let data = res.json()
+// 	console.log(data)
+// 	window.location = '/index.html'
+
+// })
