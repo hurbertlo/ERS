@@ -173,7 +173,7 @@ app.get('/chat', (req, res) => {
 
 //Kay update index
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/public');
 })
 // user connection
 io.on('connection', (socket) => {
