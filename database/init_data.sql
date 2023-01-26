@@ -73,9 +73,9 @@ VALUES (
 	);
 INSERT into categories ("name")
 values ('food'),
-('toy'),
-('clothing'),
-('tool');
+	('toy'),
+	('clothing'),
+	('tool');
 -- Kay
 INSERT INTO products (
 		category_id,

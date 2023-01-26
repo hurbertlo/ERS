@@ -44,6 +44,7 @@ CREATE TABLE products (
     description TEXT,
     image TEXT,
     unit_size INTEGER not null,
+    product_image TEXT not null,
     created_at TIMESTAMP with time zone default now(),
     updated_at TIMESTAMP with time zone default now()
 );

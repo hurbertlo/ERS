@@ -10,6 +10,12 @@ window.onload = async () => {
   if (res.ok) {
     const product_detail = await res.json();
     console.log(product_detail);
+    const leftBoard = document.querySelector(".left-board");
+    leftBoard.innerHTML = ` 
+    
+    <img class="w-100 h-100" src="${product_detail.data.image}" alt="Image" />
+    `;
+
     const rightBoard = document.querySelector(".right-board");
     rightBoard.innerHTML = ` 
 
@@ -26,7 +32,7 @@ window.onload = async () => {
             <small class="pt-1">(50 Reviews)</small>
         </div>
         <h3 class="font-weight-semi-bold mb-4">$${product_detail.data.price}</h3>
-        <pre class="mb-4">${product_detail.data.discription}</pre>
+        <pre class="mb-4">${product_detail.data.description}</pre>
       
         
         <div class="d-flex align-items-center mb-4 pt-2">
@@ -48,5 +54,10 @@ window.onload = async () => {
       `;
   }
   console.log(rightBoard);
+  console.log(leftBoard);
   // Rest of the code
 };
+
+document.querySelector("#btn-plus").addEventListener("click", function (event) {
+  event.target.innerHTML = value(event.target.innerHTML) += 1;
+});
