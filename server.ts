@@ -74,95 +74,46 @@ io.use((socket, next) => {
 });
 
 // sign up
-// app.post("/user/signup", async (req, res, next) => {
-//     try {
-//         let { fields, files } = await formParsePromise(req);
-//         let { name, mobile, email, address, password } = fields
-//         console.log('fields = ', fields)
-
-//         if (!name || !mobile || !email || !address) {
-//             res.status(400).json({
-//                 message: "Invalid input"
-//             })
-//         }
-//         let fileName = files.image["newFilename"];
-//         console.log(fileName);
-
-//         await client.query(`
-
-//        INSERT INTO users
-//             ("name", address, mobile, email, "password", created_at, updated_at, user_type_id)
-//             VALUES($1, $2, $3, $4, $5, now(), now(),2);
-//        `, [name, address, mobile, email, password])
-
-//         res.end("create user sucess");
-//     } catch (error: any) {
-//         res.status(500).end(error.message)
-//     }
-
-// })
-// // login
-// //            --- admin ---
-// // launch a product
-// app.post("/products/categoty/launch", async (req, res, next) => {
-//     try {
-//         let { fields, files } = await formParsePromise(req);
-//         let { category_id, name, price, unit_size } = fields
-//         console.log('fields = ', fields)
-
-//         if (!category_id || !name || !price || !unit_size) {
-//             res.status(400).json({
-//                 message: "Invalid input"
-//             })
-//         }
-//         let fileName = files.image["newFilename"];
-//         console.log(fileName);
-
-//         await client.query(`
-
-//        INSERT INTO products
-//             ("catagory_id","name", "price", "unit_size", created_at, updated_at)
-//             VALUES($1, $2, $3, $4, now(), now());
-//        `, [category_id, name, price, unit_size])
-
-//         res.end("Product launching sucess");
-//     } catch (error: any) {
-//         res.status(500).end(error.message)
-//     }
-
-// })
-
-// // terminate a product form client
-// app.delete("product/category/")
-// // record terminated product
-// app.post("product/category/archieve")
-
-// //             --- TPS---
-// // browse & sort all products
-// app.get("product")
-// app.get("product/category_id/:c_id")
-// // check product details
-// app.get("product/category:c_id/product_id/:p_id")
-// // order different products
-// app.post("order/:o_id/order_details/p_id/a")
-// // confirmation and check out
-// // generate a receipt
-// // generate internal sales order
-// // delivery
-// // check order status
-// // close an order
-
-//             ---CRS---common
-// browse history
-// initiate a chat
-// chat
-//             ---CRS---customer
-
-//             ---CRS---admin
-// customers overview and chats status
-// indivual chat boxs (async)
+app.post("/user/signup", async (req, res, next) => {
+    try {
 
 
+        let { fields, files } = await formParsePromise(req);
+        let { name, mobile, email, address, password } = fields
+        console.log('fields = ', fields)
+        console.log("files =", files)
+        if (!name || !mobile || !email || !address) {
+            res.status(400).json({
+                message: "Invalid input"
+            })
+        }
+        // handle the case if file is not existed
+        let profile_picture
+        if (files.image) {
+            profile_picture = files.image["newFilename"];
+            console.log("profile pic : ", profile_picture);
+        }
+
+        const result = await client.query(
+            `SELECT  * from user_types WHERE name =$1 `,
+            ["user"]
+        )
+        const userTypeId = result.rows[0].id;
+
+        await client.query(`
+    
+    INSERT INTO users
+            (user_type_id, name, address, mobile, email, password, profile_picture, created_at, updated_at)
+            VALUES($1, $2, $3, $4, $5, $6, $7, now(), now());
+    `, [userTypeId, name, address, mobile, email, password, profile_picture || ""])
+
+        res.end("create user sucess");
+    } catch (error: any) {
+        res.status(500).end(error.message)
+        console.log(error.message)
+    }
+
+})
 
 // user connection
 io.on('connection', (socket) => {
@@ -176,11 +127,9 @@ io.on('connection', (socket) => {
 
     console.log('io identity check :', req.session['user'])
     socket.join(req.session['user'].id)
-
-
-
-
 });
+
+
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/chat.html');
@@ -192,6 +141,8 @@ app.get('/', (req, res) => {
     // res.redirect('/chat.html');
 });
 
+
+//入房
 app.post('/talk-to/:roomId', (req, res) => {
 
     let roomId = req.params.roomId
@@ -224,8 +175,40 @@ app.get('/chat-with-admin/:roomName', (req, res) => {
     res.end("Welcome")
 })
 
+//KAY
+// get all products
+app.get('/products', async (req, res, next) => {
+    let result = await client.query(`select * from products`)
+    res.json({
+        data: result.rows,
+        message: "select success"
+    });
+});
+
+// get product
+app.get('/products/:productId', async (req, res, next) => {
+    const productId = req.params.productId
+    console.log('finding product :', productId);
+
+    if (!Number(productId)) {
+        res.status(400).end('invalid product id')
+        return
+    }
+    let result = await client.query(`select * from products where id = $1`, [productId])
+    let product = result.rows[0]
+    if (!product) {
+        res.status(400).end('invalid product id')
+        return
+    }
+    res.json({
+        data: product,
+        message: product
+    });
+});
+//
+
 app.use(express.static("public"));
+app.use(express.static("image"));
 server.listen(8080, () => {
     console.log(`server listening on http://localhost:8080`);
 })
-
