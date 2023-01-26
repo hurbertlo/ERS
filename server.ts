@@ -32,6 +32,9 @@ const sessionMiddleware = expressSession({
 app.use(sessionMiddleware);
 
 // sign up
+app.get("/user/signup", (req, res) => {
+    res.sendFile(__dirname + "/public/user/index.html");
+})
 app.post("/user/signup", async (req, res, next) => {
     try {
 
@@ -73,45 +76,48 @@ app.post("/user/signup", async (req, res, next) => {
 })
 //sign in
 app.post("/user/signin", async (req, res,) => {
-    async function login(req: express.Request, res: express.Response) {
-        try {
-            logger.info('body = ', req.body)
-            let { email, password } = req.body
-            if (!email || !password) {
-                res.status(402).json({
-                    message: 'Invalid input'
-                })
-                return
-            }
-            let selectUserResult = await client.query(
-                `select * from users where email = $1 `,
-                [email]
-            )
-            let foundUser = selectUserResult.rows[0]
-            if (!foundUser) {
-                res.status(402).json({
-                    message: 'Invalid username'
-                })
-                return
-            }
-            if (foundUser.password !== password) {
-                res.status(402).json({
-                    message: 'Invalid password'
-                })
-                return
-            }
-            delete foundUser.password
-            req.session['email'] = foundUser
-            console.log('foundUser = ', foundUser)
-            res.redirect('/admin.html')
-        } catch (error) {
-            logger.error(error)
-            res.status(500).json({
-                message: '[USR001] - Server error'
+    try {
+        console.log(req.body)
+        let { email, password } = req.body
+        if (!email || !password) {
+            res.status(402).json({
+                message: 'Invalid login input'
             })
+            return
         }
+
+
+        let selectUserResult = await client.query(
+            `select * from users where email = $1 `,
+            [email]
+        )
+        let foundUser = selectUserResult.rows[0]
+        if (!foundUser) {
+            res.status(402).json({
+                message: 'Invalid username'
+            })
+            return
+        }
+        if (foundUser.password !== password) {
+            res.status(402).json({
+                message: 'Invalid password'
+            })
+            return
+        }
+        delete foundUser.password
+        req.session['email'] = foundUser
+        console.log('foundUser = ', foundUser)
+        res.json({
+            message: "login success"
+        })
+    } catch (error) {
+        logger.error(error)
+        res.status(500).json({
+            message: '[USR001] - Server error'
+        })
     }
-})
+}
+)
 
 // set up users 
 let counter = 1
@@ -155,6 +161,10 @@ io.use((socket, next) => {
 });
 
 app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/home.html');
+});
+
+app.get('/chat', (req, res) => {
     res.sendFile(__dirname + '/public/chat.html');
     // if(!req.session || !req.session['user']){
     //     res.redirect('/login.html');
@@ -166,51 +176,37 @@ app.get('/', (req, res) => {
 
 // user connection
 io.on('connection', (socket) => {
-
     let req = socket.request as express.Request
-
     if (!req.session || !req.session['user']) {
         socket.disconnect()
         return
     }
-
     console.log('io identity check :', req.session['user'])
-    socket.join(req.session['user'].id)
+    socket.join(req.session['user'].id) //join另一個user id
 });
 
 //willy
 //入房
+app.get('/chat', async (req, res, next) => {
+    let chatType = await client.query(`select * from users`)
+    res.json({
+        id: chatType.rows
+    })
+})
+
 app.post('/talk-to/:roomId', (req, res) => {
-
     let roomId = req.params.roomId
-
-    // 1. find if chat room exists
-    // 2. prevent duplicate chat room, e.g. user1_user2, user2_user1
-
-    // let chatroomResult = `select * from chat_room where room_name like '%${req.params.roomId}_${req.session['user'].id}%'
-    //     or room_name like '%${req.session['user'].id}_${req.params.roomId}%'
-    // `
-    // if(chatroomResult && chatroomResult.rows.length > 0){
-    //     roomId = chatroomResult.rows[0].room_name
-    // }
-
     console.log('talk to triggered:', roomId);
-
     io.to(roomId).emit('new-message', req.body.message)
     res.end('talk ok')
 })
 
-app.get('/everyone', (req, res) => {
-    console.log('io everyone triggered');
-    io.emit('everyone', '原來係你');
-    res.end('io everyone triggered');
-})
-
-app.get('/chat-with-admin/:roomName', (req, res) => {
-    let roomName = req.params.roomName;
-    io.to(roomName).emit(`in-room`, `${roomName} hello im ben`);
-    res.end("Welcome")
-})
+// app.post('/talk-to/:roomId', (req, res) => {
+//     let roomId = req.params.roomId
+//     console.log('talk to triggered:', roomId);
+//     io.to(roomId).emit('new-message', req.body.message)
+//     res.end('talk ok')
+// })
 
 //KAY
 // get all products
