@@ -184,11 +184,28 @@ io.on('connection', (socket) => {
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/chat.html');
+    // if(!req.session || !req.session['user']){
+    //     res.redirect('/login.html');
+    // }else{
+    //     res.redirect('/index.html');
+    // }
+    // res.redirect('/chat.html');
 });
 
 app.post('/talk-to/:roomId', (req, res) => {
 
     let roomId = req.params.roomId
+
+    // 1. find if chat room exists
+    // 2. prevent duplicate chat room, e.g. user1_user2, user2_user1
+
+    // let chatroomResult = `select * from chat_room where room_name like '%${req.params.roomId}_${req.session['user'].id}%'
+    //     or room_name like '%${req.session['user'].id}_${req.params.roomId}%'
+    // `
+    // if(chatroomResult && chatroomResult.rows.length > 0){
+    //     roomId = chatroomResult.rows[0].room_name
+    // }
+
     console.log('talk to triggered:', roomId);
 
     io.to(roomId).emit('new-message', req.body.message)
