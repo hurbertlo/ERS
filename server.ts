@@ -37,8 +37,6 @@ app.get("/user/signup", (req, res) => {
 })
 app.post("/user/signup", async (req, res, next) => {
     try {
-
-
         let { fields, files } = await formParsePromise(req);
         let { name, mobile, email, address, password } = fields
         console.log('fields = ', fields)
