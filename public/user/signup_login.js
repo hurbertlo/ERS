@@ -57,17 +57,23 @@ newUserElm.addEventListener("submit", async (e) => {
 });
 
 let signInElm = document.querySelector(`.signform`);
-signInElm.addEventListener(`sumit`, async (e) => {
+signInElm.addEventListener(`submit`, async (e) => {
   e.preventDefault();
-  let formData = new FormData(signInElm);
+  let formData ={
+	email: signInElm.email.value,
+	password: signInElm.password.value,
+  }
 
   let res = await fetch(`/user/signin`, {
     method: "POST",
-    body: formData,
+	headers:{
+		'Content-type': 'application/json'
+	},
+    body: JSON.stringify(formData)
   });
   //   // post handling
-  if (!res.ok) {
-    console.log(success);
+  if (res.ok) {
+    console.log("sign in success");
   } else {
     console.log("sign in fail");
   }
