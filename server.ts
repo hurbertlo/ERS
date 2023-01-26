@@ -115,7 +115,7 @@ app.post("/user/signup", async (req, res, next) => {
 
 })
 //sign in
-app.post("/user/signin", async(req, res,) => {
+app.post("/user/signin", async (req, res,) => {
     async function login(req: express.Request, res: express.Response) {
         try {
             logger.info('body = ', req.body)
@@ -125,12 +125,12 @@ app.post("/user/signin", async(req, res,) => {
                     message: 'Invalid input'
                 })
                 return
-            }    
+            }
             let selectUserResult = await client.query(
                 `select * from users where email = $1 `,
                 [email]
-            )    
-            let foundUser = selectUserResult.rows[0]    
+            )
+            let foundUser = selectUserResult.rows[0]
             if (!foundUser) {
                 res.status(402).json({
                     message: 'Invalid username'
@@ -142,10 +142,10 @@ app.post("/user/signin", async(req, res,) => {
                     message: 'Invalid password'
                 })
                 return
-            }    
+            }
             delete foundUser.password
-            req.session.email = foundUser    
-            console.log('foundUser = ', foundUser)    
+            req.session['email'] = foundUser
+            console.log('foundUser = ', foundUser)
             res.redirect('/admin.html')
         } catch (error) {
             logger.error(error)
@@ -153,7 +153,7 @@ app.post("/user/signin", async(req, res,) => {
                 message: '[USR001] - Server error'
             })
         }
-    }   
+    }
 
 })
 
