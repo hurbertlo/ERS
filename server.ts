@@ -33,7 +33,7 @@ app.use(sessionMiddleware);
 
 // sign up
 app.get("/user/signup", (req, res) => {
-    res.sendFile(__dirname + "/public/user/index.html");
+    res.sendFile(__dirname + "/public/user/signup_login.html");
 })
 app.post("/user/signup", async (req, res, next) => {
     try {
