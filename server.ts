@@ -31,49 +31,6 @@ const sessionMiddleware = expressSession({
 
 app.use(sessionMiddleware);
 
-
-// set up users 
-let counter = 1
-
-app.use((req, res, next) => {
-
-    if (req.session['user']) {
-        next()
-        return
-    }
-    if (counter % 2 === 0) {
-        req.session['user'] = {
-            name: 'Odd Person',
-            id: 'user_' + counter,
-            createDate: new Date()
-        }
-        console.log('Odd person logged in')
-    } else {
-        req.session['user'] = {
-            name: 'Even Person',
-            id: 'user_' + counter,
-            createDate: new Date()
-        }
-        console.log('even person logged in')
-    }
-    console.log('current count = ', counter)
-    counter++
-
-    next()
-})
-
-app.get('/me', (req, res) => {
-    res.json(
-        req.session['user']
-    )
-})
-
-io.use((socket, next) => {
-    let req = socket.request as express.Request;
-    let res = req.res as express.Response;
-    sessionMiddleware(req, res, next as express.NextFunction);
-});
-
 // sign up
 app.post("/user/signup", async (req, res, next) => {
     try {
@@ -154,10 +111,58 @@ app.post("/user/signin", async (req, res,) => {
             })
         }
     }
-
 })
 
+// set up users 
+let counter = 1
 
+app.use((req, res, next) => {
+    if (req.session['user']) {
+        next()
+        return
+    }
+    if (counter % 2 === 0) {
+        req.session['user'] = {
+            name: 'Odd Person',
+            id: 'user_' + counter,
+            createDate: new Date()
+        }
+        console.log('Odd person logged in')
+    } else {
+        req.session['user'] = {
+            name: 'Even Person',
+            id: 'user_' + counter,
+            createDate: new Date()
+        }
+        console.log('even person logged in')
+    }
+    console.log('current count = ', counter)
+    counter++
+
+    next()
+})
+
+app.get('/me', (req, res) => {
+    res.json(
+        req.session['user']
+    )
+})
+
+io.use((socket, next) => {
+    let req = socket.request as express.Request;
+    let res = req.res as express.Response;
+    sessionMiddleware(req, res, next as express.NextFunction);
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/chat.html');
+    // if(!req.session || !req.session['user']){
+    //     res.redirect('/login.html');
+    // }else{
+    //     res.redirect('/index.html');
+    // }
+    // res.redirect('/home.html');
+});
 
 // user connection
 io.on('connection', (socket) => {
@@ -173,19 +178,7 @@ io.on('connection', (socket) => {
     socket.join(req.session['user'].id)
 });
 
-
-
-app.get('/', (req, res) => {
-    // res.sendFile(__dirname + '/public/chat.html');
-    // if(!req.session || !req.session['user']){
-    //     res.redirect('/login.html');
-    // }else{
-    //     res.redirect('/index.html');
-    // }
-    res.redirect('/home.html');
-});
-
-
+//willy
 //入房
 app.post('/talk-to/:roomId', (req, res) => {
 
@@ -249,7 +242,6 @@ app.get('/products/:productId', async (req, res, next) => {
         message: product
     });
 });
-//
 
 app.use(express.static("public"));
 app.use(express.static("image"));
