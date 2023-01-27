@@ -10,7 +10,7 @@ import { createFalse, ExpressionStatement } from "typescript"
 export const userRoutes = express.Router()
 
 
-userRoutes.post("signup", signup)
+userRoutes.post("/signup", signup)
 userRoutes.post("/signin", signin)
 
 
