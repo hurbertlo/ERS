@@ -9,6 +9,8 @@ socket.on('message', message => {
 //  * @param {String} HTML representing a single element
 //  * @return {Element}
 //  */
+
+
 function htmlToElement(html) {
     var template = document.createElement('template');
     html = html.trim(); // Never return a text node of whitespace as the result
@@ -22,6 +24,12 @@ let targetUser = params.get('room') //session path
 
 let messageForm = document.querySelector('form.type_msg')
 let messageHistory = document.querySelector('.msg_history');
+
+let inboxChat = document.querySelector('chat_list');
+
+
+
+
 messageForm.addEventListener('submit', async (e) => {
     e.preventDefault()
 
@@ -76,7 +84,6 @@ socket.on('new-message', (message) => { // 監聽咩事件
     // window.location.href = '/home.html';
     messageHistory.scrollTop = messageHistory.scrollHeight;
 })
-
 
 
     // socket.on('new-chat-list', (message) => {

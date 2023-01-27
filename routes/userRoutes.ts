@@ -10,20 +10,13 @@ import { createFalse, ExpressionStatement } from "typescript"
 export const userRoutes = express.Router()
 
 
-userRoutes.get("/signup", getsignup)
-userRoutes.post("signup", signup)
+userRoutes.post("/signup", signup)
 userRoutes.post("/signin", signin)
-userRoutes.post("/basket/:productId/add", addToBasket)
-// userRoutes.delete("/:userId/basket/item/:itemId",isLoggedInAPI,deleteGrabItems)
-// userRoutes.get("/:userId/orders/:orderId",isLoggedInAPI, orderedItems)
+
 
 // sign up
-async function getsignup(req: express.Request, res: express.Response) {
-    res.sendFile(__dirname + "/public/user/signup_login.html");
-}
 
-export
-    async function signup(req: express.Request, res: express.Response) {
+export async function signup(req: express.Request, res: express.Response) {
     try {
         let { fields, files } = await formParsePromise(req);
         let { name, mobile, email, address, password } = fields
@@ -103,51 +96,6 @@ export async function signin(req: express.Request, res: express.Response) {
         res.status(500).json({
             message: '[USR001] - Server error'
         })
-    }
-}
-
-
-// put items into basketu
-export async function addToBasket(req: express.Request, res: express.Response) {
-    try {
-        console.log(req.body)
-        let { quantity } = req.body
-        let productId = Number(req.params.productId)
-        let userId = req.session['userId'] || 1
-
-
-        console.log({ quantity, productId })
-
-        let selectedProduct = (await client.query(`select * from products where id = $1`, [Number(productId)])).rows[0]
-
-
-        let basketItem: any = (await client.query(`select * from baskets where order_by = $1 and  product_id = $2`, [userId, productId])).rows[0]
-
-        // update current record's quantity in basket
-        if (basketItem) {
-            console.log(Number(quantity));
-            console.log(basketItem.quantity);
-
-
-            await client.query(`update baskets set quantity = $1 where order_by = $2`, [Number(quantity) + basketItem.quantity, userId])
-        } else {
-            // add new record in basket
-
-            await client.query(`
-                INSERT INTO baskets
-                (order_by, product_id, quantity )
-                VALUES($1, $2, $3);
-            `, [userId, selectedProduct.id, Number(quantity)])
-
-        }
-
-
-
-        res.end('ok')
-
-    } catch (error: any) {
-        res.status(500).end(error.message)
-        console.log(error)
     }
 }
 
