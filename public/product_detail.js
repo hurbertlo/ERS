@@ -62,15 +62,15 @@ window.onload = async () => {
     document
       .querySelector(".btn-plus")
       .addEventListener("click", function (event) {
-        let currnetQuantity = Number(displayElm.value);
-        displayElm.value = currnetQuantity + 1;
+        let currentQuantity = Number(displayElm.value);
+        displayElm.value = currentQuantity + 1;
       });
     document
       .querySelector(".btn-minus")
       .addEventListener("click", function (event) {
-        let currnetQuantity = Number(displayElm.value);
-        if (currnetQuantity === 1) return;
-        displayElm.value = currnetQuantity - 1;
+        let currentQuantity = Number(displayElm.value);
+        if (currentQuantity === 1) return;
+        displayElm.value = currentQuantity - 1;
       });
 
     document

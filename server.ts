@@ -12,6 +12,7 @@ import expressSession from 'express-session'
 import { logger } from './util/logger';
 import { userRoutes } from './routes/userRoutes'
 import { basketRoutes } from './routes/basketRoutes';
+import { productRoutes } from './routes/productRoutes';
 
 const app = express();
 const server = new http.Server(app);
@@ -210,56 +211,9 @@ app.post('/talk-to/:roomId', (req, res) => {
 //KAY
 
 
-// get all products
-app.get('/products', async (req, res, next) => {
-    let result = await client.query(`select * from products`)
-    res.json({
-        data: result.rows,
-        message: "select success"
-    });
-
-});
-
-app.get('/products/listing/:category', async (req, res, next) => {
-    let category = req.params.category
-    let query = ''
-    if (category === 'all') {
-        query = 'select * from products'
-    } else {
-        query = `
-        select * from categories inner join products on categories.id  = products.category_id where categories.name = '${category}' 
-        `
-    }
-    let result = await client.query(query)
-    res.json({
-        data: result.rows,
-        message: "select success"
-    });
-});
-
-// get product
-app.get('/products/:productId', async (req, res, next) => {
-    const productId = req.params.productId
-    console.log('finding product :', productId);
-
-    if (!Number(productId)) {
-        res.status(400).end('invalid product id')
-        return
-    }
-    let result = await client.query(`select * from products where id = $1`, [productId])
-    let product = result.rows[0]
-    if (!product) {
-        res.status(400).end('invalid product id')
-        return
-    }
-    res.json({
-        data: product,
-        message: product
-    });
-});
-
 app.use("/user", userRoutes);
 app.use('/basket', basketRoutes);
+app.use('products', productRoutes);
 app.use(express.static("public"));
 app.use(express.static("image"));
 app.use(express.static("404"));
