@@ -125,7 +125,7 @@
                         <div class="chat_people">
                             <div class="chat_img"> <img src="" alt=""> </div>
                             <div class="chat_ib">
-                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
+                                <h5>willy <span class="chat_date">Dec 25</span></h5>
                                 <p>hello</p>
                             </div>
                         </div>
@@ -135,71 +135,13 @@
                         <div class="chat_people">
                             <div class="chat_img"> <img src="" alt=""> </div>
                             <div class="chat_ib">
-                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
+                                <h5>kay <span class="chat_date">Dec 25</span></h5>
                                 <p>hello</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="chat_list">
-                        <div class="chat_people">
-                            <div class="chat_img"> <img src="" alt=""> </div>
-                            <div class="chat_ib">
-                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
-                                <p>hello</p>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="chat_list">
-                        <div class="chat_people">
-                            <div class="chat_img"> <img src="" alt=""> </div>
-                            <div class="chat_ib">
-                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
-                                <p>hello</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chat_list">
-                        <div class="chat_people">
-                            <div class="chat_img"> <img src="" alt=""> </div>
-                            <div class="chat_ib">
-                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
-                                <p>hello</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chat_list">
-                        <div class="chat_people">
-                            <div class="chat_img"> <img src="" alt=""> </div>
-                            <div class="chat_ib">
-                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
-                                <p>hello</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chat_list">
-                        <div class="chat_people">
-                            <div class="chat_img"> <img src="" alt=""> </div>
-                            <div class="chat_ib">
-                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
-                                <p>hello</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chat_list">
-                        <div class="chat_people">
-                            <div class="chat_img"> <img src="" alt=""> </div>
-                            <div class="chat_ib">
-                                <h5>hubert <span class="chat_date">Dec 25</span></h5>
-                                <p>hello</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -226,52 +168,6 @@
                         </div>
                     </div>
 
-                    <div class="incoming_msg">
-                        <div class="incoming_msg_img"> <img src=" " alt=""> </div>
-                        <div class="received_msg">
-                            <div class="received_withd_msg">
-                                <p>hello</p>
-                                <span class="time_date"> 11:01 AM | Yesterday</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="outgoing_msg">
-                        <div class="sent_msg">
-                            <p>hello</p>
-                            <span class="time_date"> 11:01 AM | Today</span>
-                        </div>
-                    </div>
-
-                    <div class="outgoing_msg">
-                        <div class="sent_msg">
-                            <p>hello</p>
-                            <span class="time_date"> 11:01 AM | Today</span>
-                        </div>
-                    </div>
-
-                    <div class="outgoing_msg">
-                        <div class="sent_msg">
-                            <p>hello</p>
-                            <span class="time_date"> 11:01 AM | Today</span>
-                        </div>
-                    </div>
-
-                    <div class="outgoing_msg">
-                        <div class="sent_msg">
-                            <p>hello</p>
-                            <span class="time_date"> 11:01 AM | Today</span>
-                        </div>
-                    </div>
-
-                    <div class="incoming_msg">
-                        <div class="incoming_msg_img"> <img src="" alt=""> </div>
-                        <div class="received_msg">
-                            <div class="received_withd_msg">
-                                <p>hello</p>
-                                <span class="time_date"> 11:01 AM | Today</span>
-                            </div>
-                        </div>
                     </div> -->
 
                 </div>
@@ -300,92 +196,7 @@
 
     <!-- Socket setUp-->
     <script src="/socket.io/socket.io.js"></script>
-
-
-    <!-- message -->
-    <script>
-        const socket = io.connect();
-
-        /**
-         * @param {String} HTML representing a single element
-         * @return {Element}
-         */
-        function htmlToElement(html) {
-            var template = document.createElement('template');
-            html = html.trim(); // Never return a text node of whitespace as the result
-            template.innerHTML = html;
-            return template.content.firstChild;
-        }
-
-        let params = new URLSearchParams(window.location.search)
-
-        let targetUser = params.get('user')
-
-        let messageForm = document.querySelector('form.type_msg')
-        let messageHistory = document.querySelector('.msg_history');
-        messageForm.addEventListener('submit', async (e) => {
-            e.preventDefault()
-
-            // if empty string, do not send message
-            if (!messageForm.message.value || messageForm.message.value == "") {
-                return
-            }
-
-            let res = await fetch(`/talk-to/${targetUser}`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: messageForm.message.value
-                })
-            })
-            // outgoing messages
-            if (res.ok) {
-                let newOutGoingMsg = htmlToElement(`
-                        <div class="outgoing_msg">
-                            <div class="sent_msg">
-                                <p>${messageForm.message.value}</p>
-                                <span class="time_date"> 11:01 AM | June 9</span>
-                            </div>
-                        </div>
-                    `)
-                messageHistory.appendChild(newOutGoingMsg);
-                messageForm.reset();
-
-                messageHistory.scrollTop = messageHistory.scrollHeight;
-            }
-        })
-
-        // //chat_list
-        // let chatList = document.querySelector('chat_list active_chat')
-        // chatList.addEventListener('click', () => {
-
-        // })
-        let msgList = document.querySelector('chat_list active_chat')
-        msgList.addEventListener('submit', () => {
-
-        })
-
-        socket.on('new-message', (message) => { // 監聽咩事件
-            // incoming messages
-            let newIncomingMsg = htmlToElement(`
-            <div class="incoming_msg">
-                    <div class="incoming_msg_img"> <img src="" alt=""> </div>
-                    <div class="received_msg">
-                        <div class="received_withd_msg">
-                            <p>${message}</p>
-                            <span class="time_date"> 11:01 AM | June 9</span>
-                        </div>
-                    </div>
-                </div>
-                    `)
-            messageHistory.appendChild(newIncomingMsg);
-
-            // window.location.href = '/home.html';
-        })
-
-    </script>
+    <script src="/chat.js"></script>
 </body>
 
 </html>

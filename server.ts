@@ -11,7 +11,6 @@ import { Server as SocketIO } from "socket.io";
 import expressSession from 'express-session'
 import { logger } from './util/logger';
 
-
 const app = express();
 const server = new http.Server(app);
 const io = new SocketIO(server);
@@ -84,7 +83,6 @@ app.post("/user/signin", async (req, res,) => {
             return
         }
 
-
         let selectUserResult = await client.query(
             `select * from users where email = $1 `,
             [email]
@@ -117,40 +115,46 @@ app.post("/user/signin", async (req, res,) => {
 }
 )
 
-// set up users 
-let counter = 1
+// // set up users 
+// let counter = 1
 
-app.use((req, res, next) => {
-    if (req.session['user']) {
-        next()
-        return
-    }
-    if (counter % 2 === 0) {
-        req.session['user'] = {
-            name: 'Odd Person',
-            id: 'user_' + counter,
-            createDate: new Date()
-        }
-        console.log('Odd person logged in')
-    } else {
-        req.session['user'] = {
-            name: 'Even Person',
-            id: 'user_' + counter,
-            createDate: new Date()
-        }
-        console.log('even person logged in')
-    }
-    console.log('current count = ', counter)
-    counter++
+// app.use((req, res, next) => {
+//     if (req.session['room']) {
+//         next()
+//         return
+//     }
 
-    next()
-})
+//     if (counter % 2 === 0) {
+//         req.session['room'] = {
+//             name: 'Odd Person',
+//             id: 'user_' + counter,
+//             createDate: new Date()
+//         }
+//         console.log('Odd person logged in')
+//     } else {
+//         req.session['room'] = {
+//             name: 'Even Person',
+//             id: 'user_' + counter,
+//             createDate: new Date()
+//         }
+//         console.log('even person logged in')
+//     }
+//     console.log('current count = ', counter)
+//     counter++
 
-app.get('/me', (req, res) => {
-    res.json(
-        req.session['user']
-    )
-})
+//     next()
+// })
+
+// //Kay update index
+// app.get('/', (req, res) => {
+//     res.sendFile(__dirname + '/public');
+// })
+
+// app.get('/me', (req, res) => {
+//     res.json(
+//         req.session['room']
+//     )
+// })
 
 io.use((socket, next) => {
     let req = socket.request as express.Request;
@@ -158,10 +162,8 @@ io.use((socket, next) => {
     sessionMiddleware(req, res, next as express.NextFunction);
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public');
-});
 
+//willy chat
 app.get('/chat', (req, res) => {
     res.sendFile(__dirname + '/public/chat.html');
     // if(!req.session || !req.session['user']){
@@ -170,29 +172,23 @@ app.get('/chat', (req, res) => {
     //     res.redirect('/home.html');
 });
 
-//Kay update index
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public');
-})
+const admin = 'chat admin'
 // user connection
 io.on('connection', (socket) => {
+    socket.emit('message', '有咩可以幫到你？')
+
+    socket.on('disconnect', () => {
+        io.emit('message', 'A user has left the chat')
+    })
     let req = socket.request as express.Request
-    if (!req.session || !req.session['user']) {
+    if (!req.session || !req.session['room']) {
         socket.disconnect()
         return
     }
-    console.log('io identity check :', req.session['user'])
-    socket.join(req.session['user'].id) //join另一個user id
+    console.log('io identity check :', req.session['room'])
+    socket.join(req.session['room'].id) //join另一個user id
 });
 
-//willy
-//入房
-app.get('/chat', async (req, res, next) => {
-    let chatType = await client.query(`select * from users`)
-    res.json({
-        id: chatType.rows
-    })
-})
 
 app.post('/talk-to/:roomId', (req, res) => {
     let roomId = req.params.roomId
@@ -201,16 +197,7 @@ app.post('/talk-to/:roomId', (req, res) => {
     res.end('talk ok')
 })
 
-// app.post('/talk-to/:roomId', (req, res) => {
-//     let roomId = req.params.roomId
-//     console.log('talk to triggered:', roomId);
-//     io.to(roomId).emit('new-message', req.body.message)
-//     res.end('talk ok')
-// })
-
 //KAY
-
-
 // get all products
 app.get('/products', async (req, res, next) => {
     let result = await client.query(`select * from products`)
@@ -258,6 +245,7 @@ app.get('/products/:productId', async (req, res, next) => {
         message: product
     });
 });
+
 
 app.use(express.static("public"));
 app.use(express.static("image"));
