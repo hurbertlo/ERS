@@ -27,9 +27,7 @@ let messageHistory = document.querySelector('.msg_history');
 
 let inboxChat = document.querySelector('chat_list');
 
-inboxChat.addEventListener('submit', => {
 
-})
 
 
 messageForm.addEventListener('submit', async (e) => {
