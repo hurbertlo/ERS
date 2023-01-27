@@ -11,12 +11,11 @@ import { Server as SocketIO } from "socket.io";
 import expressSession from 'express-session'
 import { logger } from './util/logger';
 import { userRoutes } from './routes/userRoutes'
+import { basketRoutes } from './routes/basketRoutes';
 
 const app = express();
 const server = new http.Server(app);
 const io = new SocketIO(server);
-
-app.use(express.urlencoded({ extended: true }));
 
 fs.mkdirSync(uploadDir, { recursive: true });
 
@@ -259,7 +258,8 @@ app.get('/products/:productId', async (req, res, next) => {
     });
 });
 
-app.use("/user", userRoutes)
+app.use("/user", userRoutes);
+app.use('/basket', basketRoutes);
 app.use(express.static("public"));
 app.use(express.static("image"));
 app.use(express.static("404"));
