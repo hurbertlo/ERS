@@ -52,12 +52,11 @@ export async function addToBasket(req: express.Request, res: express.Response) {
 
 export async function updateBasketItem(req: express.Request, res: express.Response) {
     try {
-        let { productId, quantity } = req.body
+        let { quantity } = req.body
+        let productId = Number(req.params.productId)
         let userId = req.session['userId']
-        let basketItem: any = (await client.query(`select * from baskets where ordered_by = $1 and  product_id = $2`, [userId, productId])).rows[0]
-        // update current record's quantity in basket
-        basketItem.quantity = quantity;
-        await client.query(`update baskets set quantity = $1 where ordered_by = $2`, [basketItem.quantity, userId])
+
+        await client.query(`update baskets set quantity = $1 where ordered_by = $2 and product_id = $3`, [quantity, userId, productId])
         res.json({
             message: "Amend successfully"
         })
@@ -72,8 +71,9 @@ export async function updateBasketItem(req: express.Request, res: express.Respon
 
 export async function removeBasketItem(req: express.Request, res: express.Response) {
     try {
-        let { productId } = req.body
+        let productId = Number(req.params.productId)
         let userId = req.session['userId']
+
         await client.query(`delete from baskets where ordered_by = $1 and product_id = $2`, [userId, productId])
         res.json({
             message: "Ops"

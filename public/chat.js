@@ -25,11 +25,6 @@ let targetUser = params.get('room') //session path
 let messageForm = document.querySelector('form.type_msg')
 let messageHistory = document.querySelector('.msg_history');
 
-let inboxChat = document.querySelector('chat_list');
-
-
-
-
 messageForm.addEventListener('submit', async (e) => {
     e.preventDefault()
 
@@ -49,7 +44,6 @@ messageForm.addEventListener('submit', async (e) => {
     })
 
     // outgoing messages
-
 
     if (res.ok) {
         let newOutGoingMsg = htmlToElement(`
