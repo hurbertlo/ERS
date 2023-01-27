@@ -157,10 +157,10 @@
     background-color: transparent;
   }
   
-  a:hover {
+  /* a:hover {
     color: #ba6a62;
     text-decoration: underline;
-  }
+  } */
   
   a:not([href]):not([class]) {
     color: inherit;
