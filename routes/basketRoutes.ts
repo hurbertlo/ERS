@@ -97,7 +97,7 @@ export async function clearBasket(req: express.Request, res: express.Response) {
         console.log(error)
     }
 }
-async function clearBasket(req: express.Request, res: express.Response) { }
+
 
 
 
