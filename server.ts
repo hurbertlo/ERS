@@ -33,35 +33,34 @@ const sessionMiddleware = expressSession({
 app.use(sessionMiddleware);
 
 // // set up users 
-// let counter = 1
+let counter = 1
 
-// app.use((req, res, next) => {
-//     if (req.session['room']) {
-//         next()
-//         return
-//     }
+app.use((req, res, next) => {
+    if (req.session['room']) {
+        next()
+        return
+    }
 
-//     if (counter % 2 === 0) {
-//         req.session['room'] = {
-//             name: 'Odd Person',
-//             id: 'user_' + counter,
-//             createDate: new Date()
-//         }
-//         console.log('Odd person logged in')
-//     } else {
-//         req.session['room'] = {
-//             name: 'Even Person',
-//             id: 'user_' + counter,
-//             createDate: new Date()
-//         }
-//         console.log('even person logged in')
-//     }
-//     console.log('current count = ', counter)
-//     counter++
+    if (counter % 2 === 0) {
+        req.session['room'] = {
+            name: 'Odd Person',
+            id: 'user_' + counter,
+            createDate: new Date()
+        }
+        console.log('Odd person logged in')
+    } else {
+        req.session['room'] = {
+            name: 'Even Person',
+            id: 'user_' + counter,
+            createDate: new Date()
+        }
+        console.log('even person logged in')
+    }
+    console.log('current count = ', counter)
+    counter++
 
-//     next()
-// })
-
+    next()
+})
 
 io.use((socket, next) => {
     let req = socket.request as express.Request;
@@ -72,21 +71,27 @@ io.use((socket, next) => {
 //willy chat
 app.get('/chat', (req, res) => {
     res.sendFile(__dirname + '/public/chat.html');
+    // if(!req.session || !req.session['user']){
+    //     res.redirect('/login.html');
+    // }else{
+    //     res.redirect('/home.html');
 });
 
 // user connection
 io.on('connection', (socket) => {
-    // socket.emit('message', '有咩可以幫到你？')
-    // socket.on('disconnect', () => {
-    //     io.emit('message', 'A user has left the chat')
-    // })
+    socket.emit('message', '有咩可以幫到你？')
+
+    socket.on('disconnect', () => {
+        io.emit('message', 'A user has left the chat')
+    })
+
     let req = socket.request as express.Request
-    if (!req.session) {
+    if (!req.session || !req.session['room']) {
         socket.disconnect()
         return
     }
-    console.log('io identity check :', req.session['userId'])
-    socket.join(req.session['userId']) //join另一個user id
+    console.log('io identity check :', req.session['room'])
+    socket.join(req.session['room'].id) //join另一個user id
 });
 
 app.post('/talk-to/:roomId', (req, res) => {
