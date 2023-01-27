@@ -49,7 +49,7 @@ CREATE TABLE products (
 );
 CREATE TABLE baskets (
     id serial primary key,
-    order_by INTEGER not null,
+    ordered_by INTEGER not null,
     foreign key (order_by) references users(id),
     product_id INT not null,
     foreign key (product_id) references products(id),

@@ -255,7 +255,7 @@ VALUES (
 INSERT INTO order_details (
 		order_id,
 		product_id,
-		amount,
+		quantity,
 		price_per_item,
 		discount_amount,
 		price,

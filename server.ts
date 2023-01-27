@@ -13,6 +13,7 @@ import { logger } from './util/logger';
 import { userRoutes } from './routes/userRoutes'
 import { basketRoutes } from './routes/basketRoutes';
 import { productRoutes } from './routes/productRoutes';
+import { orderRoutes } from './routes/orderRoutes';
 
 const app = express();
 const server = new http.Server(app);
@@ -103,10 +104,12 @@ app.post('/talk-to/:roomId', (req, res) => {
     res.end('talk ok')
 })
 
-
-
+app.get("/signup", (req, res) => {
+    res.sendFile(__dirname + "/public/user/signup_login.html");
+})
 app.use("/user", userRoutes);
 app.use('/basket', basketRoutes);
+app.use("/order", orderRoutes);
 app.use('products', productRoutes);
 app.use(express.static("public"));
 app.use(express.static("image"));

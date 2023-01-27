@@ -60,3 +60,18 @@ async function removeBasketItem(req: express.Request, res: express.Response) { }
 
 
 async function clearBasket(req: express.Request, res: express.Response) { }
+
+
+
+// kay update get basket
+basketRoutes.get('/', async (req, res, next) => {
+
+    let userId = req.session['userId']
+    let result = await client.query(`select * from baskets where order_by = $1`, [userId])
+    let basketItems = result.rows
+
+    res.json({
+        data: basketItems,
+        message: `${basketItems.length} item${basketItems.length>1 ?'s' : ''} found`
+    });
+});

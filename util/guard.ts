@@ -5,7 +5,7 @@ export const isLoggedIn = (
 	res: express.Response,
 	next: express.NextFunction
 ) => {
-	if (req.session["user_id"]) {
+	if (req.session["userId"]) {
 		//called Next here
 		next()
 	} else {
@@ -19,7 +19,7 @@ export const isLoggedInAPI = (
 	res: express.Response,
 	next: express.NextFunction
 ) => {
-	if (req.session["user_id"]) {
+	if (req.session["userId"]) {
 		//called Next here
 		next()
 	} else {
