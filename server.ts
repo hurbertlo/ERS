@@ -35,37 +35,37 @@ app.use(sessionMiddleware);
 // set up users 
 let counter = 1
 
-app.use((req, res, next) => {
-    if (req.session['user']) {
-        next()
-        return
-    }
-    if (counter % 2 === 0) {
-        req.session['user'] = {
-            name: 'Odd Person',
-            id: 'user_' + counter,
-            createDate: new Date()
-        }
-        console.log('Odd person logged in')
-    } else {
-        req.session['user'] = {
-            name: 'Even Person',
-            id: 'user_' + counter,
-            createDate: new Date()
-        }
-        console.log('even person logged in')
-    }
-    console.log('current count = ', counter)
-    counter++
+//     if (counter % 2 === 0) {
+//         req.session['room'] = {
+//             name: 'Odd Person',
+//             id: 'user_' + counter,
+//             createDate: new Date()
+//         }
+//         console.log('Odd person logged in')
+//     } else {
+//         req.session['room'] = {
+//             name: 'Even Person',
+//             id: 'user_' + counter,
+//             createDate: new Date()
+//         }
+//         console.log('even person logged in')
+//     }
+//     console.log('current count = ', counter)
+//     counter++
 
-    next()
-})
+//     next()
+// })
 
-app.get('/me', (req, res) => {
-    res.json(
-        req.session['user']
-    )
-})
+// //Kay update index
+// app.get('/', (req, res) => {
+//     res.sendFile(__dirname + '/public');
+// })
+
+// app.get('/me', (req, res) => {
+//     res.json(
+//         req.session['room']
+//     )
+// })
 
 io.use((socket, next) => {
     let req = socket.request as express.Request;
@@ -73,10 +73,8 @@ io.use((socket, next) => {
     sessionMiddleware(req, res, next as express.NextFunction);
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public');
-});
 
+//willy chat
 app.get('/chat', (req, res) => {
     res.sendFile(__dirname + '/public/chat.html');
     // if(!req.session || !req.session['user']){
@@ -85,29 +83,22 @@ app.get('/chat', (req, res) => {
     //     res.redirect('/home.html');
 });
 
-//Kay update index
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public');
-})
+const admin = 'chat admin'
 // user connection
 io.on('connection', (socket) => {
+    socket.emit('message', '有咩可以幫到你？')
+
+    socket.on('disconnect', () => {
+        io.emit('message', 'A user has left the chat')
+    })
     let req = socket.request as express.Request
-    if (!req.session || !req.session['user']) {
+    if (!req.session || !req.session['room']) {
         socket.disconnect()
         return
     }
-    console.log('io identity check :', req.session['user'])
-    socket.join(req.session['user'].id) //join另一個user id
+    console.log('io identity check :', req.session['room'])
+    socket.join(req.session['room'].id) //join另一個user id
 });
-
-//willy
-//入房
-app.get('/chat', async (req, res, next) => {
-    let chatType = await client.query(`select * from users`)
-    res.json({
-        id: chatType.rows
-    })
-})
 
 app.post('/talk-to/:roomId', (req, res) => {
     let roomId = req.params.roomId

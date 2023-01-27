@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" 
-    content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Hoppers</title>
 
-    <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-    crossorigin="anonymous"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
     <link rel="stylesheet" href="/index.css" />
     <link rel="stylesheet" href="/header.css" />
     <link rel="stylesheet" href="/footer.css" />
@@ -22,14 +18,14 @@
 </head>
 
 <body>
-   <div id="header"></div>
-   <script src="/header.js"></script>
+    <div id="header"></div>
+    <script src="/header.js"></script>
 
-<!-- Shop Product Start -->
-<div class="post-container">
-    <div class="row pb-3">
-       
-        <!-- <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
+    <!-- Shop Product Start -->
+    <div class="post-container">
+        <div class="row pb-3">
+
+            <!-- <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
             <div class="card product-item border-0 mb-4">
                 <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                     <img class="img-fluid w-100" src="https://i.pinimg.com/236x/ec/43/de/ec43de668867db59cdd38d80c87a4cf0.jpg" alt="">
@@ -42,8 +38,8 @@
                 </div>
             </div>
         </div> -->
-        
-        <!-- <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
+
+            <!-- <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
             <div class="card product-item border-0 mb-4">
                 <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                     <img class="img-fluid w-100" src="https://i.pinimg.com/564x/17/cf/a6/17cfa660f791c390f66496a44de81fdb.jpg" alt="">
@@ -56,8 +52,8 @@
                 </div>
             </div>
         </div> -->
-        
-        <!-- <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
+
+            <!-- <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
             <div class="card product-item border-0 mb-4">
                 <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                     <a href="http://localhost:8080/product_detail.html?id=3">
@@ -71,53 +67,53 @@
                 </div>
             </div>
         </div>-->
-        
-        <!-- <a href="http://localhost:8080/detail.html?id=3"> product 3</a>
+
+            <!-- <a href="http://localhost:8080/detail.html?id=3"> product 3</a>
         <a href="http://localhost:8080/detail.html?id=1">product 1</a>
         <a href="http://localhost:8080/detail.html?id=2">product 2</a> -->
-        
-        
-        
-        
-        
+
+
+
+
+
+        </div>
+
     </div>
-    
-</div>
-<!-- Shop Product End -->
-</div>
-</div>
-<!-- Shop End -->
+    <!-- Shop Product End -->
+    </div>
+    </div>
+    <!-- Shop End -->
 
 
 
-   <footer></footer>
+    <footer></footer>
     <script src="/footer.js"></script>
 
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-      crossorigin="anonymous"></script>
-  <script src="https://kit.fontawesome.com/b635d6dc2e.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/b635d6dc2e.js" crossorigin="anonymous"></script>
 
 
-  <script>
-async function getPosts(){
+    <script>
+        async function getPosts() {
 
-    let search = new URLSearchParams(window.location.search)
-        let res =   await fetch(`/products/listing/${search.get("category")}`)
-        if(res.ok){
-            let data = await res.json()
-            let posts = data.data
-            console.table(posts)
-            updatePostListingUI(posts)
+            let search = new URLSearchParams(window.location.search)
+            let res = await fetch(`/products/listing/${search.get("category")}`)
+            if (res.ok) {
+                let data = await res.json()
+                let posts = data.data
+                console.table(posts)
+                updatePostListingUI(posts)
+            }
+
         }
-
-}
-function updatePostListingUI(posts){
-    let postContainer = document.querySelector('.post-container')
-    postContainer.innerHTML =''
-    for (let post of posts){
-        postContainer.innerHTML +=
-        `
+        function updatePostListingUI(posts) {
+            let postContainer = document.querySelector('.post-container')
+            postContainer.innerHTML = ''
+            for (let post of posts) {
+                postContainer.innerHTML +=
+                    `
                 <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
                     <div class="card product-item border-0 mb-4">
                         <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
@@ -132,14 +128,14 @@ function updatePostListingUI(posts){
                     </div>
                 </div>
         `
-    }
-}
+            }
+        }
 
 
-(function init(){
-    getPosts()
-})()
-  </script>
+        (function init() {
+            getPosts()
+        })()
+    </script>
 </body>
 
 </html>
