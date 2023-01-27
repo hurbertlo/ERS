@@ -11,7 +11,8 @@ basketRoutes.post("/:productId", isLoggedInAPI, addToBasket)
 basketRoutes.put("/:productId", isLoggedInAPI, updateBasketItem)
 basketRoutes.delete("/:productId", isLoggedInAPI, removeBasketItem)
 basketRoutes.delete("/", isLoggedInAPI, clearBasket)
-
+// kay update get basket
+basketRoutes.get("/", isLoggedInAPI, getBasket)
 
 export async function addToBasket(req: express.Request, res: express.Response) {
     try {
@@ -102,7 +103,7 @@ export async function clearBasket(req: express.Request, res: express.Response) {
 
 
 // kay update get basket
-basketRoutes.get('/', async (req, res, next) => {
+async function getBasket(req: express.Request, res: express.Response) {
 
     let userId = req.session['userId']
     let result = await client.query(`select * from baskets where ordered_by = $1`, [userId])
@@ -112,4 +113,4 @@ basketRoutes.get('/', async (req, res, next) => {
         data: basketItems,
         message: `${basketItems.length} item${basketItems.length > 1 ? 's' : ''} found`
     });
-});
+};

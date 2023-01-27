@@ -110,7 +110,7 @@ app.get("/user/signup", (req, res) => {
 app.use("/user", userRoutes);
 app.use('/basket', basketRoutes);
 app.use("/order", orderRoutes);
-app.use('products', productRoutes);
+app.use('/products', productRoutes);
 app.use(express.static("public"));
 app.use(express.static("image"));
 app.use(express.static("404"));

@@ -73,25 +73,27 @@ window.onload = async () => {
         displayElm.value = currentQuantity - 1;
       });
 
-    document
-      .querySelector("#add-to-cart")
-      .addEventListener("click", async function (event) {
-        let res = await fetch("asldlsa", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: {
-            quantity: Number(displayElm.value),
-            productId,
-          },
-        });
-        if (res.ok) {
-          Notiflix.Notify.success("成功加入購物車！");
-        } else {
-          Notiflix.Notify.failure("未能加入購物車！");
-        }
-      });
+    document.querySelector("#add-to-cart").addEventListener("click", addToCard);
+  }
+
+  async function addToCard() {
+    const searchParams = new URLSearchParams(location.search);
+    const productId = searchParams.get("id");
+    let res = await fetch(`http://localhost:8080/basket/${productId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        quantity: Number(document.querySelector("#quantity-display").value),
+      }),
+    });
+
+    if (res.ok) {
+      Notiflix.Notify.success("成功加入購物車！");
+    } else {
+      Notiflix.Notify.failure("未能加入購物車！");
+    }
   }
 
   // Rest of the code
