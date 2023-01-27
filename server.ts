@@ -32,52 +32,41 @@ const sessionMiddleware = expressSession({
 app.use(sessionMiddleware);
 
 // // set up users 
-// let counter = 1
+let counter = 1
 
-// app.use((req, res, next) => {
-//     if (req.session['room']) {
-//         next()
-//         return
-//     }
+app.use((req, res, next) => {
+    if (req.session['room']) {
+        next()
+        return
+    }
 
-//     if (counter % 2 === 0) {
-//         req.session['room'] = {
-//             name: 'Odd Person',
-//             id: 'user_' + counter,
-//             createDate: new Date()
-//         }
-//         console.log('Odd person logged in')
-//     } else {
-//         req.session['room'] = {
-//             name: 'Even Person',
-//             id: 'user_' + counter,
-//             createDate: new Date()
-//         }
-//         console.log('even person logged in')
-//     }
-//     console.log('current count = ', counter)
-//     counter++
+    if (counter % 2 === 0) {
+        req.session['room'] = {
+            name: 'Odd Person',
+            id: 'user_' + counter,
+            createDate: new Date()
+        }
+        console.log('Odd person logged in')
+    } else {
+        req.session['room'] = {
+            name: 'Even Person',
+            id: 'user_' + counter,
+            createDate: new Date()
+        }
+        console.log('even person logged in')
+    }
+    console.log('current count = ', counter)
+    counter++
 
-//     next()
-// })
+    next()
+})
 
-// //Kay update index
-// app.get('/', (req, res) => {
-//     res.sendFile(__dirname + '/public');
-// })
-
-// app.get('/me', (req, res) => {
-//     res.json(
-//         req.session['room']
-//     )
-// })
 
 io.use((socket, next) => {
     let req = socket.request as express.Request;
     let res = req.res as express.Response;
     sessionMiddleware(req, res, next as express.NextFunction);
 });
-
 
 //willy chat
 app.get('/chat', (req, res) => {
@@ -88,7 +77,8 @@ app.get('/chat', (req, res) => {
     //     res.redirect('/home.html');
 });
 
-const admin = 'chat admin'
+
+
 // user connection
 io.on('connection', (socket) => {
     socket.emit('message', '有咩可以幫到你？')
@@ -96,6 +86,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         io.emit('message', 'A user has left the chat')
     })
+
     let req = socket.request as express.Request
     if (!req.session || !req.session['room']) {
         socket.disconnect()
@@ -111,6 +102,8 @@ app.post('/talk-to/:roomId', (req, res) => {
     io.to(roomId).emit('new-message', req.body.message)
     res.end('talk ok')
 })
+
+
 
 app.use("/user", userRoutes);
 app.use('/basket', basketRoutes);
