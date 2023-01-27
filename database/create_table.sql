@@ -53,10 +53,7 @@ CREATE TABLE baskets (
     foreign key (order_by) references users(id),
     product_id INT not null,
     foreign key (product_id) references products(id),
-    amount INTEGER not null,
-    price_per_item FLOAT not null,
-    discount_amount FLOAT not null,
-    price FLOAT not null,
+    quantity INTEGER not null,
     created_at TIMESTAMP with time zone default now(),
     updated_at TIMESTAMP with time zone default now()
 );
@@ -66,7 +63,7 @@ CREATE TABLE order_details (
     foreign key (order_id) references orders(id),
     product_id INT not null,
     foreign key (product_id) references products(id),
-    amount INTEGER not null,
+    quantity INTEGER not null,
     price_per_item FLOAT not null,
     discount_amount FLOAT not null,
     price FLOAT not null,

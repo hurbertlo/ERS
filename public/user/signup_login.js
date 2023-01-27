@@ -52,7 +52,7 @@ newUserElm.addEventListener("submit", async (e) => {
   if (res.ok) {
     newUserElm.reset();
   } else {
-    console.log("post fail");
+    console.log("signup fail");
   }
 });
 
@@ -66,12 +66,12 @@ signInElm.addEventListener(`submit`, async (e) => {
 
   let res = await fetch(`/user/signin`, {
     method: "POST",
-	headers:{
+	  headers:{
 		'Content-type': 'application/json'
 	},
     body: JSON.stringify(formData)
   });
-  //   // post handling
+  //  post handling
   if (res.ok) {
     console.log("sign in success");
   } else {
