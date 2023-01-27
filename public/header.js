@@ -13,7 +13,9 @@ document.querySelector("#header").innerHTML = /*html*/ `
     <div class="offcanvas-body">
        
         <div class="menu-container">
+            <a href='/index.html'>
             <div class="menu-item">首頁</div>
+            </a>
             <a href='/listing.html?category=all'>
               <div class="menu-item">全部</div>
             </a>
@@ -85,19 +87,21 @@ document.querySelector("#header").innerHTML = /*html*/ `
 
 
         <div class="menu-container-2">
-        <div class="menu-item">首頁</div>
+        <a href='/index.html'>
+          <div class="menu-item">首頁</div>
+        </a>
         <a href='/listing.html?category=all'>
           <div class="menu-item">全部</div>
         </a>
         <a href='/listing.html?category=food'>
           <div class="menu-item">食品</div>
-        </a>
+        </a></b>
         <a href='/listing.html?category=clothing'>
           <div class="menu-item">玩具</div>
-        </a>
+        </a></b>
         <a href='/listing.html?category=toy'>
           <div class="menu-item">衣服</div>
-        </a>
+        </a></b>
         <a href='/listing.html?category=tool'>
           <div class="menu-item">工具</div>
         </a>

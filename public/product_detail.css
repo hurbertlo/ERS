@@ -1,0 +1,12 @@
+.right-board {
+    justify-content: center;
+    align-items: center;
+    padding: 80px;
+}
+
+
+.left-board {
+    justify-content: center;
+    align-items: center;
+    padding: 100px;
+}
