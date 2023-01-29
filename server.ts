@@ -62,7 +62,6 @@ app.use((req, res, next) => {
     next()
 })
 
-
 io.use((socket, next) => {
     let req = socket.request as express.Request;
     let res = req.res as express.Response;
@@ -77,8 +76,6 @@ app.get('/chat', (req, res) => {
     // }else{
     //     res.redirect('/home.html');
 });
-
-
 
 // user connection
 io.on('connection', (socket) => {
