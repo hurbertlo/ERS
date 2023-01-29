@@ -421,3 +421,25 @@ VALUES (1, 1, 'Hello, can I help?', 'active'),
 	(1, 3, 'Bye', 'active'),
 	(2, 4, 'Hi', 'active'),
 	(2, 4, 'Hii', 'active');
+INSERT INTO order_status (status, created_at, updated_at)
+VALUES('Order Received', '2023-01-29', '2023-01-29');
+INSERT INTO order_status (status, created_at, updated_at)
+VALUES('On The Way', '2023-01-29', '2023-01-29');
+INSERT INTO order_status (status, created_at, updated_at)
+VALUES('Delivered', '2023-01-29', '2023-01-29');
+INSERT INTO baskets(
+		ordered_by,
+		product_id,
+		quantity,
+		created_at,
+		updated_at
+	)
+VALUES(1, 2, 2, '2023-01-18', '2023-01-18'),
+	(1, 3, 4, '2023-01-18', '2023-01-18'),
+	(2, 5, 2, '2023-01-18', '2023-01-18'),
+	(2, 7, 3, '2023-01-18', '2023-01-18'),
+	(2, 6, 1, '2023-01-18', '2023-01-18'),
+	(3, 8, 5, '2023-01-18', '2023-01-18'),
+	(3, 10, 1, '2023-01-18', '2023-01-18'),
+	(3, 11, 1, '2023-01-18', '2023-01-18'),
+	(3, 4, 3, '2023-01-18', '2023-01-18');
