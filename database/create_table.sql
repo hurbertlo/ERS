@@ -23,13 +23,20 @@ CREATE TABLE users (
     created_at TIMESTAMP with time zone default now(),
     updated_at TIMESTAMP with time zone default now()
 );
+CREATE TABLE order_status(
+    id SERIAL primary key,
+    status TEXT not null,
+    created_at TIMESTAMP with time zone default now(),
+    updated_at TIMESTAMP with time zone default now()
+);
 CREATE TABLE orders (
     id SERIAL primary key,
     ordered_by INTEGER not null,
     foreign key (ordered_by) references users(id),
     address TEXT not null,
     total_price FLOAT not null,
-    status TEXT not null default 'requested',
+    order_status_id INTEGER not null default 1,
+    foreign key (order_status_id) references order_status(id),
     -- requested, on the way , delivered
     created_at TIMESTAMP with time zone default now(),
     updated_at TIMESTAMP with time zone default now()
@@ -64,9 +71,9 @@ CREATE TABLE order_details (
     product_id INT not null,
     foreign key (product_id) references products(id),
     quantity INTEGER not null,
-    price_per_item FLOAT not null,
-    discount_amount FLOAT not null,
     price FLOAT not null,
+    discount_amount FLOAT default 1,
+    subtotal FLOAT not null,
     created_at TIMESTAMP with time zone default now(),
     updated_at TIMESTAMP with time zone default now()
 );
