@@ -23,10 +23,10 @@ INSERT INTO users (
 	)
 VALUES (
 		1,
-		'ben',
+		'Admin ben',
 		'WanChai',
 		'63759857',
-		'ben@hotmail.com',
+		'adminben@hoppers.com',
 		'passw@rd',
 		'2023-01-16',
 		'2023-01-18'
@@ -42,7 +42,7 @@ INSERT INTO users (
 		updated_at
 	)
 VALUES (
-		1,
+		2,
 		'sam',
 		'Kowloon Tong',
 		'98628763',
@@ -68,6 +68,26 @@ VALUES (
 		'58362837',
 		'ken@hotmail.com',
 		'pass456',
+		'2023-01-16',
+		'2023-01-18'
+	);
+INSERT INTO users (
+		user_type_id,
+		name,
+		address,
+		mobile,
+		email,
+		password,
+		created_at,
+		updated_at
+	)
+VALUES (
+		2,
+		'sandy',
+		'causeway Bay',
+		'94728756',
+		'sandy@hotmail.com',
+		'pass231',
 		'2023-01-16',
 		'2023-01-18'
 	);
@@ -347,7 +367,7 @@ insert into chats (
 	)
 VALUES (
 		1,
-		2,
+		3,
 		'Why my product did not delivery on time?',
 		'text',
 		'2023-01-24',
@@ -362,7 +382,7 @@ insert into chats (
 		updated_at
 	)
 VALUES (
-		2,
+		1,
 		3,
 		'How many stock of bell_bone do you have? ',
 		'text',
@@ -385,3 +405,19 @@ VALUES (
 		'2023-01-01',
 		'2023-01-08'
 	);
+INSERT INTO chat_room (room_name, user_one_id, user_two_id, status)
+VALUES ('user1_user3', 1, 3, 'active'),
+	('user1_user4', 1, 4, 'active');
+INSERT INTO chat_message (
+		room_id,
+		user_id,
+		message,
+		status,
+		created_at,
+		updated_at
+	)
+VALUES (1, 1, 'Hello, can I help?', 'active'),
+	(1, 3, 'No thanks', 'active'),
+	(1, 3, 'Bye', 'active'),
+	(2, 4, 'Hi', 'active'),
+	(2, 4, 'Hii', 'active');

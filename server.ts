@@ -14,15 +14,13 @@ import { userRoutes } from './routes/userRoutes'
 import { basketRoutes } from './routes/basketRoutes';
 import { productRoutes } from './routes/productRoutes';
 import { orderRoutes } from './routes/orderRoutes';
+import { chatRoutes } from './routes/chatRoutes';
 
+
+//Socket.io Session SetUp
 const app = express();
 const server = new http.Server(app);
 const io = new SocketIO(server);
-
-fs.mkdirSync(uploadDir, { recursive: true });
-
-app.use(express.json());
-
 const sessionMiddleware = expressSession({
     secret: "Tecky Academy teaches typescript",
     resave: true,
@@ -32,66 +30,56 @@ const sessionMiddleware = expressSession({
 
 app.use(sessionMiddleware);
 
-// // set up users 
-let counter = 1
-
-app.use((req, res, next) => {
-    if (req.session['room']) {
-        next()
-        return
-    }
-
-    if (counter % 2 === 0) {
-        req.session['room'] = {
-            name: 'Odd Person',
-            id: 'user_' + counter,
-            createDate: new Date()
-        }
-        console.log('Odd person logged in')
-    } else {
-        req.session['room'] = {
-            name: 'Even Person',
-            id: 'user_' + counter,
-            createDate: new Date()
-        }
-        console.log('even person logged in')
-    }
-    console.log('current count = ', counter)
-    counter++
-
-    next()
-})
-
 io.use((socket, next) => {
     let req = socket.request as express.Request;
     let res = req.res as express.Response;
     sessionMiddleware(req, res, next as express.NextFunction);
 });
 
-//willy chat
-app.get('/chat', (req, res) => {
-    res.sendFile(__dirname + '/public/chat.html');
-    // if(!req.session || !req.session['user']){
-    //     res.redirect('/login.html');
-    // }else{
-    //     res.redirect('/home.html');
-});
+fs.mkdirSync(uploadDir, { recursive: true });
+app.use(express.json());
+
+// // // set up users 
+// let counter = 1
+
+// app.use((req, res, next) => {
+//     if (req.session['user']) {
+//         next()
+//         return
+//     }
+
+//     if (counter % 2 === 0) {
+//         req.session['user'] = {
+//             name: 'Odd Person',
+//             id: 'user_' + counter,
+//             createDate: new Date()
+//         }
+//         console.log('Odd person logged in')
+//     } else {
+//         req.session['user'] = {
+//             name: 'Even Person',
+//             id: 'user_' + counter,
+//             createDate: new Date()
+//         }
+//         console.log('even person logged in')
+//     }
+//     console.log('current count = ', counter)
+//     counter++
+
+//     next()
+// })
+
+
 
 // user connection
 io.on('connection', (socket) => {
-    socket.emit('message', '有咩可以幫到你？')
-
-    socket.on('disconnect', () => {
-        io.emit('message', 'A user has left the chat')
-    })
-
     let req = socket.request as express.Request
-    if (!req.session || !req.session['room']) {
+    if (!req.session || !req.session['user']) {
         socket.disconnect()
         return
     }
-    console.log('io identity check :', req.session['room'])
-    socket.join(req.session['room'].id) //join另一個user id
+    console.log('io identity check :', req.session['user'])
+    socket.join(req.session['user'].id) //join另一個user id
 });
 
 app.post('/talk-to/:roomId', (req, res) => {
@@ -101,10 +89,7 @@ app.post('/talk-to/:roomId', (req, res) => {
     res.end('talk ok')
 })
 
-app.get("/user/signup", (req, res) => {
-    res.sendFile(__dirname + "/public/user/signup_login.html");
-})
-
+app.use("/chatroom", chatRoutes);
 app.use("/user", userRoutes);
 app.use('/basket', basketRoutes);
 app.use("/order", orderRoutes);

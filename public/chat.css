@@ -113,6 +113,21 @@ img {
     overflow-y: scroll;
 }
 
+.inbox_chat::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* bootstrap overrides */
+.nav-link {
+    color: rgb(66, 66, 66) !important;
+}
+
+.nav-link.active {
+    background-color: grey !important;
+    color: white !important;
+}
+
+
 .active_chat {
     background: #ebebeb;
 }
@@ -154,7 +169,7 @@ img {
     width: 57%;
 }
 
-.mesgs {
+.msgs {
     float: left;
     padding: 30px 15px 0 25px;
     width: 60%;
