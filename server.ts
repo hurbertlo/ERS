@@ -104,9 +104,6 @@ app.post('/talk-to/:roomId', (req, res) => {
     res.end('talk ok')
 })
 
-app.get("/user/signup", (req, res) => {
-    res.sendFile(__dirname + "/public/user/signup_login.html");
-})
 app.use("/user", userRoutes);
 app.use('/basket', basketRoutes);
 app.use("/order", orderRoutes);
