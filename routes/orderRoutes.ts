@@ -8,25 +8,28 @@ import { Console } from "console"
 
 export const orderRoutes = express.Router()
 
-orderRoutes.post("/create", isLoggedInAPI, createOrder)
+orderRoutes.post("/basket/:basketid", isLoggedInAPI, createOrder)
 orderRoutes.put("/delivering", deliveringOrder)
 orderRoutes.put("/completed", completedOrder)
 
 export async function createOrder(req: express.Request, res: express.Response) {
     let orderId: number
+    let userId = req.session["userId"]
+    let sendaddress = await client.query(`select address from users where id = $1`, [userId])
+    let address = sendaddress.rows[0]["address"]
     let checkoutItems = []
     let n
-    try {
-        let userId = req.session["userId"]
-        let sendaddress = await client.query(`select address from users where id = $1`, [userId])
-        // create a temporary summary table of the order
-        checkoutItems = (await client.query(`WITH choosenItems AS(SELECT product_id, quantity FROM baskets where ordered_by = ${userId}),
-                     choosenItemDetails AS(SELECT id ,price FROM products WHERE id IN (SELECT product_id FROM baskets INNER JOIN users ON baskets.ordered_by = ${userId}))
-                     SELECT product_id, quantity, price FROM choosenItems INNER JOIN choosenItemDetails ON choosenItems.product_id = choosenItemDetails.id`)).rows
+    let total = 0
+    let orderDate
 
-        let address = sendaddress.rows[0]["address"]
+    try {
+        // create a temporary summary table of the order
+        checkoutItems = (await client.query(`WITH chosenItems AS(SELECT product_id, quantity FROM baskets where ordered_by = ${userId}),
+                     chosenItemDetails AS(SELECT id ,price FROM products WHERE id IN (SELECT product_id FROM baskets INNER JOIN users ON baskets.ordered_by = ${userId}))
+                     SELECT product_id, quantity, price FROM chosenItems INNER JOIN chosenItemDetails ON chosenItems.product_id = chosenItemDetails.id`)).rows
+
         n = checkoutItems.length
-        let total = 0
+
         // Create an Order
         for (let i = 0; i < n; i++) {
             let pq = checkoutItems[i].quantity
@@ -38,10 +41,10 @@ export async function createOrder(req: express.Request, res: express.Response) {
         let order = await client.query(` INSERT INTO orders(ordered_by, address, total_price) VALUES ($1, $2, $3) RETURNING id`,
             [userId, address, total])
         orderId = order.rows[0].id
-
-    } catch (e) {
-        console.log(e);
+        orderDate = await client.query(`SELECT createded_at FROM orders WHERE id = $1`, [orderId])
+    } catch (error: any) {
         res.status(500).end("[ORD001]-server error")
+        console.log(error);
         throw new Error("Order fail")
     }
 
@@ -59,16 +62,29 @@ export async function createOrder(req: express.Request, res: express.Response) {
             await client.query(`INSERT INTO order_details(order_id, product_id, quantity, price, subtotal) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
                 [orderId!, pId, pq, pp, subTotal])
         }
-    }
-    catch (e) {
-        console.log(e);
+    } catch (error: any) {
         res.status(500).end("[ORD002]-server error")
+        console.log(error)
     }
 
     res.json({
-        message: "order received with thanks"
+        message: "order received with thanks",
+        address,
+        orderId,
+        orderDate,
+        checkoutItems,
+        total
     })
+
+    // remove Basket 
+    try {
+        await client.query(`DELETE FROM baskets WHERE ordered_by = $1`, [userId])
+    } catch (error: any) {
+        res.status(500).end("[ORD003] Server Error")
+        console.log(error)
+    }
 }
+
 
 
 
@@ -82,7 +98,7 @@ export async function deliveringOrder(req: express.Request, res: express.Respons
         })
 
     } catch (error: any) {
-        res.status(500).end("[ORD003]-server error")
+        res.status(500).end("[ORD004]-server error")
         console.log(error)
     }
 }
@@ -98,7 +114,7 @@ export async function completedOrder(req: express.Request, res: express.Response
         })
 
     } catch (error: any) {
-        res.status(500).end("[ORD004]-server error")
+        res.status(500).end("[ORD005]-server error")
         console.log(error)
     }
 }
