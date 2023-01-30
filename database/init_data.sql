@@ -3,6 +3,7 @@ TRUNCATE user_types RESTART IDENTITY CASCADE;
 TRUNCATE users RESTART IDENTITY CASCADE;
 TRUNCATE order_details RESTART IDENTITY CASCADE;
 TRUNCATE orders RESTART IDENTITY CASCADE;
+TRUNCATE order_status RESTART IDENTITY CASCADE;
 TRUNCATE products RESTART IDENTITY CASCADE;
 TRUNCATE categories RESTART IDENTITY CASCADE;
 -- willy
@@ -240,11 +241,17 @@ VALUES (
 		'2023-01-12',
 		'2023-01-15'
 	);
+INSERT INTO order_status (status, created_at, updated_at)
+VALUES('Order Received', '2023-01-29', '2023-01-29');
+INSERT INTO order_status (status, created_at, updated_at)
+VALUES('On The Way', '2023-01-29', '2023-01-29');
+INSERT INTO order_status (status, created_at, updated_at)
+VALUES('Delivered', '2023-01-29', '2023-01-29');
 INSERT INTO orders (
 		ordered_by,
 		address,
 		total_price,
-		status,
+		order_status_id,
 		created_at,
 		updated_at
 	)
@@ -252,7 +259,7 @@ VALUES (
 		1,
 		'Kowloon Tong',
 		1226.0,
-		'Delivered',
+		1,
 		'2023-01-02 00:00:00+08',
 		'2023-01-02 00:00:00+08'
 	),
@@ -260,7 +267,7 @@ VALUES (
 		2,
 		'Wan Chai',
 		476.0,
-		'On The Way',
+		2,
 		'2023-01-02 00:00:00+08',
 		'2023-01-02 00:00:00+08'
 	),
@@ -268,7 +275,7 @@ VALUES (
 		3,
 		'Mong Kok',
 		618.0,
-		'Order Received',
+		3,
 		'2023-01-02 00:00:00+08',
 		'2023-01-02 00:00:00+08'
 	);
@@ -276,9 +283,9 @@ INSERT INTO order_details (
 		order_id,
 		product_id,
 		quantity,
-		price_per_item,
-		discount_amount,
 		price,
+		discount_amount,
+		subtotal,
 		created_at,
 		updated_at
 	)
@@ -412,21 +419,13 @@ INSERT INTO chat_message (
 		room_id,
 		user_id,
 		message,
-		status,
-		created_at,
-		updated_at
+		status
 	)
 VALUES (1, 1, 'Hello, can I help?', 'active'),
 	(1, 3, 'No thanks', 'active'),
 	(1, 3, 'Bye', 'active'),
 	(2, 4, 'Hi', 'active'),
 	(2, 4, 'Hii', 'active');
-INSERT INTO order_status (status, created_at, updated_at)
-VALUES('Order Received', '2023-01-29', '2023-01-29');
-INSERT INTO order_status (status, created_at, updated_at)
-VALUES('On The Way', '2023-01-29', '2023-01-29');
-INSERT INTO order_status (status, created_at, updated_at)
-VALUES('Delivered', '2023-01-29', '2023-01-29');
 INSERT INTO baskets(
 		ordered_by,
 		product_id,
