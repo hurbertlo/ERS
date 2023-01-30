@@ -246,9 +246,9 @@ VALUES (
 INSERT INTO order_status (status, created_at, updated_at)
 VALUES('Order Received', '2023-01-29', '2023-01-29');
 INSERT INTO order_status (status, created_at, updated_at)
-VALUES('On The Way', '2023-01-29', '2023-01-29');
+VALUES('Delivering', '2023-01-29', '2023-01-29');
 INSERT INTO order_status (status, created_at, updated_at)
-VALUES('Delivered', '2023-01-29', '2023-01-29');
+VALUES('Completed', '2023-01-29', '2023-01-29');
 INSERT INTO orders (
 		ordered_by,
 		address,
