@@ -12,7 +12,16 @@ export const userRoutes = express.Router()
 userRoutes.get("signup", signupLogin)
 userRoutes.post("/signup", signup)
 userRoutes.post("/signin", signin)
+userRoutes.get("/me", getMe)
 
+
+//get userId
+function getMe(req: express.Request, res: express.Response) {
+    res.json({
+        userId: req.session['userId'],
+        role: req.session['role'],
+    })
+}
 
 // go to the signup_login page
 export async function signupLogin(req: express.Request, res: express.Response) {
@@ -90,7 +99,13 @@ export async function signin(req: express.Request, res: express.Response) {
         }
         delete foundUser.password
         req.session['userId'] = foundUser.id
-        console.log('foundUser = ', foundUser)
+
+
+
+        //  determine where user role
+
+        let role = (await client.query('select name from user_types where id = $1', [foundUser.user_type_id])).rows[0].name
+        req.session['role'] = role
 
         res.json({
             message: "login success"

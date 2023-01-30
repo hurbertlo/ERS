@@ -414,20 +414,6 @@ VALUES (
 		'2023-01-01',
 		'2023-01-08'
 	);
-INSERT INTO chat_room (room_name, user_one_id, user_two_id, status)
-VALUES ('user1_user3', 1, 3, 'active'),
-	('user1_user4', 1, 4, 'active');
-INSERT INTO chat_message (
-		room_id,
-		user_id,
-		message,
-		status
-	)
-VALUES (1, 1, 'Hello, can I help?', 'active'),
-	(1, 3, 'No thanks', 'active'),
-	(1, 3, 'Bye', 'active'),
-	(2, 4, 'Hi', 'active'),
-	(2, 4, 'Hii', 'active');
 INSERT INTO baskets(
 		ordered_by,
 		product_id,

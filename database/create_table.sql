@@ -96,23 +96,3 @@ CREATE TABLE product_images (
     created_at TIMESTAMP with time zone default now(),
     updated_at TIMESTAMP with time zone default now()
 );
-CREATE TABLE chat_room (
-    id SERIAL primary key,
-    room_name VARCHAR(255),
-    user_one_id INTEGER references users(id),
-    user_two_id INTEGER references users(id),
-    status VARCHAR(255) default 'active',
-    created_at TIMESTAMP with time zone default now(),
-    updated_at TIMESTAMP with time zone default now()
-);
-CREATE TABLE chat_message (
-    id SERIAL primary key,
-    room_id INTEGER references chat_room(id),
-    user_id INTEGER,
-    foreign key (user_id) references users(id),
-    foreign key (user_id) references users(id),
-    message TEXT,
-    status VARCHAR(255) default 'active',
-    created_at TIMESTAMP with time zone default now(),
-    updated_at TIMESTAMP with time zone default now()
-);

@@ -79,7 +79,7 @@ io.on('connection', (socket) => {
         return
     }
     console.log('io identity check :', req.session['user'])
-    socket.join(req.session['user'].id) //join另一個user id
+    socket.join(req.session['user'].id)
 });
 
 app.post('/talk-to/:roomId', (req, res) => {
