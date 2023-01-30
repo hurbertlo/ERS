@@ -4,6 +4,9 @@ import { isLoggedInAPI } from '../util/guard'
 import { client } from '../util/db'
 import { error } from "winston"
 import { Console } from "console"
+import { OrderDetail } from '../util/model'
+import { io } from '../server'
+
 
 
 export const orderRoutes = express.Router()
@@ -41,7 +44,7 @@ export async function createOrder(req: express.Request, res: express.Response) {
         let order = await client.query(` INSERT INTO orders(ordered_by, address, total_price) VALUES ($1, $2, $3) RETURNING id`,
             [userId, address, total])
         orderId = order.rows[0].id
-        orderDate = await client.query(`SELECT createded_at FROM orders WHERE id = $1`, [orderId])
+        orderDate = await client.query(`SELECT created_at FROM orders WHERE id = $1`, [orderId])
     } catch (error: any) {
         res.status(500).end("[ORD001]-server error")
         console.log(error);
@@ -50,8 +53,8 @@ export async function createOrder(req: express.Request, res: express.Response) {
 
     // Export to order_details
     try {
-        let orderDetails = []
-        let orderDetailId: number
+
+
         for (let i = 0; i < n; i++) {
             let pId = checkoutItems[i].product_id
             let pq = checkoutItems[i].quantity
@@ -62,25 +65,20 @@ export async function createOrder(req: express.Request, res: express.Response) {
             await client.query(`INSERT INTO order_details(order_id, product_id, quantity, price, subtotal) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
                 [orderId!, pId, pq, pp, subTotal])
         }
+
     } catch (error: any) {
         res.status(500).end("[ORD002]-server error")
         console.log(error)
+        throw new Error("Order fail")
     }
 
-    res.json({
-        message: "order received with thanks",
-        address,
-        orderId,
-        orderDate,
-        checkoutItems,
-        total
-    })
-
-    // remove Basket 
+    // remove from Basket 
     try {
         await client.query(`DELETE FROM baskets WHERE ordered_by = $1`, [userId])
+        socket.emit("load_receipt", { message: "New order received" })
+        res.redirect("/receipt")
     } catch (error: any) {
-        res.status(500).end("[ORD003] Server Error")
+        socket.emit("admin", "[ORD003]-server error, fail to update baskets")
         console.log(error)
     }
 }

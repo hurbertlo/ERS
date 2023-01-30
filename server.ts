@@ -15,7 +15,8 @@ import { basketRoutes } from './routes/basketRoutes';
 import { productRoutes } from './routes/productRoutes';
 import { orderRoutes } from './routes/orderRoutes';
 import { chatRoutes } from './routes/chatRoutes';
-import { User } from './util/model';
+import { OrderDetail, User } from './util/model';
+import { receiptRoutes } from './routes/receiptRoutes';
 
 declare module 'express-session' {
     interface SessionData {
@@ -33,7 +34,7 @@ declare module 'express-session' {
 //Socket.io Session SetUp
 const app = express();
 const server = new http.Server(app);
-const io = new SocketIO(server);
+export const io = new SocketIO(server);
 const sessionMiddleware = expressSession({
     secret: "Tecky Academy teaches typescript",
     resave: true,
@@ -105,6 +106,11 @@ app.post('/talk-to/:roomId', (req, res) => {
 
 
 // testing 
+// app.get("/aaa",)
+
+
+
+
 
 app.get("/aaa",)
 
@@ -112,6 +118,7 @@ app.use("/chatroom", chatRoutes);
 app.use("/user", userRoutes);
 app.use('/basket', basketRoutes);
 app.use("/order", orderRoutes);
+app.use("/receipt", receiptRoutes);
 app.use('/products', productRoutes);
 app.use(express.static("public"));
 app.use(express.static("image"));
