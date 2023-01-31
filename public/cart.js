@@ -72,8 +72,9 @@ async function fetchBasketItems() {
                   basketItems
                 )}</h5>
               </div>
-              <button class="btn btn-block btn-primary my-3 py-3">
-                確認付款
+              <button class="btn btn-block btn-primary my-3 py-3"
+              onclick='createOrder()'
+              >確認付款
               </button>
             </div>
           </div>
@@ -86,7 +87,6 @@ function getTotalAmount(basketItems) {
   let total = 0;
   for (let i = 0; i < basketItems.length; i++) {
     let subtotal = basketItems[i].price * basketItems[i].quantity;
-    // basketItems[i]["subTotal"] = subTotal
     total = total + subtotal;
   }
   return total;
@@ -136,6 +136,17 @@ async function removeBasketItem(basketItemId) {
   console.log(result);
 
   fetchBasketItems();
+}
+
+async function createOrder() {
+  let res = await fetch(`/order/basket`, {
+    method: "post",
+  });
+
+  if (res.ok) {
+    let data = await res.json();
+    window.location = data.redirect;
+  }
 }
 
 (function init() {
