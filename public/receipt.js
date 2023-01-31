@@ -1,5 +1,3 @@
-
-
 async function loadReceipt() {
     let res = await fetch('/receipt')
     if (res.ok) {

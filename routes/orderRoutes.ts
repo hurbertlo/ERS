@@ -44,7 +44,8 @@ export async function createOrder(req: express.Request, res: express.Response) {
         let order = await client.query(` INSERT INTO orders(ordered_by, address, total_price) VALUES ($1, $2, $3) RETURNING id`,
             [userId, address, total])
         orderId = order.rows[0].id
-        orderDate = await client.query(`SELECT created_at FROM orders WHERE id = $1`, [orderId])
+        orderDate = await client.query(`SELECT git pull
+         FROM orders WHERE id = $1`, [orderId])
     } catch (error: any) {
         res.status(500).end("[ORD001]-server error")
         console.log(error);

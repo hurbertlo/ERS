@@ -34,6 +34,7 @@ export async function getReceipt(req: express.Request, res: express.Response) {
             total = total + purchasedItems[i].subtotal
             orderDetails[i]["address"] = address
             orderDetails[i]["total"] = total
+            orderDetails[i]["orderId"] = orderId
         }
         res.json({
             data: orderDetails,
