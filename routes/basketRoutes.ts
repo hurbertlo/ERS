@@ -90,14 +90,16 @@ export async function removeBasketItem(
   res: express.Response
 ) {
   try {
-    console.log("deleting...");
-
     let basketItemId = Number(req.params.basketItemId);
+    console.log(basketItemId);
     let userId = req.session["userId"];
 
     await client.query(
-      `delete from baskets where ordered_by = $1 and product_id = $2`,
-      [userId, basketItemId]
+      //   `delete from baskets where ordered_by = $1 and product_id = $2`,
+      //   [userId, basketItemId]
+      // );
+      `delete from baskets where id = $1`, //kay update delete basketItem
+      [basketItemId]
     );
     res.json({
       message: "Ops",
