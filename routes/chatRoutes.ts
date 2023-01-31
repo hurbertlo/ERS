@@ -1,5 +1,6 @@
 import express from "express"
 import { client } from '../util/db'
+import { formParsePromise } from '../util/formidable'
 // import { logger } from '../util/logger'
 // import { isLoggedInAPI } from '../util/guard'
 // import { userRoutes } from "./userRoutes"
@@ -9,7 +10,34 @@ export const chatRoutes = express.Router()
 
 chatRoutes.get('/chat-list', getChatList)
 chatRoutes.get('/chats/:userId', getChatsWithAdmin)
+chatRoutes.get('/chatMsgSave', ChatMsgSaved)
 
+async function ChatMsgSaved(req: express.Request, res: express.Response) {
+    let { fields, files } = await formParsePromise(req);
+    let { content, content_type } = fields
+    console.log("fields = ", fields)
+    console.log("files = ", files)
+    if (!content || !content_type) {
+        res.status(400).json({
+            message: "error"
+        })
+    }
+    const result = await client.query(
+        `SELECT * from chats WHERE content = '';`
+    )
+    const msgSave = result.rows[0].content;
+
+    let msgRecord = await client.query(`
+    INSERT INTO chats
+        (sender, receiver, content, content_type, created_at, updated_at)
+    VALUES($1, $2, $3, $4, now(), now());
+    `, [msgSave, content, content_type || ""])
+
+    res.json({
+        message: `${msgRecord}`
+    })
+    console.log("msg saved");
+}
 
 async function getChatsWithAdmin(req: express.Request, res: express.Response) {
     let userId = Number(req.params.userId)
@@ -81,6 +109,9 @@ async function getChatList(req: express.Request, res: express.Response) {
         message: `${result.rowCount} record${result.rowCount > 1 ? 's' : ''} found`
     })
 }
+
+
+
 
 
 // Get all existing chats for current user

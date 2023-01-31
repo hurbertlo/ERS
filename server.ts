@@ -85,15 +85,17 @@ app.use(express.json());
 
 
 
+
+
 // user connection
 io.on('connection', (socket) => {
     let req = socket.request as express.Request
-    if (!req.session || !req.session['user']) {
+    if (!req.session || !req.session['userId']) { //要跟返userRoutes
         socket.disconnect()
         return
     }
-    console.log('io identity check :', req.session['user'])
-    socket.join(req.session['user'].id)
+    // console.log('io identity check :', req.session['userId'])
+    socket.join(req.session['userId'])
 });
 
 app.post('/talk-to/:roomId', (req, res) => {
