@@ -15,7 +15,7 @@ userRoutes.post("/signin", signin)
 userRoutes.get("/me", getMe)
 
 
-//get userId
+
 function getMe(req: express.Request, res: express.Response) {
     res.json({
         userId: req.session['userId'],
@@ -23,11 +23,10 @@ function getMe(req: express.Request, res: express.Response) {
     })
 }
 
-// go to the signup_login page
 export async function signupLogin(req: express.Request, res: express.Response) {
     res.sendFile(__dirname + "/public/user/signup_login.html");
 }
-// sign up
+
 
 export async function signup(req: express.Request, res: express.Response) {
     try {
@@ -40,7 +39,7 @@ export async function signup(req: express.Request, res: express.Response) {
                 message: "Invalid input"
             })
         }
-        // handle the case if file is not existed
+
         let profile_picture
         if (files.image) {
             profile_picture = files.image["newFilename"];
@@ -69,7 +68,6 @@ export async function signup(req: express.Request, res: express.Response) {
     }
 }
 
-//sign in
 export async function signin(req: express.Request, res: express.Response) {
     try {
         console.log(req.body)
@@ -106,6 +104,7 @@ export async function signin(req: express.Request, res: express.Response) {
 
         let role = (await client.query('select name from user_types where id = $1', [foundUser.user_type_id])).rows[0].name
         req.session['role'] = role
+
 
         res.json({
             message: "login success"

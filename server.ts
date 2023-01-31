@@ -15,13 +15,15 @@ import { basketRoutes } from './routes/basketRoutes';
 import { productRoutes } from './routes/productRoutes';
 import { orderRoutes } from './routes/orderRoutes';
 import { chatRoutes } from './routes/chatRoutes';
-import { OrderDetail, User } from './util/model';
-import { receiptRoutes } from './routes/receiptRoutes';
+import { receiptRoutes } from './routes/salesRoutes';
+import { User } from './util/model';
+import { warehouseRoutes } from './routes/warehouseRoutes';
 
 declare module 'express-session' {
     interface SessionData {
         visitCounter?: number
         users?: User
+
     }
 }
 
@@ -113,15 +115,13 @@ app.post('/talk-to/:roomId', (req, res) => {
 
 
 
-
-app.get("/aaa",)
-
 app.use("/chatroom", chatRoutes);
 app.use("/user", userRoutes);
 app.use('/basket', basketRoutes);
 app.use("/order", orderRoutes);
-app.use("/receipt", receiptRoutes);
+app.use("/sales", receiptRoutes);
 app.use('/products', productRoutes);
+app.use('/warehouses', warehouseRoutes);
 app.use(express.static("public"));
 app.use(express.static("image"));
 app.use(express.static("404"));

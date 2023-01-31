@@ -4,14 +4,16 @@ import { isLoggedInAPI } from "../util/guard";
 import { client } from "../util/db";
 import { error } from "winston";
 import { Console } from "console";
-import { OrderDetail } from "../util/model";
 import { io } from "../server";
 
 export const orderRoutes = express.Router();
 
 orderRoutes.post("/basket", isLoggedInAPI, createOrder);
-orderRoutes.put("/delivering", deliveringOrder);
-orderRoutes.put("/completed", completedOrder);
+orderRoutes.put("/delivering/:orderId", deliveringOrder);
+orderRoutes.put("/completed/:orderId", completedOrder);
+orderRoutes.get("/outstanding", outstandingOrder);
+
+
 
 export async function createOrder(req: express.Request, res: express.Response) {
     let orderId: number;
@@ -54,7 +56,9 @@ export async function createOrder(req: express.Request, res: express.Response) {
             [orderId]
         );
     } catch (error: any) {
-        res.status(500).end("[ORD001]-server error");
+        res.status(500).json({
+            message: "[ORD001]-server error"
+        })
         console.log(error);
         throw new Error("Order fail");
     }
@@ -74,7 +78,9 @@ export async function createOrder(req: express.Request, res: express.Response) {
             );
         }
     } catch (error: any) {
-        res.status(500).end("[ORD002]-server error");
+        res.status(500).json({
+            message: "[ORD002]-server error"
+        })
         console.log(error);
         throw new Error("Order fail");
     }
@@ -86,8 +92,8 @@ export async function createOrder(req: express.Request, res: express.Response) {
         console.log("done");
 
         res.json({
-            message: "done",
-            redirect: "receipt.html",
+            message: "Order received with thanks",
+            redirect: `/sales.html?orderId=${orderId}/`,
         });
     } catch (error: any) {
         // socket.emit("admin", "[ORD003]-server error, fail to update baskets")
@@ -95,25 +101,57 @@ export async function createOrder(req: express.Request, res: express.Response) {
     }
 }
 
-// order on the way
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// update order on the way
 export async function deliveringOrder(
     req: express.Request,
     res: express.Response
 ) {
     try {
+        let order_status_id
         let orderId = req.body;
-        await client.query(
-            `UPDATE orders SET order_status_id = 2 where orders.id = $1`,
-            [orderId]
-        );
+        if (order_status_id == 1) {
+            await client.query(
+                `UPDATE orders SET order_status_id = 2 where orders.id = $1`,
+                [orderId]
+            )
+        }
+
         res.json({
             message: "Your treasure is coming",
         });
     } catch (error: any) {
-        res.status(500).end("[ORD004]-server error");
+        res.status(500).json({
+            message: "[ORD004]-server error"
+        })
         console.log(error);
     }
 }
+
+
+
+
+
 
 // order delivered
 export async function completedOrder(
@@ -121,16 +159,22 @@ export async function completedOrder(
     res: express.Response
 ) {
     try {
+        let order_status_id
         let orderId = req.body;
-        await client.query(
-            `UPDATE orders SET order_status_id = 3 where orders.id = $1`,
-            [orderId]
-        );
+        if (order_status_id == 2) {
+            await client.query(
+                `UPDATE orders SET order_status_id = 3 where orders.id = $1`,
+                [orderId]
+            )
+        }
+
         res.json({
             message: "May your litte darling enjoys",
         });
     } catch (error: any) {
-        res.status(500).end("[ORD005]-server error");
+        res.status(500).json({
+            message: "[ORD005]-server error"
+        })
         console.log(error);
     }
 }
@@ -146,7 +190,29 @@ export async function completeOrder(
             message: "Enjoy",
         });
     } catch (error: any) {
-        res.status(500).end("[ORD003]-server error");
+        res.status(500).json({
+            message: "[ORD006]-server error"
+        })
+        console.log(error);
+    }
+}
+
+export async function outstandingOrder(
+    req: express.Request,
+    res: express.Response
+) {
+    try {
+        let outstandingOrders = await client.query(`
+        SELECT * FROM orders WHERE order_status !=3
+        ORDER BY created_at ASC 
+        `)
+        res.json({
+            outstandingOrders
+        })
+    } catch (error: any) {
+        res.status(500).json({
+            message: "[ORMGT001]-server error"
+        })
         console.log(error);
     }
 }
