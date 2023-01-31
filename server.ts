@@ -15,7 +15,7 @@ import { basketRoutes } from './routes/basketRoutes';
 import { productRoutes } from './routes/productRoutes';
 import { orderRoutes } from './routes/orderRoutes';
 import { chatRoutes } from './routes/chatRoutes';
-import { receiptRoutes } from './routes/salesRoutes';
+import { salesRoutes } from './routes/salesRoutes';
 import { User } from './util/model';
 import { warehouseRoutes } from './routes/warehouseRoutes';
 
@@ -119,7 +119,7 @@ app.use("/chatroom", chatRoutes);
 app.use("/user", userRoutes);
 app.use('/basket', basketRoutes);
 app.use("/order", orderRoutes);
-app.use("/sales", receiptRoutes);
+app.use("/sales", salesRoutes);
 app.use('/products', productRoutes);
 app.use('/warehouses', warehouseRoutes);
 app.use(express.static("public"));

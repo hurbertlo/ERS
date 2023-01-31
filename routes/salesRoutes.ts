@@ -8,12 +8,12 @@ import { io } from "../server"
 
 
 
-export const receiptRoutes = express.Router()
+export const salesRoutes = express.Router()
 
-receiptRoutes.get("/", getReceipt)
+salesRoutes.get("/", getSales)
 
 
-export async function getReceipt(req: express.Request, res: express.Response) {
+export async function getSales(req: express.Request, res: express.Response) {
     try {
         let userId = req.session["userId"]
         let address = (await client.query(`SELECT address FROM users where id = $1`, [userId])).rows[0].address
