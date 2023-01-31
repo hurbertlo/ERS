@@ -96,3 +96,13 @@ CREATE TABLE product_images (
     created_at TIMESTAMP with time zone default now(),
     updated_at TIMESTAMP with time zone default now()
 );
+CREATE TABLE warehouses (
+    id SERIAL primary key,
+    product_id INTEGER not null,
+    foreign key(product_id) references products(id),
+    available_quantity INTEGER not null,
+    refill_level FLOAT not null,
+    capacity INTEGER default 6000,
+    created_at TIMESTAMP with time zone default now(),
+    updated_at TIMESTAMP with time zone default now()
+);
