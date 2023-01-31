@@ -5,9 +5,6 @@ const socket = io.connect();
 //     console.log(message);
 // })
 
-let params = new URLSearchParams(window.location.search)
-let userId = params.get('id')
-
 let inboxChatContainer = document.querySelector('#inbox-chat-id');
 let mainMessageContainer = document.querySelector('#message-id');
 let msgsContainer = document.querySelector('#message-id .msgs');
@@ -29,8 +26,15 @@ async function getChatList() {
     let data = await res.json()
     let userList = data.data
     return userList
-
 }
+
+// async function ChatMsgSaved() {
+//     let res = await fetch('/chatMsgSave')
+//     let data = await res.json()
+//     let msgSaved = data.data
+//     return msgSaved
+// }
+
 
 function renderChatListUI(chatList) {
     console.table(chatList);
@@ -56,7 +60,6 @@ function renderChatListUI(chatList) {
         </div>
         `
     }
-
 }
 
 function onChatListItemClick(chatListItemId) {
@@ -68,6 +71,7 @@ function onChatListItemClick(chatListItemId) {
 
 }
 
+//data(chat record) save in userId
 async function fetchChats(userId) {
     console.log(userId);
     let res = await fetch(`/chatroom/chats/${userId}`)
@@ -76,6 +80,7 @@ async function fetchChats(userId) {
 
     renderChatsUI(chats)
 }
+
 
 function renderChatsUI(chats) {
     let conversationContainer = document.querySelector('.msg_history')
@@ -106,6 +111,7 @@ async function getChats() {
         renderChatListUI(chatList)
 
     }
+
     let chatResult = await fetch(`/chatroom`);
 
     // if not logon, force page redirection //彈去signin
@@ -116,6 +122,10 @@ async function getChats() {
 
 getChats()
 
+
+
+let params = new URLSearchParams(window.location.search)
+let userId = params.get('id')
 
 //dummy
 function htmlToElement(html) {
