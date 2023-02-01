@@ -10,7 +10,7 @@ export const warehouseRoutes = express.Router();
 
 warehouseRoutes.get("/", isLoggedInAPI, allProductsQty);
 warehouseRoutes.get("/:productId", isLoggedInAPI, specificProductQty);
-warehouseRoutes.put("/:productId", isLoggedInAPI, amendQuantity);
+// warehouseRoutes.put("/:productId", isLoggedInAPI, amendQuantity);
 
 export async function allProductsQty(req: express.Request, res: express.Response) {
     try {
