@@ -1,6 +1,6 @@
 import * as bcrypt from "bcryptjs";
 
-const SALT_ROUNDS = 10;
+const SALT_ROUNDS = 2;
 
 /**
  * @params plainPassword: supplied when signup
@@ -24,3 +24,5 @@ export async function checkPassword(
     );
     return isMatched;
 }
+
+hashPassword('aaa').then(console.log);
