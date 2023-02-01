@@ -71,16 +71,17 @@ signInElm.addEventListener(`submit`, async (e) => {
     },
     body: JSON.stringify(formData)
   });
+
   //  post handling
   if (res.ok) {
-    const role = res.json()
-    if (role == "admin") {
-      window.location = '/admin_order_details.html';
+    let data = await res.json()
+    if (data.role == "admin") {
+      window.location = '/admin_panel.html';
     } else {
       window.location = '/'
     }
-
   } else {
     console.log("sign in fail");
   }
-});
+}
+)
