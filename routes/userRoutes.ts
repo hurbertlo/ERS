@@ -107,7 +107,7 @@ export async function signin(req: express.Request, res: express.Response) {
 
 
         res.json({
-            message: "login success"
+            role
         })
 
     } catch (error) {

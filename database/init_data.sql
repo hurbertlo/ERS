@@ -26,11 +26,11 @@ INSERT INTO users (
 	)
 VALUES (
 		1,
-		'Admin ben',
-		'WanChai',
-		'63759857',
-		'adminben@hoppers.com',
-		'passw@rd',
+		'Admin',
+		'Sheung Wan',
+		'22228080',
+		'admin@hoppers.com',
+		'aaa',
 		'2023-01-16',
 		'2023-01-18'
 	);
@@ -91,6 +91,86 @@ VALUES (
 		'94728756',
 		'sandy@hotmail.com',
 		'pass231',
+		'2023-01-16',
+		'2023-01-18'
+	);
+INSERT INTO users (
+		user_type_id,
+		name,
+		address,
+		mobile,
+		email,
+		password,
+		created_at,
+		updated_at
+	)
+VALUES (
+		2,
+		'Dorothy',
+		'Tai Po',
+		'91918950',
+		'dorothy@hotmail.com',
+		'dd',
+		'2023-01-16',
+		'2023-01-18'
+	);
+INSERT INTO users (
+		user_type_id,
+		name,
+		address,
+		mobile,
+		email,
+		password,
+		created_at,
+		updated_at
+	)
+VALUES (
+		2,
+		'ken',
+		'Po Lam',
+		'65481254',
+		'ken@gmail.com',
+		'pass231',
+		'2023-01-16',
+		'2023-01-18'
+	);
+INSERT INTO users (
+		user_type_id,
+		name,
+		address,
+		mobile,
+		email,
+		password,
+		created_at,
+		updated_at
+	)
+VALUES (
+		2,
+		'Fred',
+		'Fanling',
+		'54178358',
+		'Fred@cconnect.com',
+		'pass',
+		'2023-01-16',
+		'2023-01-18'
+	);
+INSERT INTO users (
+		user_type_id,
+		name,
+		address,
+		mobile,
+		email,
+		password,
+		created_at,
+		updated_at
+	)
+VALUES (
+		2,
+		'Ruby',
+		'WanChai',
+		'63759857',
+		'Ruby@outlook.com',
+		'passw@rd',
 		'2023-01-16',
 		'2023-01-18'
 	);
@@ -433,7 +513,7 @@ VALUES(2, 2, 2, '2023-01-18', '2023-01-18'),
 	(6, 8, 5, '2023-01-18', '2023-01-18'),
 	(6, 12, 3, '2023-01-18', '2023-01-18'),
 	(7, 7, 2, '2023-01-18', '2023-01-18'),
-	(8, 9, 6, '2023-01-18', '2023-01-18');
+	(7, 9, 6, '2023-01-18', '2023-01-18');
 INSERT INTO warehouses(
 		product_id,
 		available_quantity,

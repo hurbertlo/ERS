@@ -73,8 +73,12 @@ signInElm.addEventListener(`submit`, async (e) => {
   });
   //  post handling
   if (res.ok) {
-    console.log("sign in success");
-    window.location = '/'
+    const role = res.json()
+    if (role == "admin") {
+      window.location = '/admin_order_details.html';
+    } else {
+      window.location = '/'
+    }
 
   } else {
     console.log("sign in fail");
