@@ -1,22 +1,18 @@
 
 const socket = io.connect();
 
-// socket.on('message', message => {
-//     console.log(message);
-// })
-
 let inboxChatContainer = document.querySelector('#inbox-chat-id');
 let mainMessageContainer = document.querySelector('#message-id');
 let msgsContainer = document.querySelector('#message-id .msgs');
 let messageForm = document.querySelector('form.type_msg')
 let messageHistory = document.querySelector('.msg_history');
 
-
 //接返userRoutes getMe function
 //拎user type
 async function getMe() {
     let res = await fetch('/user/me')
     let userInfo = await res.json()
+    console.log(userInfo);
     return userInfo
 }
 
@@ -25,40 +21,64 @@ async function getChatList() {
     let res = await fetch('/chatroom/chat-list')
     let data = await res.json()
     let userList = data.data
+    console.log(userList);
     return userList
 }
 
-// async function ChatMsgSaved() {
-//     let res = await fetch('/chatMsgSave')
-//     let data = await res.json()
-//     let msgSaved = data.data
-//     return msgSaved
-// }
+async function renderChatListUI(chatList) {
 
-
-function renderChatListUI(chatList) {
-    console.table(chatList);
     inboxChatContainer.innerHTML = ''
-    for (let chatListItem of chatList) {
-        inboxChatContainer.innerHTML += `
 
-        <div id='chat-list-item-${chatListItem.id}' class='chat-list-item-card' onclick='onChatListItemClick(${chatListItem.id})'>
-                <div > <b>${chatListItem.id}</b></div>
+    const role = (await fetchMe()).role
+
+    if (role === "admin") {
+
+        for (let chatListItem of chatList) {
+            console.table(chatListItem);
+
+            inboxChatContainer.innerHTML += `
         
-                <div class='avatar-container'>
-                        <img src='https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'></img>
+                <div id='chat-list-item-${chatListItem.id}' class='chat-list-item-card' onclick='onChatListItemClick(${chatListItem.id})'>
+                        <div > <b>${chatListItem.id}</b></div>
+                
+                        <div class='avatar-container'>
+                                <img src='https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'></img>
+                        </div>
+                        <div class='info-container'>
+                            <div class='first-row'>
+                                    <div class='user-name'> ${chatListItem.name}</div>
+                                    <div> ${chatListItem.last_message_created_at}</div>
+                            </div>
+                            
+                            <div class='last-message'> ${chatListItem.last_message}</div>
+        
+                        </div>
                 </div>
-                <div class='info-container'>
-                    <div class='first-row'>
-                            <div class='user-name'> ${chatListItem.name}</div>
-                            <div> ${chatListItem.last_message_created_at}</div>
-                    </div>
-                    
-                    <div class='last-message'> ${chatListItem.last_message}</div>
+                `}
 
+    } else {
+        for (let chatListItem of chatList) {
+            console.table(chatListItem);
+
+            inboxChatContainer.innerHTML += `
+        
+                <div id='chat-list-item-${chatListItem.id}' class='chat-list-item-card' onclick='onChatListItemClick(${chatListItem.id})'>
+                        <div > <b></b></div>
+                
+                        <div class='avatar-container'>
+                                <img src='https://vectorified.com/images/admin-logo-icon-18.png'></img>
+                        </div>
+                        <div class='info-container'>
+                            <div class='first-row'>
+                                    <div class='user-name'> ${chatListItem.name}</div>
+                                    <div> ${chatListItem.last_message_created_at}</div>
+                            </div>
+                            
+                            <div class='last-message'> ${chatListItem.last_message}</div>
+        
+                        </div>
                 </div>
-        </div>
-        `
+                `}
     }
 }
 
@@ -73,7 +93,7 @@ function onChatListItemClick(chatListItemId) {
 
 //data(chat record) save in userId
 async function fetchChats(userId) {
-    console.log(userId);
+    console.log('talk to:', userId);
     let res = await fetch(`/chatroom/chats/${userId}`)
     let data = await res.json()
     let chats = data.data
@@ -81,6 +101,11 @@ async function fetchChats(userId) {
     renderChatsUI(chats)
 }
 
+async function fetchMe() {
+    let res = await fetch(`/user/me`)
+    let data = await res.json()
+    return data
+}
 
 function renderChatsUI(chats) {
     let conversationContainer = document.querySelector('.msg_history')
@@ -106,11 +131,10 @@ function renderChatsUI(chats) {
 //
 async function getChats() {
     let { role } = await getMe()
-    if (role === 'admin') {
-        let chatList = await getChatList()
-        renderChatListUI(chatList)
-
-    }
+    // if (role === 'admin') {
+    let chatList = await getChatList()
+    renderChatListUI(chatList)
+    // }
 
     let chatResult = await fetch(`/chatroom`);
 
@@ -124,8 +148,11 @@ getChats()
 
 
 
+
 let params = new URLSearchParams(window.location.search)
 let userId = params.get('id')
+
+
 
 //dummy
 function htmlToElement(html) {
@@ -135,6 +162,8 @@ function htmlToElement(html) {
     return template.content.firstChild;
 }
 
+
+
 messageForm.addEventListener('submit', async (e) => {
     e.preventDefault()
 
@@ -143,13 +172,16 @@ messageForm.addEventListener('submit', async (e) => {
         return
     }
 
+    // let receiver = (await fetchMe()).role
+    // console.log('sender:', receiver)
     let res = await fetch(`/talk-to/${userId}`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            message: messageForm.message.value
+            message: messageForm.message.value,
+            // receiver: messageForm.message
         })
     })
 
@@ -187,4 +219,3 @@ socket.on('new-message', (message) => { // 監聽咩事件
     // window.location.href = '/home.html';
     messageHistory.scrollTop = messageHistory.scrollHeight;
 })
-

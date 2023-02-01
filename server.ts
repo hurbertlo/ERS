@@ -19,6 +19,8 @@ import { salesRoutes } from './routes/salesRoutes';
 import { User } from './util/model';
 import { warehouseRoutes } from './routes/warehouseRoutes';
 
+
+
 declare module 'express-session' {
     interface SessionData {
         visitCounter?: number
@@ -55,40 +57,6 @@ io.use((socket, next) => {
 fs.mkdirSync(uploadDir, { recursive: true });
 app.use(express.json());
 
-// // // set up users 
-// let counter = 1
-
-// app.use((req, res, next) => {
-//     if (req.session['user']) {
-//         next()
-//         return
-//     }
-
-//     if (counter % 2 === 0) {
-//         req.session['user'] = {
-//             name: 'Odd Person',
-//             id: 'user_' + counter,
-//             createDate: new Date()
-//         }
-//         console.log('Odd person logged in')
-//     } else {
-//         req.session['user'] = {
-//             name: 'Even Person',
-//             id: 'user_' + counter,
-//             createDate: new Date()
-//         }
-//         console.log('even person logged in')
-//     }
-//     console.log('current count = ', counter)
-//     counter++
-
-//     next()
-// })
-
-
-
-
-
 // user connection
 io.on('connection', (socket) => {
     let req = socket.request as express.Request
@@ -96,9 +64,17 @@ io.on('connection', (socket) => {
         socket.disconnect()
         return
     }
-    // console.log('io identity check :', req.session['userId'])
+    console.log('io identity check :', req.session['userId'])
     socket.join(req.session['userId'])
 });
+
+// app.get('/test', (req, res) => {
+//     console.log('triggered');
+
+//     io.emit("new-user", "Congratulations! New User Created!");
+//     res.end('triggered')
+// })
+
 
 app.post('/talk-to/:roomId', (req, res) => {
     let roomId = req.params.roomId
