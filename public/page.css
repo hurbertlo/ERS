@@ -2318,10 +2318,10 @@
     }
   }
   
-  .btn {
+  .kate {
+    color: #6F6F6F;
     display: inline-block;
     font-weight: 400;
-    color: #6F6F6F;
     text-align: center;
     vertical-align: middle;
     user-select: none;
@@ -9584,6 +9584,12 @@
     }
   }
   
-  .container-delete-product  {
+  /* .container-delete-product  {
+    display:flex;
+    align-items: center;
     margin: 50px 0px 50px 0px;
-  }
+  } */
+
+  .line  {
+    margin: 50px 0px 50px 0px;
+  } 

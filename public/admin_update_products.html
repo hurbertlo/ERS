@@ -36,9 +36,6 @@
       rel="stylesheet"
     />
 
-    <!-- Libraries Stylesheet -->
-    <!-- <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet"> -->
-
     <link rel="stylesheet" href="/index.css" />
     <link rel="stylesheet" href="/page.css" />
   </head>
@@ -125,26 +122,27 @@
       </div>
     </div>
 
-    <div class="container-delete-product">
+    <div class="line">
       <div class="row bg-secondary py-2 px-xl-5"></div>
     </div>
-
-    <div class="container-delete-product">
-      <form
-        action="/admin_order_details"
-        method="DELETE"
-        id="admin-delete-products-form"
-      >
-        <div>
-          <label>
-            產品編號 :
-            <input type="text" name="name" required />
-          </label>
-        </div>
-        <button id="add-to-listing" class="btn btn-primary px-3">
-          <i class="bi bi-shop"></i> 刪除產品
-        </button>
-      </form>
+    
+      <div class="delete-product">
+        <form
+          action="/admin_order_details"
+          method="DELETE"
+          id="admin-delete-products-form"
+        >
+          <div>
+            <label>
+              產品編號 :
+              <input type="text" name="name" required />
+            </label>
+          </div>
+          <button id="add-to-listing" class="btn btn-primary px-3">
+            <i class="bi bi-trash3"></i> 刪除產品
+          </button>
+        </form>
+      </div>
     </div>
     <!-- Shop Detail End -->
 

@@ -13,7 +13,7 @@ window.onload = async () => {
     const leftBoard = document.querySelector(".left-board");
     leftBoard.innerHTML = ` 
     
-    <img class="w-80 h-80" src="${product_detail.data.image}" alt="Image" />
+    <img class="w-100 h-100" img-fluid src="${product_detail.data.image}" alt="Image" />
     `;
 
     const rightBoard = document.querySelector(".right-board");
@@ -40,13 +40,13 @@ window.onload = async () => {
         <div class="d-flex align-items-center mb-4 pt-2">
             <div class="input-group quantity mr-3" style="width: 130px;">
             <div class="input-group-btn">
-                    <button class="btn btn-primary btn-minus" >
+                    <button class="kate btn-primary btn-minus" >
                     <i class="fa fa-minus"></i>
                     </button>
                 </div>
                 <input disabled type="text" class="form-control bg-secondary text-center" value="1" id="quantity-display">
                 <div class="input-group-btn">
-                    <button class="btn btn-primary btn-plus">
+                    <button class="kate btn-primary btn-plus">
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
