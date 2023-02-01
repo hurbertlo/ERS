@@ -15,13 +15,17 @@ import { basketRoutes } from './routes/basketRoutes';
 import { productRoutes } from './routes/productRoutes';
 import { orderRoutes } from './routes/orderRoutes';
 import { chatRoutes } from './routes/chatRoutes';
-import { OrderDetail, User } from './util/model';
-import { receiptRoutes } from './routes/receiptRoutes';
+import { salesRoutes } from './routes/salesRoutes';
+import { User } from './util/model';
+import { warehouseRoutes } from './routes/warehouseRoutes';
+
+
 
 declare module 'express-session' {
     interface SessionData {
         visitCounter?: number
         users?: User
+
     }
 }
 
@@ -53,48 +57,24 @@ io.use((socket, next) => {
 fs.mkdirSync(uploadDir, { recursive: true });
 app.use(express.json());
 
-// // // set up users 
-// let counter = 1
-
-// app.use((req, res, next) => {
-//     if (req.session['user']) {
-//         next()
-//         return
-//     }
-
-//     if (counter % 2 === 0) {
-//         req.session['user'] = {
-//             name: 'Odd Person',
-//             id: 'user_' + counter,
-//             createDate: new Date()
-//         }
-//         console.log('Odd person logged in')
-//     } else {
-//         req.session['user'] = {
-//             name: 'Even Person',
-//             id: 'user_' + counter,
-//             createDate: new Date()
-//         }
-//         console.log('even person logged in')
-//     }
-//     console.log('current count = ', counter)
-//     counter++
-
-//     next()
-// })
-
-
-
 // user connection
 io.on('connection', (socket) => {
     let req = socket.request as express.Request
-    if (!req.session || !req.session['user']) {
+    if (!req.session || !req.session['userId']) { //要跟返userRoutes
         socket.disconnect()
         return
     }
-    console.log('io identity check :', req.session['user'])
-    socket.join(req.session['user'].id)
+    console.log('io identity check :', req.session['userId'])
+    socket.join(req.session['userId'])
 });
+
+// app.get('/test', (req, res) => {
+//     console.log('triggered');
+
+//     io.emit("new-user", "Congratulations! New User Created!");
+//     res.end('triggered')
+// })
+
 
 app.post('/talk-to/:roomId', (req, res) => {
     let roomId = req.params.roomId
@@ -111,15 +91,13 @@ app.post('/talk-to/:roomId', (req, res) => {
 
 
 
-
-app.get("/aaa",)
-
 app.use("/chatroom", chatRoutes);
 app.use("/user", userRoutes);
 app.use('/basket', basketRoutes);
 app.use("/order", orderRoutes);
-app.use("/receipt", receiptRoutes);
+app.use("/sales", salesRoutes);
 app.use('/products', productRoutes);
+app.use('/warehouses', warehouseRoutes);
 app.use(express.static("public"));
 app.use(express.static("image"));
 app.use(express.static("404"));

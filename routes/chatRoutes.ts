@@ -1,5 +1,6 @@
 import express from "express"
 import { client } from '../util/db'
+import { formParsePromise } from '../util/formidable'
 // import { logger } from '../util/logger'
 // import { isLoggedInAPI } from '../util/guard'
 // import { userRoutes } from "./userRoutes"
@@ -9,6 +10,27 @@ export const chatRoutes = express.Router()
 
 chatRoutes.get('/chat-list', getChatList)
 chatRoutes.get('/chats/:userId', getChatsWithAdmin)
+chatRoutes.get('/chatMsgSave', ChatMsgSaved)
+
+
+
+async function ChatMsgSaved(req: express.Request, res: express.Response) {
+    let sender = req.session[`userId`]
+    let { message, receiver } = req.body
+    if (!message) {
+        res.status(402).json({
+            message: 'not Found Msg'
+        })
+        return
+    }
+
+    await client.query(`
+    INSERT INTO chats
+        (sender, receiver, content, content_type)
+    VALUES($1, $2, $3, $4);
+    `, [sender, receiver, message, ""])
+}
+
 
 
 async function getChatsWithAdmin(req: express.Request, res: express.Response) {
@@ -35,18 +57,22 @@ async function getChatsWithAdmin(req: express.Request, res: express.Response) {
 }
 
 
+
 async function getChatList(req: express.Request, res: express.Response) {
     let role = req.session['role']
     let userId = req.session['userId']
+    console.log(role);
 
-    if (role !== 'admin') {
-        res.status(403).json({
-            message: 'Unauthorized'
-        })
-        return
-    }
+    // if (role !== 'admin') {
+    //     res.status(403).json({
+    //         message: 'Unauthorized'
+    //     })
+    //     return
+    // }
 
-    let result = await client.query(`
+    if (role === "admin") {
+
+        let result = await client.query(`
         
         with 
 
@@ -68,19 +94,56 @@ async function getChatList(req: express.Request, res: express.Response) {
 
                 )
 
-        select 
-            chat_list_details.* ,
-                (select content from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message,
-                (select created_at  from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message_created_at
-            from chat_list_details
+select 
+chat_list_details.* ,
+(select content from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message,
+(select created_at  from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message_created_at
+from chat_list_details
 
     `)
 
-    res.json({
-        data: result.rows,
-        message: `${result.rowCount} record${result.rowCount > 1 ? 's' : ''} found`
-    })
+        res.json({
+            data: result.rows,
+            message: `${result.rowCount} record${result.rowCount > 1 ? 's' : ''} found`
+        })
+    } else {
+        let result = await client.query(`
+        
+        with 
+
+        chat_list as 
+                (
+                select  sender as user_id from chats c where sender = 1 
+                union
+                select  receiver as user_id  from chats c where receiver = 1
+                ),
+
+        chat_list_details as (
+                select 
+                u.id,
+                name,
+                address,
+                email
+
+                from chat_list cl join users u on cl.user_id = u.id
+
+                )
+
+select 
+chat_list_details.* ,
+(select content from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message,
+(select created_at  from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message_created_at
+from chat_list_details
+
+    `)
+
+        res.json({
+            data: result.rows,
+            message: `${result.rowCount} record${result.rowCount > 1 ? 's' : ''} found`
+        })
+    }
 }
+
 
 
 // Get all existing chats for current user
