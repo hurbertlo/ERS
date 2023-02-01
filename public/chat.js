@@ -6,6 +6,7 @@ let mainMessageContainer = document.querySelector('#message-id');
 let msgsContainer = document.querySelector('#message-id .msgs');
 let messageForm = document.querySelector('form.type_msg')
 let messageHistory = document.querySelector('.msg_history');
+let targetUserId
 
 //接返userRoutes getMe function
 //拎user type
@@ -41,25 +42,6 @@ async function fetchMe() {
     return data
 }
 
-//get receiver
-async function getReceiverId() {
-    let res = await fetch('/chatroom/chat-receiver')
-    let receiverData = await res.json()
-    return receiverData
-}
-
-async function ChatMsgSaved() {
-    let res = await fetch(`/chatroom/chats-save`, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        // body: JSON.stringify({
-        //     message: messageForm.message.value,
-        // })
-    })
-}
-
 async function renderChatListUI(chatList) {
 
     inboxChatContainer.innerHTML = ''
@@ -72,9 +54,9 @@ async function renderChatListUI(chatList) {
             console.table(chatListItem);
 
             inboxChatContainer.innerHTML += `
-        
-                <div id='chat-list-item-${chatListItem.id}' class='chat-list-item-card' onclick='onChatListItemClick(${chatListItem.id})'>
-                        <div > <b>${chatListItem.id}</b></div>
+
+                <div id='chat-list-item-${chatListItem.id}' data-user-id='${chatListItem.id}' class='chat-list-item-card' onclick='onChatListItemClick(${chatListItem.id})'>
+                        <div><b>${chatListItem.id}</b></div>
                 
                         <div class='avatar-container'>
                                 <img src='https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'></img>
@@ -95,7 +77,7 @@ async function renderChatListUI(chatList) {
         for (let chatListItem of chatList) {
             console.table(chatListItem);
 
-            inboxChatContainer.innerHTML += `
+            inboxChatContainer.innerHTML += (`
         
                 <div id='chat-list-item-${chatListItem.id}' class='chat-list-item-card' onclick='onChatListItemClick(${chatListItem.id})'>
                         <div > <b></b></div>
@@ -113,7 +95,9 @@ async function renderChatListUI(chatList) {
         
                         </div>
                 </div>
-                `}
+                `)
+            messageHistory.scrollTop = messageHistory.scrollHeight;
+        }
     }
 }
 
@@ -123,6 +107,7 @@ function onChatListItemClick(chatListItemId) {
     })
     document.querySelector(`#chat-list-item-${chatListItemId}`).classList.add('active')
     fetchChats(chatListItemId)
+    targetUserId = chatListItemId
 }
 
 function renderChatsUI(chats) {
@@ -130,7 +115,7 @@ function renderChatsUI(chats) {
     conversationContainer.innerHTML = ''
 
     for (let chatItem of chats) {
-        conversationContainer.innerHTML += `
+        conversationContainer.innerHTML += (`
     <div class=${chatItem.is_self ? "outgoing_msg" : "incoming_msg"}>
     <div class=${chatItem.is_self ? "" : "incoming_msg_img"}> <img src="" alt=""> </div>
     <div class=${chatItem.is_self ? "sent_msg" : "received_msg"}>
@@ -140,7 +125,8 @@ function renderChatsUI(chats) {
         </div>
     </div>
     </div>
-`
+`)
+        messageHistory.scrollTop = messageHistory.scrollHeight;
     }
     console.table(chats)
 }
@@ -164,9 +150,9 @@ async function getChats() {
 
 getChats()
 
-let params = new URLSearchParams(window.location.search)
-let userId = params.get('id')
 
+
+//outcoming同incoming既msg 
 function htmlToElement(html) {
     var template = document.createElement('template');
     html = html.trim(); // Never return a text node of whitespace as the result
@@ -174,25 +160,22 @@ function htmlToElement(html) {
     return template.content.firstChild;
 }
 
+
 messageForm.addEventListener('submit', async (e) => {
     e.preventDefault()
 
     // if empty string, do not send message
-    if (!messageForm.message.value || messageForm.message.value == "") {
+    if (!messageForm.message.value || messageForm.message.value == "" || !targetUserId) {
         return
     }
 
-    let receiver = (await getReceiverId())
-    console.log('receiver:', receiver)
-
-    let res = await fetch(`/talk-to/${userId}`, {
+    let res = await fetch(`/chatroom/talk-to/${targetUserId}`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             message: messageForm.message.value,
-            // receiver: 
         })
     })
 
@@ -215,13 +198,14 @@ messageForm.addEventListener('submit', async (e) => {
 
 //incoming messages 
 socket.on('new-message', (message) => { // 監聽咩事件
+    console.log('new message found');
     let newIncomingMsg = htmlToElement(/* html */`
             <div class="incoming_msg">
                     <div class="incoming_msg_img"> <img src="" alt=""> </div>
                     <div class="received_msg">
                         <div class="received_withd_msg">
-                            <p>${message}</p>
-                            <span class="time_date"> 11:01 AM | June 9</span>
+                            <p>${message.content}</p>
+                            <span class="time_date"> ${message.created_at}</span>
                         </div>
                     </div>
                 </div>

@@ -64,31 +64,12 @@ io.on('connection', (socket) => {
         socket.disconnect()
         return
     }
-    console.log('io identity check :', req.session['userId']) //check下咩user id入黎
-    socket.join(req.session['userId'])
+    socket.join(String(req.session['userId'])) //join呢間房
+
 });
-
-// app.get('/test', (req, res) => {
-//     console.log('triggered');
-
-//     io.emit("new-user", "Congratulations! New User Created!");
-//     res.end('triggered')
-// })
-
-app.post('/talk-to/:roomId', (req, res) => {
-    let roomId = req.params.roomId
-    console.log('talk to triggered:', roomId);
-    io.to(roomId).emit('new-message', req.body.message)
-    res.end('talk ok')
-})
-
-
 
 // testing 
 // app.get("/aaa",)
-
-
-
 
 app.use("/chatroom", chatRoutes);
 app.use("/user", userRoutes);

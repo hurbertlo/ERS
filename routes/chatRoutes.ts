@@ -1,4 +1,5 @@
 import express from "express"
+import { io } from "../server"
 import { client } from '../util/db'
 import { formParsePromise } from '../util/formidable'
 // import { logger } from '../util/logger'
@@ -10,35 +11,39 @@ export const chatRoutes = express.Router()
 
 chatRoutes.get('/chat-list', getChatList)
 chatRoutes.get('/chats/:userId', getChatsWithAdmin)
-chatRoutes.get('/chat-receiver', getReceiverId)
-chatRoutes.post('/chats-save', ChatMsgSaved)
+chatRoutes.post('/talk-to/:receiver', createMsg)
+
 
 //save msg
-async function ChatMsgSaved(req: express.Request, res: express.Response) {
-    let sender = req.session[`userId`]
-    let { message, receiver } = req.body
-    if (!message) {
-        res.status(402).json({
-            message: 'not Found Msg'
+async function createMsg(req: express.Request, res: express.Response) {
+    try {
+        let sender = req.session[`userId`]
+        let receiver = req.params.receiver
+        let { message } = req.body
+        if (!message) {
+            res.status(402).json({
+                message: 'not Found Msg'
+            })
+            return
+        }
+
+        let result = await client.query(`
+            INSERT INTO chats
+                (sender, receiver, content, content_type)
+            VALUES($1, $2, $3, $4) returning *;
+            `, [sender, receiver, message, "text"])
+
+        let newMessage = result.rows[0]
+        io.to(String(receiver)).emit('new-message', newMessage)
+        res.json({
+            message: "message sent"
         })
-        return
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            message: 'Server fail'
+        })
     }
-
-    (await client.query(`
-    INSERT INTO chats
-        (sender, receiver, content, content_type)
-    VALUES($1, $2, $3, $4);
-    `, [sender, receiver, message, ""])).rows[0]
-}
-
-
-//拎receiver
-async function getReceiverId(req: express.Request, res: express.Response) {
-    let result = await client.query(`
-    select receiver from chats`)
-    res.json({
-        data: result.rows
-    })
 }
 
 async function getChatsWithAdmin(req: express.Request, res: express.Response) {
