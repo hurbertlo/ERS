@@ -13,7 +13,7 @@ window.onload = async () => {
     const leftBoard = document.querySelector(".left-board");
     leftBoard.innerHTML = ` 
     
-    <img class="w-80 h-80" src="${product_detail.data.image}" alt="Image" />
+    <img class="w-100 h-100" img-fluid src="${product_detail.data.image}" alt="Image" />
     `;
 
     const rightBoard = document.querySelector(".right-board");

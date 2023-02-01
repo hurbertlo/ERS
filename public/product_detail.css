@@ -1,12 +1,14 @@
-.right-board {
-    justify-content: center;
-    align-items: center;
-    padding: 80px;
+.rightBoard {
+    /* justify-content: center; */
+    display: flex;
+    text-align: center;
+    /* padding: 80px; */
 }
 
 
 .left-board {
-    justify-content: center;
+    display: flex;
+    /* justify-content: center; */
     align-items: center;
-    padding: 100px;
+    /* padding: 100px; */
 }
