@@ -186,7 +186,7 @@ img {
 }
 
 .sent_msg p {
-    background: #05728f none repeat scroll 0 0;
+    background-color: #D19C97;
     border-radius: 3px;
     font-size: 14px;
     margin: 0;
@@ -221,7 +221,7 @@ img {
 }
 
 .msg_send_btn {
-    background: #05728f none repeat scroll 0 0;
+    background-color: #D19C97;
     border: medium none;
     border-radius: 50%;
     color: #fff;
@@ -342,5 +342,5 @@ img {
 }
 
 .chat-list-item-card.active {
-    background-color: rgb(184, 213, 184);
+    background-color: #D19C97;
 }
