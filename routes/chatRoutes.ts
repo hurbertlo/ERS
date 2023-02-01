@@ -10,10 +10,10 @@ export const chatRoutes = express.Router()
 
 chatRoutes.get('/chat-list', getChatList)
 chatRoutes.get('/chats/:userId', getChatsWithAdmin)
-chatRoutes.get('/chatMsgSave', ChatMsgSaved)
+chatRoutes.get('/chat-receiver', getReceiverId)
+chatRoutes.post('/chats-save', ChatMsgSaved)
 
-
-
+//save msg
 async function ChatMsgSaved(req: express.Request, res: express.Response) {
     let sender = req.session[`userId`]
     let { message, receiver } = req.body
@@ -24,14 +24,22 @@ async function ChatMsgSaved(req: express.Request, res: express.Response) {
         return
     }
 
-    await client.query(`
+    (await client.query(`
     INSERT INTO chats
         (sender, receiver, content, content_type)
     VALUES($1, $2, $3, $4);
-    `, [sender, receiver, message, ""])
+    `, [sender, receiver, message, ""])).rows[0]
 }
 
 
+//拎receiver
+async function getReceiverId(req: express.Request, res: express.Response) {
+    let result = await client.query(`
+    select receiver from chats`)
+    res.json({
+        data: result.rows
+    })
+}
 
 async function getChatsWithAdmin(req: express.Request, res: express.Response) {
     let userId = Number(req.params.userId)
@@ -55,8 +63,6 @@ async function getChatsWithAdmin(req: express.Request, res: express.Response) {
         message: `${chats.length} record${chats.length > 1 ? 's' : ''} found`
     })
 }
-
-
 
 async function getChatList(req: express.Request, res: express.Response) {
     let role = req.session['role']

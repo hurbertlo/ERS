@@ -30,9 +30,8 @@ async function fetchBasketItems() {
                     >
                       <div class="input-group-btn">
                         <button class="btn btn-sm btn-primary btn-minus" 
-                        onclick='updateBasketItemQuantity(${
-                          basketItem.basket_id
-                        }, -1)'>
+                        onclick='updateBasketItemQuantity(${basketItem.basket_id
+        }, -1)'>
                           <i class="fa fa-minus"></i>
                         </button>
                       </div>
@@ -44,17 +43,15 @@ async function fetchBasketItems() {
                       />
                       <div class="input-group-btn">
                         <button class="btn btn-sm btn-primary btn-plus" 
-                        onclick='updateBasketItemQuantity(${
-                          basketItem.basket_id
-                        }, +1)'>
+                        onclick='updateBasketItemQuantity(${basketItem.basket_id
+        }, +1)'>
                           <i class="fa fa-plus"></i>
                         </button>
                       </div>
                     </div>
                   </td>
-                  <td class="align-middle">$${
-                    basketItem.price * basketItem.quantity
-                  }</td>
+                  <td class="align-middle">$${basketItem.price * basketItem.quantity
+        }</td>
                   <td class="align-middle">
                     <button class="btn btn-sm btn-primary"
                     onclick="removeBasketItem(${basketItem.basket_id})">
@@ -75,8 +72,8 @@ async function fetchBasketItems() {
               <div class="d-flex justify-content-between mt-2">
                 <h5 class="font-weight-bold">帳單總額</h5>
                 <h5 class="font-weight-bold">$${getTotalAmount(
-                  basketItems
-                )}</h5>
+      basketItems
+    )}</h5>
               </div>
               <button class="btn btn-block btn-primary my-3 py-3"
               onclick='createOrder()'

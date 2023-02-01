@@ -1,5 +1,7 @@
 async function loadReceipt() {
-    let res = await fetch('/receipt')
+    let search = new URLSearchParams(window.location.search)
+    let orderId = search.get('orderId')
+    let res = await fetch(`/sales?orderId=${orderId}`)
     if (res.ok) {
         let orderDetails = await res.json()
 
