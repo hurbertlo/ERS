@@ -36,7 +36,7 @@
     <!-- <img class="w-80 h-80" src="${product_detail.data.image}" alt="Image" /></div> -->
 
     <div class="col-12 col-md-6 right-board">
-      <form action="/admin_order_details" method="POST" id="admin-add-products-form">
+      <form action="" method="POST" id="admin-add-products-form">
         <div>
           <label>
             名稱 :
@@ -73,11 +73,14 @@
             autocomplete="off" />
           <p class="help-block text-danger"></p>
         </div>
+
+        <!-- post product -->
         <div>
           <button id="add-to-listing" class="btn btn-primary px-3">
             <i class="bi bi-shop"></i> 發布產品
           </button>
         </div>
+
         <!-- <h3 class="font-weight-semi-bold">${product_detail.data.name}</h3>
 
       <h3 class="font-weight-semi-bold mb-4">$${product_detail.data.price}</h3>
@@ -96,8 +99,10 @@
     <div class="row bg-secondary py-2 px-xl-5"></div>
   </div>
 
+
+  <!-- delete product -->
   <div class="delete-product">
-    <form action="/admin_order_details" method="DELETE" id="admin-delete-products-form">
+    <form action="" method="DELETE" id="admin-delete-products-form">
       <div>
         <label>
           產品編號 :
@@ -110,6 +115,8 @@
     </form>
   </div>
   </div>
+
+
   <!-- Shop Detail End -->
 
   <!-- JavaScript Libraries -->

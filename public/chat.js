@@ -1,4 +1,3 @@
-
 const socket = io.connect();
 
 let inboxChatContainer = document.querySelector('#inbox-chat-id');
@@ -145,7 +144,6 @@ async function getChats() {
     // if not logon, force page redirection //彈去signin
     if (!chatResult.ok) {
         window.location.href = '/user/signup_login.html';
-
     }
 }
 
