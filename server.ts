@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
         socket.disconnect()
         return
     }
-    console.log('io identity check :', req.session['userId'])
+    console.log('io identity check :', req.session['userId']) //check下咩user id入黎
     socket.join(req.session['userId'])
 });
 
@@ -74,7 +74,6 @@ io.on('connection', (socket) => {
 //     io.emit("new-user", "Congratulations! New User Created!");
 //     res.end('triggered')
 // })
-
 
 app.post('/talk-to/:roomId', (req, res) => {
     let roomId = req.params.roomId
