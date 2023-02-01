@@ -9,6 +9,12 @@ async function fetchBasketItems() {
 
     basketItemTBodyElm.innerHTML = "";
 
+    if (basketItems.length === 0) {
+      basketItemTBodyElm.innerHTML += `
+      您的購物車暫時沒有貨品!
+`;
+    }
+
     for (let basketItem of basketItems) {
       basketItemTBodyElm.innerHTML += `
             <tr id='basket_item_${basketItem.basket_id}'>

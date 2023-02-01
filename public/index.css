@@ -1,4 +1,4 @@
-.container-fluid {
+/* .container-fluid {
     position: relative;
 
 }
@@ -11,7 +11,7 @@
 
 .navbar-toggler {
     z-index: 1;
-}
+} */
 
 /* .carousel-inner {
     height: 100%;
@@ -87,11 +87,11 @@
 }
 
 .logo {
-    height: 100px;
-    width: 200px;
+    height: 80px;
+    width: 180px;
 }
 
-.section1-container {
+/* .section1-container {
     margin-top: 50px;
     margin-bottom: 50px;
 }
@@ -99,4 +99,4 @@
 .bottom_image {
     height: 200px;
     width: 300px;
-}
+} */

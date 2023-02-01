@@ -9494,6 +9494,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* padding: 0px 50px 0px 50px; */
   }
   
   .carousel-caption {
@@ -9501,7 +9502,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
+    /* background: rgba(0, 0, 0, 0.3); */
     z-index: 1;
   }
   
@@ -9583,4 +9584,6 @@
     }
   }
   
-
+  .container-delete-product  {
+    margin: 50px 0px 50px 0px;
+  }
