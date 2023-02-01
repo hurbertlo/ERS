@@ -38,7 +38,28 @@ export async function getSales(req: express.Request, res: express.Response) {
 
     } catch (error: any) {
         res.status(500).json({
-            message: "[RCPT001]-Fail to generate receipt, please connect "
+            message: "[RPT001]-Fail to generate receipt, please connect "
+        })
+
+        console.log(error)
+    }
+}
+
+
+export async function getAllSales(req: express.Request, res: express.Response) {
+    try {
+        let inputDate
+        let orderDetails = (await client.query(`SELECT * FROM orders_details`)).rows
+        let selectedMonth = (await client.query(`SELECT * FROM order_details WHERE created_at = $1`, [inputDate])).rows
+
+
+        res.json({
+            orderDetails
+        })
+
+    } catch (error: any) {
+        res.status(500).json({
+            message: "[RPTT002]-Fail to generate report"
         })
 
         console.log(error)

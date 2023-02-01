@@ -1,24 +1,35 @@
 async function fetchOrders() {
-    const res = await fetch(`order/outstanding`);
+    let res = await fetch(`/order/outstanding`);
     if (res.ok) {
-        const data = await res.json();
-        const outstandingOrders = data.data;
-        const outstandingElm = document.querySelector(".outstandingOrderList");
+        let data = await res.json()
+        let outstandingOrders = data.data
+        let outstandingElm = document.querySelector(".outstandingOrderList");
 
         outstandingElm.innerHTML = "";
-
-        for (let outstandingOrder of outstandingOrders) {
+        if (outstandingOrders.length === 0) {
             outstandingElm.innerHTML += `
-            <tr id ='outstanding_${outstandingOrder.id}'>                               
-                <td class="align-middle">${outstandingOrder.id}</td>
-                <td class="align-middle">${outstandingOrder.ordered_by}</td>
-                <td class="align-middle">${outstandingOrder.address}</td>
-                <td class="align-middle">${outstandingOrder.total_price}</td>                
-                <td class="align-middle">${outstandingOrder.created_at}</td>
-                <td class="align-middle">${outstandingOrder.updated_at}</td>
-                <td class="align-middle">${outstandingOrder.order_status_id}</td>
+            No outstanding orders
+      `;
+        }
+
+        for (outstandingOrder of outstandingOrders) {
+            let outstandingOrderStatusId = outstandingOrder.order_status_id
+            let outstandingOrderId = outstandingOrder.id
+
+            outstandingElm.innerHTML += `
+            
+              <th>${outstandingOrder.id}</th>
+              <th>${outstandingOrder.ordered_by}</th>
+              <th>${outstandingOrder.address}</th>
+              <th>${outstandingOrder.total_price}</th>
+              <th>${outstandingOrder.created_at}</th>
+              <th>${outstandingOrder.updated_at}</th>
+              <th>${outstandingOrder.order_status_id}</th>
+                      
+          
+                                       
                 <td class="align-middle">
-                <button class="bi bi-truck"  onclick="deliveringOrder(${outstandingOrder.order_status_id, outstandingOrder.id})">
+                <button class="bi bi-truck deliver${outstandingOrder.id}" >
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck"
                     viewBox="0 0 16 16" >
                     <path
@@ -27,7 +38,7 @@ async function fetchOrders() {
                 </button>
                 </td>
                 <td class="align-middle">
-                <button class="bi bi-check-lg"onclick="completeOrder(${outstandingOrder.order_status_id, outstandingOrder.id})">
+                <button class="bi bi-check-lg complete${outstandingOrderId}" >
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-check-lg" viewBox="0 0 16 16">
                     <path
@@ -35,17 +46,21 @@ async function fetchOrders() {
                   </svg>
                 </button>
                 </td>
-            </tr>            
+                       
            `
         }
     }
 }
 
+fetchOrders();
 
-async function deliveringOrder(outstandingOrderStatusId, outstandingOrderId) {
-    let outstandingOrderStatusId = outstandingOrder.order_status_id
-    let outstandingOrderId = outstandingOrder.id
+
+
+
+document.querySelector(`.deliver${outstandingOrder.id}`).addEventListener("click", async function deliverOrder(e, outstandingOrderStatusId, outstandingOrderId) {
+    e.preventDefault();
     let res = await fetch(`/order/delivering/${outstandingOrderId}`, {
+
         method: "post",
         headers: {
             "Content-type": "application/json",
@@ -62,11 +77,9 @@ async function deliveringOrder(outstandingOrderStatusId, outstandingOrderId) {
         }
     }
     fetchOrders()
-}
-
-async function completeOrder(outstandingOrderStatusId, outstandingOrderId) {
-    let outstandingOrderStatusId = outstandingOrder.order_status_id
-    let outstandingOrderId = outstandingOrder.id
+})
+document.querySelector(`.completed${outstandingOrderId}`).addEventListener("click", async function completedOrder(e, outstandingOrderStatusId, outstandingOrderId) {
+    e.preventDefault();
     let res = await fetch(`/order/completed/${outstandingOrderId}`, {
         method: "post",
         headers: {
@@ -84,10 +97,9 @@ async function completeOrder(outstandingOrderStatusId, outstandingOrderId) {
         }
     }
     fetchOrders()
-}
+})
 
-
-(function init() {
-    fetchOrders();
-})();
+    (function init() {
+        fetchOrders();
+    })();
 

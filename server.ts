@@ -25,7 +25,6 @@ declare module 'express-session' {
     interface SessionData {
         visitCounter?: number
         users?: User
-
     }
 }
 
@@ -45,6 +44,7 @@ const sessionMiddleware = expressSession({
     saveUninitialized: true,
     cookie: { secure: false },
 });
+
 
 app.use(sessionMiddleware);
 

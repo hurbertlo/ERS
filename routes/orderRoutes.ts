@@ -9,7 +9,7 @@ import { io } from "../server";
 export const orderRoutes = express.Router();
 
 orderRoutes.post("/basket", isLoggedInAPI, createOrder);
-orderRoutes.put("/delivering/:orderId", deliveringOrder);
+orderRoutes.put("/deliver/:orderId", deliverOrder);
 orderRoutes.put("/completed/:orderId", completedOrder);
 orderRoutes.get("/outstanding", outstandingOrder);
 
@@ -124,12 +124,12 @@ export async function createOrder(req: express.Request, res: express.Response) {
 
 
 // update order on the way
-export async function deliveringOrder(
+export async function deliverOrder(
     req: express.Request,
     res: express.Response
 ) {
     try {
-        let order_status_id
+        let order_status_id = req.body
         let orderId = req.body;
         if (order_status_id == 1) {
             await client.query(
@@ -160,7 +160,7 @@ export async function completedOrder(
     res: express.Response
 ) {
     try {
-        let order_status_id
+        let order_status_id = req.body
         let orderId = req.body;
         if (order_status_id == 2) {
             await client.query(
@@ -203,12 +203,14 @@ export async function outstandingOrder(
     res: express.Response
 ) {
     try {
-        let outstandingOrders = await client.query(`
-        SELECT * FROM orders WHERE order_status !=3
+        let result = await client.query(`
+        SELECT * FROM orders WHERE order_status_id !=3
         ORDER BY created_at ASC 
         `)
+        let outstandingOrders = result.rows
         res.json({
-            outstandingOrders
+
+            data: outstandingOrders
         })
     } catch (error: any) {
         res.status(500).json({

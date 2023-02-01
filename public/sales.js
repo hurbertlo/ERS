@@ -1,24 +1,24 @@
 async function loadReceipt() {
-    let search = new URLSearchParams(window.location.search)
-    console.log(search)
-    let res = await fetch(`/sales?orderId=${search.get('orderId')}`)
-    if (res.ok) {
-        let orderDetails = await res.json()
-        updatePurchasedItemContainer(orderDetails)
-    } else {
-        res.json({
-            message: "[RCPT002] Fail to load receipt"
-        })
-    }
+  let search = new URLSearchParams(window.location.search)
+  console.log(search)
+  let res = await fetch(`/sales?orderId=${search.get('orderId')}`)
+  if (res.ok) {
+    let orderDetails = await res.json()
+    updatePurchasedItemContainer(orderDetails)
+  } else {
+    res.json({
+      message: "[RCPT002] Fail to load receipt"
+    })
+  }
 }
 loadReceipt()
 
 function updatePurchasedItemContainer(orderDetails) {
-    console.log(orderDetails);
-    let receiptMain = document.querySelector('main')
+  console.log(orderDetails);
+  let receiptMain = document.querySelector('main')
 
-    receiptMain.innerHTML = ''
-    receiptMain.innerHTML =  /**HTML */`
+  receiptMain.innerHTML = ''
+  receiptMain.innerHTML =  /**HTML */`
     
         <div class="row align-items-center py-3 px-xl-5">
     <div class="col-lg-3">
@@ -63,8 +63,8 @@ function updatePurchasedItemContainer(orderDetails) {
           <tbody class="align-middle">
 
           ${orderDetails.paidItems.map(e => {
-        return (
-            `
+    return (
+      `
             <tr>
                 <td class="align-middle">${e.product_id}</td>
                 <td class="align-middle">${e.name}</td>
@@ -73,9 +73,9 @@ function updatePurchasedItemContainer(orderDetails) {
                 <td class="align-middle">$${e.subtotal}</td>
             </tr>
             `
-        )
-    })
-        }
+    )
+  })
+    }
             
 
             <tr>
@@ -84,8 +84,8 @@ function updatePurchasedItemContainer(orderDetails) {
               <td class="align-middle"></td>
               <td class="align-middle">帳單總額:</td>
               <td class="align-middle">$${orderDetails.paidItems.reduce((acc, curr) => {
-            return acc + curr.subtotal
-        }, 0)}</td>
+      return acc + curr.subtotal
+    }, 0)}</td>
             </tr>
 
             <div class="container-fluid pt-5"></div>
