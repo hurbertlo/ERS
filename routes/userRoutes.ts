@@ -105,7 +105,6 @@ export async function signin(req: express.Request, res: express.Response) {
         let role = (await client.query('select name from user_types where id = $1', [foundUser.user_type_id])).rows[0].name
         req.session['role'] = role
 
-
         res.json({
             role
         })

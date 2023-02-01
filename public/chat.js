@@ -1,4 +1,3 @@
-
 const socket = io.connect();
 
 let inboxChatContainer = document.querySelector('#inbox-chat-id');
@@ -56,7 +55,7 @@ async function renderChatListUI(chatList) {
             inboxChatContainer.innerHTML += `
 
                 <div id='chat-list-item-${chatListItem.id}' data-user-id='${chatListItem.id}' class='chat-list-item-card' onclick='onChatListItemClick(${chatListItem.id})'>
-                        <div><b>${chatListItem.id}</b></div>
+                        <div><b></b></div>
                 
                         <div class='avatar-container'>
                                 <img src='https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'></img>
@@ -210,6 +209,10 @@ socket.on('new-message', (message) => { // 監聽咩事件
                     </div>
                 </div>
                     `)
+
+    //for real-time update last-message
+    document.querySelector('.last-message').innerHTML = message.content
+
 
     messageHistory.appendChild(newIncomingMsg);
     messageHistory.scrollTop = messageHistory.scrollHeight;

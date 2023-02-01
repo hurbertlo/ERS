@@ -42,14 +42,14 @@ document.querySelector("#admin_header").innerHTML = /*html*/ `
 `;
 
 window.addEventListener("scroll", () => {
-  console.log(window.scrollY);
-  if (window.scrollY > 10) {
-    document
-      .querySelector("#admin_header")
-      .classList.add("admin_header-shadow");
-  } else {
-    document
-      .querySelector("#admin_header")
-      .classList.remove("admin_header-shadow");
-  }
+    console.log(window.scrollY);
+    if (window.scrollY > 10) {
+        document
+            .querySelector("#admin_header")
+            .classList.add("admin_header-shadow");
+    } else {
+        document
+            .querySelector("#admin_header")
+            .classList.remove("admin_header-shadow");
+    }
 });
