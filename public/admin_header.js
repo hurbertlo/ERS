@@ -22,10 +22,10 @@ document.querySelector("#admin_header").innerHTML = /*html*/ `
          <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
              <div class="navbar-nav mr-auto py-0">
                  <a href="admin_order_details.html" class="nav-item nav-link">銷售紀錄</a>
-                 <a href="admin_cart.html" class="nav-item nav-link">對話</a>
-                 <a href="admin_orders.html" class="nav-item nav-link">交易狀態</a>
-                 <a href="admin_new_products.html" class="nav-item nav-link">產品更新</a>
-                 <a href="contact.html" class="nav-item nav-link">存貨</a>
+                 <a href="admin_chat.html" class="nav-item nav-link">對話</a>
+                 <a href="admin_update_order_status.html" class="nav-item nav-link">交易狀態</a>
+                 <a href="admin_update_products.html" class="nav-item nav-link">產品更新</a>
+                 <a href="admin_inventory.html" class="nav-item nav-link">存貨</a>
              </div>
              <!-- <div class="navbar-nav ml-auto py-0">
                  <a href="" class="nav-item nav-link">Login</a>

@@ -6,27 +6,26 @@ document.querySelector("footer").innerHTML = `
                 <a href="" class="text-decoration-none">
                     <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">E</span>Shopper</h1>
                 </a>
-                <p>Dolore erat dolor sit lorem vero amet. Sed sit lorem magna, ipsum no sit erat lorem et magna ipsum dolore amet erat.</p>
                 <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>香港上環文咸西街59-67號金日集團中心
                 ​11樓 C-E室</p>
                 <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@hoppers.com</p>
-                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+852 9725 6400</p>
             </div>
             <div class="col-lg-8 col-md-12">
                 <div class="row">
                     <div class="col-md-4 mb-5">
                         <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
                         <div class="d-flex flex-column justify-content-start">
-                            <a class="text-dark mb-2" href="index.html"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                            <a class="text-dark mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-dark mb-2" href="detail.html"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-                            <a class="text-dark mb-2" href="cart.html"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
-                            <a class="text-dark mb-2" href="checkout.html"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-                            <a class="text-dark" href="contact.html"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                            <a class="text-dark mb-2" href="/index.html"><i class="fa fa-angle-right mr-2"></i>首頁</a>
+                            <a class="text-dark mb-2" href="/listing.html?category=all.html"><i class="fa fa-angle-right mr-2"></i>全部</a>
+                            <a class="text-dark mb-2" href="/listing.html?category=food.html"><i class="fa fa-angle-right mr-2"></i>食品</a>
+                            <a class="text-dark mb-2" href="/listing.html?category=toy.html"><i class="fa fa-angle-right mr-2"></i>玩具</a>
+                            <a class="text-dark mb-2" href="/listing.html?category=clothing.html"><i class="fa fa-angle-right mr-2"></i>衣服</a>
+                            <a class="text-dark" href="/listing.html?category=tool.html"><i class="fa fa-angle-right mr-2"></i>工具</a>
                         </div>
                     </div>
                     <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">Newsletter</h5>
+                        <h5 class="font-weight-bold text-dark mb-4">獲取最新消息</h5>
                         <form action="">
                             <div class="form-group">
                                 <input type="text" class="form-control border-0 py-4" placeholder="Your Name" required="required" />
@@ -36,7 +35,7 @@ document.querySelector("footer").innerHTML = `
                                     required="required" />
                             </div>
                             <div>
-                                <button class="btn btn-primary btn-block border-0 py-3" type="submit">Subscribe Now</button>
+                                <button class="btn btn-primary btn-block border-0 py-3" type="submit">訂閱我們</button>
                             </div>
                         </form>
                     </div>
@@ -46,9 +45,7 @@ document.querySelector("footer").innerHTML = `
         <div class="row border-top border-light mx-xl-5 py-4">
             <div class="col-md-6 px-xl-0">
                 <p class="mb-md-0 text-center text-md-left text-dark">
-                    &copy; <a class="text-dark font-weight-semi-bold" href="#">Your Site Name</a>. All Rights Reserved. Designed
-                    by
-                    <a class="text-dark font-weight-semi-bold" href="https://htmlcodex.com">HTML Codex</a>
+                    &copy; <a class="text-dark font-weight-semi-bold" href="#">Hoppers Co., Ltd.</a> 
                 </p>
             </div>
             <div class="col-md-6 px-xl-0 text-center text-md-right">

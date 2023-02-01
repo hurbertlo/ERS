@@ -93,13 +93,14 @@ export async function createOrder(req: express.Request, res: express.Response) {
 
         res.json({
             message: "Order received with thanks",
-            redirect: `/sales.html?orderId=${orderId}/`,
+            redirect: `/sales.html?orderId=${orderId}`,
         });
     } catch (error: any) {
         // socket.emit("admin", "[ORD003]-server error, fail to update baskets")
         console.log(error);
     }
 }
+
 
 
 
