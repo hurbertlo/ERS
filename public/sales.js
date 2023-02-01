@@ -1,12 +1,10 @@
 async function loadReceipt() {
     let search = new URLSearchParams(window.location.search)
-    let orderId = search.get('orderId')
-    let res = await fetch(`/sales?orderId=${orderId}`)
+    console.log(search)
+    let res = await fetch(`/sales?orderId=${search.get('orderId')}`)
     if (res.ok) {
         let orderDetails = await res.json()
-
         updatePurchasedItemContainer(orderDetails)
-
     } else {
         res.json({
             message: "[RCPT002] Fail to load receipt"
@@ -16,6 +14,7 @@ async function loadReceipt() {
 loadReceipt()
 
 function updatePurchasedItemContainer(orderDetails) {
+    console.log(orderDetails);
     let addressElm = document.querySelector('address')
     addressElm.innerText = orderDetails.address
 
@@ -28,16 +27,16 @@ function updatePurchasedItemContainer(orderDetails) {
     let purchasedItemContainerElem = document.querySelector('.receipt')
     purchasedItemContainerElem.innerHTML = ''
 
-    for (let orderDetailItem of orderDetails) {
+    for (let orderDetailItem of orderDetails.paidItems) {
 
         purchasedItemContainerElem.innerHTML += `
             <tr>
             <td class="td1">
-            ${orderDetailItem.paidItems.name}
+            ${orderDetailItem.name}
             </td>
-            <td class=td2>${orderDetailItem.paidItems.product_id}</td>
-            <td class=td3>${orderDetailItem.paidItems.quantity}</td>
-            <td class=td4>${orderDetailItem.paidItems.subtotal}</td>
+            <td class=td2>${orderDetailItem.product_id}</td>
+            <td class=td3>${orderDetailItem.quantity}</td>
+            <td class=td4>${orderDetailItem.subtotal}</td>
         </tr>
 
 

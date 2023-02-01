@@ -17,8 +17,10 @@ export async function getSales(req: express.Request, res: express.Response) {
     try {
         let userId = req.session["userId"]
         let address = (await client.query(`SELECT address FROM users where id = $1`, [userId])).rows[0].address
+        console.log(address)
         let orderId = Number(req.query.orderId)
-        console.log(orderId)
+        console.log("req.query.orderId", req.query.orderId)
+        console.log("orderId", orderId)
         let total = (await client.query(`SELECT total_price FROM orders WHERE id = $1`, [orderId])).rows[0].total_price
         console.log(total)
         let date = (await client.query(`SELECT created_at FROM orders WHERE id = $1`, [orderId])).rows[0].created_at
