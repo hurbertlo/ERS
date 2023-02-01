@@ -14,7 +14,7 @@ document.querySelector("footer").innerHTML = `
             <div class="col-lg-8 col-md-12">
                 <div class="row">
                     <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                        <h5 class="font-weight-bold text-dark mb-4">快速連結</h5>
                         <div class="d-flex flex-column justify-content-start">
                             <a class="text-dark mb-2" href="/index.html"><i class="fa fa-angle-right mr-2"></i>首頁</a>
                             <a class="text-dark mb-2" href="/listing.html?category=all.html"><i class="fa fa-angle-right mr-2"></i>全部</a>
@@ -28,10 +28,10 @@ document.querySelector("footer").innerHTML = `
                         <h5 class="font-weight-bold text-dark mb-4">獲取最新消息</h5>
                         <form action="">
                             <div class="form-group">
-                                <input type="text" class="form-control border-0 py-4" placeholder="Your Name" required="required" />
+                                <input type="text" class="form-control border-0 py-4" placeholder="名稱" required="required" />
                             </div>
                             <div class="form-group">
-                                <input type="email" class="form-control border-0 py-4" placeholder="Your Email"
+                                <input type="email" class="form-control border-0 py-4" placeholder="電郵"
                                     required="required" />
                             </div>
                             <div>
