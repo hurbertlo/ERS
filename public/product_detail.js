@@ -32,8 +32,9 @@ window.onload = async () => {
             <small class="pt-1">(50 Reviews)</small>
         </div>
         <h3 class="font-weight-semi-bold mb-4">$${product_detail.data.price}</h3>
-        <div> 
-        <pre class="mb-4">${product_detail.data.description}</pre>
+        <div>
+        <div class="mb-4">${product_detail.data.description}</div>
+        <div class="mb-4">產地: ${product_detail.data.place_of_origin}</div> 
       
     
         <div class="d-flex align-items-center mb-4 pt-2">

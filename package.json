@@ -19,10 +19,12 @@
   },
   "homepage": "https://github.com/hurbertlo/ERS#readme",
   "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/dotenv": "^8.2.0",
     "@types/formidable": "^2.0.5",
     "@types/node": "^18.11.18",
     "@types/pg": "^8.6.6",
+    "bcryptjs": "^2.4.3",
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
