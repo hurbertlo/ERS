@@ -13,7 +13,7 @@ productRoutes.get('/listing/:category', selectProductRange)
 productRoutes.get('/:productId', productDetails)
 productRoutes.post('/', launchProduct)
 productRoutes.delete('/', delistProduct)
-productRoutes.get("/", updateProducts)
+productRoutes.post("/", updateProducts)
 
 
 
@@ -160,19 +160,14 @@ export async function updateProducts(req: express.Request, res: express.Response
             console.log("profile pic : ", profile_picture);
         }
 
-        const result = await client.query(
-            `SELECT  * from user_types WHERE name ='user' `
-        )
-        const userTypeId = result.rows[0].id;
-
         await client.query(`
             INSERT INTO products
-            (category_id, "name", price, place_of_origin, description, created_at, updated_at)
+            ("name", price,description ,place_of_origin ,category_id,  created_at, updated_at)
             VALUES($1, $2, $3, $4, $5, now(), now());
-            `, [userTypeId, name, price, description, place_of_origin, category_id, profile_picture])
+            `, [name, price, description, place_of_origin, category_id, profile_picture])
 
         res.json({
-            message: "create user sucess"
+            message: "Products Updated"
         })
     } catch (error: any) {
         res.status(500).json({
