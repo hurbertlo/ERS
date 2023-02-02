@@ -13,7 +13,7 @@ productRoutes.get('/listing/:category', selectProductRange)
 productRoutes.get('/:productId', productDetails)
 productRoutes.post('/', launchProduct)
 productRoutes.delete('/', delistProduct)
-productRoutes.post("/", updateProducts)
+productRoutes.post("/", adminProducts)
 
 
 
@@ -142,7 +142,7 @@ export async function delistProduct(req: express.Request, res: express.Response)
 
 
 
-export async function updateProducts(req: express.Request, res: express.Response) {
+export async function adminProducts(req: express.Request, res: express.Response) {
     try {
         let { fields, files } = await formParsePromise(req);
         let { name, price, description, place_of_origin, category_id } = fields

@@ -1,14 +1,9 @@
-.rightBoard {
-    /* justify-content: center; */
-    display: flex;
-    text-align: center;
-    /* padding: 80px; */
+.right-board{
+    align-items: center;
+    padding: 90px 0px 0px 30px;
 }
 
-
-.left-board {
-    display: flex;
-    /* justify-content: center; */
+.left-board{
     align-items: center;
-    /* padding: 100px; */
+    padding: 0px 0px 0px 90px;
 }

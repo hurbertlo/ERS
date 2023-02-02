@@ -1,3 +1,4 @@
+
 const socket = io.connect();
 
 let inboxChatContainer = document.querySelector('#inbox-chat-id');
@@ -31,6 +32,7 @@ async function fetchChats(userId) {
     let res = await fetch(`/chatroom/chats/${userId}`)
     let data = await res.json()
     let chats = data.data
+    console.log(chats);
     renderChatsUI(chats)
 }
 
@@ -51,8 +53,7 @@ async function renderChatListUI(chatList) {
 
         for (let chatListItem of chatList) {
             console.table(chatListItem);
-
-            inboxChatContainer.innerHTML += `
+            inboxChatContainer.innerHTML += (`
 
                 <div id='chat-list-item-${chatListItem.id}' data-user-id='${chatListItem.id}' class='chat-list-item-card' onclick='onChatListItemClick(${chatListItem.id})'>
                         <div><b></b></div>
@@ -70,7 +71,12 @@ async function renderChatListUI(chatList) {
         
                         </div>
                 </div>
-                `}
+                `)
+
+        }
+
+        inboxChatContainer.appendChild
+
 
     } else {
         for (let chatListItem of chatList) {
@@ -95,6 +101,7 @@ async function renderChatListUI(chatList) {
                         </div>
                 </div>
                 `)
+
             messageHistory.scrollTop = messageHistory.scrollHeight;
         }
     }
@@ -107,6 +114,9 @@ function onChatListItemClick(chatListItemId) {
     document.querySelector(`#chat-list-item-${chatListItemId}`).classList.add('active')
     fetchChats(chatListItemId)
     targetUserId = chatListItemId
+    // if (!targetUserId) {
+    //     messageHistory.n
+    // }
 }
 
 function renderChatsUI(chats) {
@@ -144,6 +154,7 @@ async function getChats() {
     // if not logon, force page redirection //彈去signin
     if (!chatResult.ok) {
         window.location.href = '/user/signup_login.html';
+
     }
 }
 
@@ -185,7 +196,7 @@ messageForm.addEventListener('submit', async (e) => {
                         <div class="outgoing_msg">
                             <div class="sent_msg">
                                 <p>${messageForm.message.value}</p>
-                                <span class="time_date"> 11:01 AM | June 9</span>
+                                <span class="time_date">11:01 AM | June 9</span>
                             </div>
                         </div>
                     `)
@@ -211,8 +222,7 @@ socket.on('new-message', (message) => { // 監聽咩事件
                     `)
 
     //for real-time update last-message
-    document.querySelector('.last-message').innerHTML = message.content
-
+    // document.querySelector('.last-message').innerHTML = message.content
 
     messageHistory.appendChild(newIncomingMsg);
     messageHistory.scrollTop = messageHistory.scrollHeight;

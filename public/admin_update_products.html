@@ -30,94 +30,90 @@
   <div id="admin_header"></div>
   <script src="/admin_header.js"></script>
 
-  <!-- Shop Detail Start -->
-  <div class="row">
-    <div class="col-12 col-md-6 left-board"></div>
-    <!-- <img class="w-80 h-80" src="${product_detail.data.image}" alt="Image" /></div> -->
+  <div class="container-fluid">
+    <div class="row align-items-center py-3 px-xl-5">
+      <div class="col-lg-3">
+        <p class="mb-2">
+        <div class="col-12 col-md-6 left-board">
+          <form action="" method="POST" id="admin-add-products-form">
+            <div>
+              <label>
+                名稱 :
+                <input type="text" name="name" required />
+              </label>
+            </div>
+            <div>
+              <label>
+                價錢 :
+                <input type="number" name="price" />
+              </label>
+            </div>
+            <div>
+              <label>
+                簡介 :
+                <input type="text" name="description" />
+              </label>
+            </div>
+            <div>
+              <label>
+                產地 :
+                <input type="text" name="place_of_origin" />
+              </label>
+            </div>
+            <div>
+              <label>
+                種類 :
+                <input type="text" name="category_id" />
+              </label>
+            </div>
+            <div class="form-group">
+              <label>相片<span class="req">*</span> </label>
+              <input type="file" class="form-control" id="product_image" name="image" message="Please upload image"
+                autocomplete="off" />
+              <p class="help-block text-danger"></p>
+            </div>
 
-    <div class="col-12 col-md-6 right-board">
-      <form action="" method="POST" id="admin-add-products-form">
-        <div>
-          <label>
-            名稱 :
-            <input type="text" name="name" required />
-          </label>
+            <!-- post product -->
+            <button id="add-to-listing" class="btn btn-primary px-3">
+              <i class="bi bi-shop"></i> 發布產品
+            </button>
         </div>
-        <div>
-          <label>
-            價錢 :
-            <input type="number" name="price" />
-          </label>
-        </div>
-        <div>
-          <label>
-            簡介 :
-            <input type="text" name="description" />
-          </label>
-        </div>
-        <div>
-          <label>
-            產地 :
-            <input type="text" name="place_of_origin" />
-          </label>
-        </div>
-        <div>
-          <label>
-            種類 :
-            <input type="text" name="category_id" />
-          </label>
-        </div>
-        <div class="form-group">
-          <label>相片<span class="req">*</span> </label>
-          <input type="file" class="form-control" id="product_image" name="image" message="Please upload image"
-            autocomplete="off" />
-          <p class="help-block text-danger"></p>
-        </div>
-
-        <!-- post product -->
-        <div>
-          <button id="add-to-listing" class="btn btn-primary px-3">
-            <i class="bi bi-shop"></i> 發布產品
-          </button>
-        </div>
-
-        <!-- <h3 class="font-weight-semi-bold">${product_detail.data.name}</h3>
-
-      <h3 class="font-weight-semi-bold mb-4">$${product_detail.data.price}</h3>
-      <div> 
-        <div class="mb-4">${product_detail.data.description}</div>
-        <div class="mb-4">產地: ${product_detail.data.place_of_origin}</div> 
-        <div class="mb-4">分類編號: ${product_detail.data.category_id}</div>
-        <div class="mb-4">數量: ${product_detail.data.unit_size}</div>
-        <button id="add-to-listing" class="btn btn-primary px-3"><i class="bi bi-shop"></i> 發布貨品</button>
-    </div> -->
-      </form>
+        </form>
+        </p>
+      </div>
     </div>
+  </div>
+
+
+  <div class="col-12 col-md-6 right-board"></div>
+  <!-- <img class="w-80 h-80" src="${product_detail.data.image}" alt="Image" /></div> -->
+  </div>
   </div>
 
   <div class="line">
     <div class="row bg-secondary py-2 px-xl-5"></div>
   </div>
 
+  <div class="container-fluid">
+    <div class="row align-items-center py-3 px-xl-5">
+      <div class="col-lg-3">
+        <p class="mb-2">
+        <form action="/admin_order_details" method="DELETE" id="admin-delete-products-form">
+          <div>
+            <label>
+              產品編號 : <input type="text" name="name" required />
+            </label>
+          </div>
 
-  <!-- delete product -->
-  <div class="delete-product">
-    <form action="" method="DELETE" id="admin-delete-products-form">
-      <div>
-        <label>
-          產品編號 :
-          <input type="text" name="name" required />
-        </label>
+          <button id="add-to-listing" class="btn btn-primary px-3">
+            <i class="bi bi-trash3"></i> 刪除產品
+          </button>
       </div>
-      <button id="add-to-listing" class="btn btn-primary px-3">
-        <i class="bi bi-trash3"></i> 刪除產品
-      </button>
-    </form>
+      </form>
+      </p>
+    </div>
   </div>
   </div>
-
-
-  <!-- Shop Detail End -->
 
   <!-- JavaScript Libraries -->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

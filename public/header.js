@@ -7,11 +7,11 @@ document.querySelector("#header").innerHTML = /*html*/ `
 </div>
 <!-- Topbar End -->
 
-<!-- Topbar Start -->
+
 <div class="container-fluid">
 <div class="row align-items-center py-3 px-xl-5">
     <div class="col-lg-3 d-none d-lg-block">
-        <a href="" class="text-decoration-none">
+        <a href='/index.html'>
           <img class="logo" src="/pet_logo.jpg">
         </a>
     </div>
@@ -52,12 +52,12 @@ document.querySelector("#header").innerHTML = /*html*/ `
             </button>
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
-                    <a href="/index.html" class="nav-item nav-link active">首頁</a>
+                    <a href="/index.html" class="nav-item nav-link">首頁</a>
                     <a href="/product_list.html?category=all" class="nav-item nav-link">全部</a>
                     <a href="/product_list.html?category=food" class="nav-item nav-link">食品</a>
                     <a href="/product_list.html?category=toy" class="nav-item nav-link">玩具</a>
                     <a href="/product_list.html?category=clothing" class="nav-item nav-link">衣服</a>
-                    <a href="/product_list.html?category=tool" class="nav-item nav-link">工具</a>
+                    <a href="/product_list.html?category=tool" class="nav-item nav-link">美容工具</a>
                 </div>
             </div>
         </nav>
