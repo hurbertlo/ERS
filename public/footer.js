@@ -3,9 +3,6 @@ document.querySelector("footer").innerHTML = `
     <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
         <div class="row px-xl-5 pt-5">
             <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
-                <a href="" class="text-decoration-none">
-                    <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">E</span>Shopper</h1>
-                </a>
                 <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>香港上環文咸西街59-67號金日集團中心
                 ​11樓 C-E室</p>
                 <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@hoppers.com</p>
@@ -14,7 +11,7 @@ document.querySelector("footer").innerHTML = `
             <div class="col-lg-8 col-md-12">
                 <div class="row">
                     <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                        <h5 class="font-weight-bold text-dark mb-4">快速連結</h5>
                         <div class="d-flex flex-column justify-content-start">
                             <a class="text-dark mb-2" href="/index.html"><i class="fa fa-angle-right mr-2"></i>首頁</a>
                             <a class="text-dark mb-2" href="/listing.html?category=all.html"><i class="fa fa-angle-right mr-2"></i>全部</a>
@@ -28,10 +25,10 @@ document.querySelector("footer").innerHTML = `
                         <h5 class="font-weight-bold text-dark mb-4">獲取最新消息</h5>
                         <form action="">
                             <div class="form-group">
-                                <input type="text" class="form-control border-0 py-4" placeholder="Your Name" required="required" />
+                                <input type="text" class="form-control border-0 py-4" placeholder="名稱" required="required" />
                             </div>
                             <div class="form-group">
-                                <input type="email" class="form-control border-0 py-4" placeholder="Your Email"
+                                <input type="email" class="form-control border-0 py-4" placeholder="電郵"
                                     required="required" />
                             </div>
                             <div>
