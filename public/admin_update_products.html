@@ -36,7 +36,7 @@
     <!-- <img class="w-80 h-80" src="${product_detail.data.image}" alt="Image" /></div> -->
 
     <div class="col-12 col-md-6 right-board">
-      <form action="" method="POST" id="admin-add-products-form">
+      <form class="post-product-form" action="" method="POST" id="admin-add-products-form">
         <div>
           <label>
             名稱 :
@@ -76,7 +76,7 @@
 
         <!-- post product -->
         <div>
-          <button id="add-to-listing" class="btn btn-primary px-3">
+          <button id="add-products" class="btn btn-primary px-3">
             <i class="bi bi-shop"></i> 發布產品
           </button>
         </div>
@@ -102,14 +102,14 @@
 
   <!-- delete product -->
   <div class="delete-product">
-    <form action="" method="DELETE" id="admin-delete-products-form">
+    <form class="delete-product-form" action="" method="DELETE" id="admin-delete-products-form">
       <div>
         <label>
           產品編號 :
           <input type="text" name="name" required />
         </label>
       </div>
-      <button id="add-to-listing" class="btn btn-primary px-3">
+      <button id="delete-products" class="btn btn-primary px-3">
         <i class="bi bi-trash3"></i> 刪除產品
       </button>
     </form>
