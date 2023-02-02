@@ -1,28 +1,34 @@
 async function loadReceipt() {
-    let search = new URLSearchParams(window.location.search)
-    console.log(search)
-    let res = await fetch(`/sales?orderId=${search.get('orderId')}`)
-    if (res.ok) {
-        let orderDetails = await res.json()
-        updatePurchasedItemContainer(orderDetails)
-    } else {
-        res.json({
-            message: "[RCPT002] Fail to load receipt"
-        })
-    }
+  let search = new URLSearchParams(window.location.search);
+  console.log(search);
+  let res = await fetch(`/sales?orderId=${search.get("orderId")}`);
+  if (res.ok) {
+    let orderDetails = await res.json();
+    updatePurchasedItemContainer(orderDetails);
+  } else {
+    res.json({
+      message: "[RCPT002] Fail to load receipt",
+    });
+  }
 }
-loadReceipt()
+loadReceipt();
 
 function updatePurchasedItemContainer(orderDetails) {
-    console.log(orderDetails);
-    let receiptMain = document.querySelector('main')
+  console.log(orderDetails);
+  let receiptMain = document.querySelector("main");
 
-    receiptMain.innerHTML = ''
-    receiptMain.innerHTML =  /**HTML */`
+  receiptMain.innerHTML = "";
+  receiptMain.innerHTML = /**HTML */ `
+
+    <div class="container-fluid">
+    <div class="row bg-secondary py-2 px-xl-5">
+    </div>
+    </div>
     
-        <div class="row align-items-center py-3 px-xl-5">
+    <div class="row align-items-center py-3 px-xl-5">
     <div class="col-lg-3">
-      <img class="logo" src="/pet_logo.jpg" />
+    <a href="/index.html">
+    <img class="logo" src="/pet_logo.jpg" /></a>
     </div>
     <div class="col-lg-6 col-6 text-left"></div>
     <div class="col-lg-3 col-6 text-right">
@@ -41,7 +47,6 @@ function updatePurchasedItemContainer(orderDetails) {
         <p class="mb-2">
           <i class="fa fa-map-marker-alt text-primary mr-3"></i>香港上環文咸西街59-67號金日集團中心 ​11樓 C-E室
         </p>
-
       </div>
     </div>
   </div>
@@ -62,9 +67,8 @@ function updatePurchasedItemContainer(orderDetails) {
           </thead>
           <tbody class="align-middle">
 
-          ${orderDetails.paidItems.map(e => {
-        return (
-            `
+          ${orderDetails.paidItems.map((e) => {
+            return `
             <tr>
                 <td class="align-middle">${e.product_id}</td>
                 <td class="align-middle">${e.name}</td>
@@ -72,10 +76,8 @@ function updatePurchasedItemContainer(orderDetails) {
                 <td class="align-middle">$${e.subtotal / e.quantity}</td>
                 <td class="align-middle">$${e.subtotal}</td>
             </tr>
-            `
-        )
-    })
-        }
+            `;
+          })}
             
 
             <tr>
@@ -83,9 +85,12 @@ function updatePurchasedItemContainer(orderDetails) {
               <td class="align-middle"></td>
               <td class="align-middle"></td>
               <td class="align-middle">帳單總額:</td>
-              <td class="align-middle">$${orderDetails.paidItems.reduce((acc, curr) => {
-            return acc + curr.subtotal
-        }, 0)}</td>
+              <td class="align-middle">$${orderDetails.paidItems.reduce(
+                (acc, curr) => {
+                  return acc + curr.subtotal;
+                },
+                0
+              )}</td>
             </tr>
 
             <div class="container-fluid pt-5"></div>
@@ -98,11 +103,15 @@ function updatePurchasedItemContainer(orderDetails) {
   <!-- Table End -->
 
   <div class="container-fluid">
-    Thank you!
+    <div class="row align-items-center py-3 px-xl-5">
+      <div class="col-lg-3">
+        <p class="mb-2">
+  Thank you!
+        </p>
+      </div>
+    </div>
   </div>
 
     
-    `
-
+    `;
 }
-
