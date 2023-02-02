@@ -27,14 +27,11 @@ document.querySelector("#admin_header").innerHTML = /*html*/ `
                  <a href="admin_update_products.html" class="nav-item nav-link">產品更新</a>
                  <a href="admin_inventory.html" class="nav-item nav-link">存貨紀錄</a>
                  <a href="admin_order_details.html" class="nav-item nav-link">銷售紀錄</a>
+                 <a href="/index.html" class="nav-item nav-link">返回購物網站</a> 
              </div>
-             <!-- <div class="navbar-nav ml-auto py-0">
-                 <a href="" class="nav-item nav-link">Login</a>
-                 <a href="" class="nav-item nav-link">Register</a>
-             </div> -->
          </div>
      </nav>
-     
+
  </div>
 </div>
 </div>
@@ -42,14 +39,14 @@ document.querySelector("#admin_header").innerHTML = /*html*/ `
 `;
 
 window.addEventListener("scroll", () => {
-    console.log(window.scrollY);
-    if (window.scrollY > 10) {
-        document
-            .querySelector("#admin_header")
-            .classList.add("admin_header-shadow");
-    } else {
-        document
-            .querySelector("#admin_header")
-            .classList.remove("admin_header-shadow");
-    }
+  console.log(window.scrollY);
+  if (window.scrollY > 10) {
+    document
+      .querySelector("#admin_header")
+      .classList.add("admin_header-shadow");
+  } else {
+    document
+      .querySelector("#admin_header")
+      .classList.remove("admin_header-shadow");
+  }
 });
