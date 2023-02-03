@@ -114,9 +114,9 @@ function onChatListItemClick(chatListItemId) {
     document.querySelector(`#chat-list-item-${chatListItemId}`).classList.add('active')
     fetchChats(chatListItemId)
     targetUserId = chatListItemId
-    // if (!targetUserId) {
-    //     messageHistory.n
-    // }
+    if (!targetUserId) {
+
+    }
 }
 
 function renderChatsUI(chats) {
@@ -141,7 +141,7 @@ function renderChatsUI(chats) {
 }
 
 // retrieve all latest chats for this user, once
-//
+
 async function getChats() {
     let { role } = await getMe()
     // if (role === 'admin') {
@@ -159,7 +159,6 @@ async function getChats() {
 }
 
 getChats()
-
 
 
 //outcoming同incoming既msg 
