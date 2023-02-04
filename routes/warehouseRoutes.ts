@@ -14,10 +14,15 @@ warehouseRoutes.get("/:productId", isLoggedInAPI, specificProductQty);
 
 export async function allProductsQty(req: express.Request, res: express.Response) {
     try {
-        let availableAllQty = await client.query(`
+        let result = await client.query(`
         SELECT product_id, available_quantity FROM warehouses
         `
         )
+        let availableAllQty = result.rows
+        res.json({
+
+            data: availableAllQty
+        })
     } catch (error: any) {
         res.status(500).json({
             message: "[WHE001] Server Error"
@@ -28,14 +33,18 @@ export async function allProductsQty(req: express.Request, res: express.Response
 
 
 
-
 export async function specificProductQty(req: express.Request, res: express.Response) {
     try {
         let productId
-        let availableQty = await client.query(`
+        let result = await client.query(`
         SELECT available_quantity FROM warehouses 
         WHERE product_id= $1
         `, [productId])
+        let availableQty = result.rows
+        res.json({
+
+            data: availableQty
+        })
     } catch (error: any) {
         res.status(500).json({
             message: "[WHE002] Server Error"

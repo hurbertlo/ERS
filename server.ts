@@ -19,19 +19,12 @@ import { salesRoutes } from './routes/salesRoutes';
 import { User } from './util/model';
 import { warehouseRoutes } from './routes/warehouseRoutes';
 
-
-
 declare module 'express-session' {
     interface SessionData {
         visitCounter?: number
         users?: User
     }
 }
-
-// number of times of visit
-// app.get("/product/:id",(req,res)=>{
-// req.session["visitCounter"]= req.session["visitCounter"]? request.session["visitCounter"]+1 :1
-// })
 
 
 //Socket.io Session SetUp
@@ -67,9 +60,6 @@ io.on('connection', (socket) => {
     socket.join(String(req.session['userId'])) //join呢間房
 
 });
-
-// testing 
-// app.get("/aaa",)
 
 app.use("/chatroom", chatRoutes);
 app.use("/user", userRoutes);

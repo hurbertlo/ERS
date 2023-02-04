@@ -129,18 +129,22 @@ export async function deliverOrder(
     res: express.Response
 ) {
     try {
-        let order_status_id = req.body
-        let orderId = req.body;
+        let { orderId, order_status_id } = req.body
         if (order_status_id == 1) {
             await client.query(
                 `UPDATE orders SET order_status_id = 2 where orders.id = $1`,
                 [orderId]
             )
+            res.json({
+                message: "Your treasure is coming",
+            });
+        } else {
+            res.json({
+                message: "unavailable operation"
+            })
+            console.log(error)
         }
 
-        res.json({
-            message: "Your treasure is coming",
-        });
     } catch (error: any) {
         res.status(500).json({
             message: "[ORD004]-server error"
@@ -160,18 +164,23 @@ export async function completedOrder(
     res: express.Response
 ) {
     try {
-        let order_status_id = req.body
-        let orderId = req.body;
+        let { orderId, order_status_id } = req.body
+
         if (order_status_id == 2) {
             await client.query(
                 `UPDATE orders SET order_status_id = 3 where orders.id = $1`,
                 [orderId]
             )
+            res.json({
+                message: "May your litte darling enjoys",
+            });
+        } else {
+            res.json({
+                message: "unavailable operation"
+            })
         }
 
-        res.json({
-            message: "May your litte darling enjoys",
-        });
+
     } catch (error: any) {
         res.status(500).json({
             message: "[ORD005]-server error"
@@ -180,23 +189,8 @@ export async function completedOrder(
     }
 }
 
-export async function completeOrder(
-    req: express.Request,
-    res: express.Response
-) {
-    try {
-        let orderId = req.body;
-        await client.query(`delete from orders where ordered_by = $1`, [orderId]);
-        res.json({
-            message: "Enjoy",
-        });
-    } catch (error: any) {
-        res.status(500).json({
-            message: "[ORD006]-server error"
-        })
-        console.log(error);
-    }
-}
+
+
 
 export async function outstandingOrder(
     req: express.Request,

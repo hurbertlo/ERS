@@ -1,35 +1,40 @@
 async function fetchOrders() {
-    let res = await fetch(`/order/outstanding`);
-    if (res.ok) {
-        let data = await res.json()
-        let outstandingOrders = data.data
-        let outstandingElm = document.querySelector(".outstandingOrderList");
+  let res = await fetch(`/order/outstanding`);
+  if (res.ok) {
+    let data = await res.json()
+    let outstandingOrders = data.data
+    let outstandingElm = document.querySelector(".outstandingOrderList");
 
-        outstandingElm.innerHTML = "";
-        if (outstandingOrders.length === 0) {
-            outstandingElm.innerHTML += `
-            No outstanding orders
+    outstandingElm.innerHTML = "";
+    if (outstandingOrders.length === 0) {
+      outstandingElm.innerHTML += `
+            <th>No outstanding orders</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
       `;
-        }
+    }
 
-        for (outstandingOrder of outstandingOrders) {
-            let outstandingOrderStatusId = outstandingOrder.order_status_id
-            let outstandingOrderId = outstandingOrder.id
-
-            outstandingElm.innerHTML += `
+    for (outstandingOrder of outstandingOrders) {
+      let outstandingOrderStatusId = outstandingOrder.order_status_id
+      let outstandingOrderId = outstandingOrder.id
+      outstandingElm.innerHTML += `
             
+            <div id="outstandingOrderElm${outstandingOrderId}">            
               <th>${outstandingOrder.id}</th>
               <th>${outstandingOrder.ordered_by}</th>
               <th>${outstandingOrder.address}</th>
               <th>${outstandingOrder.total_price}</th>
               <th>${outstandingOrder.created_at}</th>
               <th>${outstandingOrder.updated_at}</th>
-              <th>${outstandingOrder.order_status_id}</th>
-                      
+              <th>${outstandingOrderStatusId}</th>        
           
                                        
                 <td class="align-middle">
-                <button class="bi bi-truck deliver${outstandingOrder.id}" >
+                <button class="bi bi-truck" onclick="deliverOrder(${outstandingOrderId},${outstandingOrderStatusId})">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck"
                     viewBox="0 0 16 16" >
                     <path
@@ -38,7 +43,7 @@ async function fetchOrders() {
                 </button>
                 </td>
                 <td class="align-middle">
-                <button class="bi bi-check-lg complete${outstandingOrderId}" >
+                <button class="bi bi-check-lg" onclick="completedOrder(${outstandingOrderId},${outstandingOrderStatusId})" ></div>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-check-lg" viewBox="0 0 16 16">
                     <path
@@ -46,60 +51,69 @@ async function fetchOrders() {
                   </svg>
                 </button>
                 </td>
-                       
+              </div>
            `
-        }
+
+
     }
+  }
 }
 
-fetchOrders();
 
 
 
+async function deliverOrder(orderId, order_status_id) {
 
-document.querySelector(`.deliver${outstandingOrder.id}`).addEventListener("click", async function deliverOrder(e, outstandingOrderStatusId, outstandingOrderId) {
-    e.preventDefault();
-    let res = await fetch(`/order/delivering/${outstandingOrderId}`, {
+  let orderData = {
+    orderId,
+    order_status_id
+  }
 
-        method: "post",
-        headers: {
-            "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-            order_status_id: outstandingOrderStatusId,
-            orderId: outstandingOrderId
-        })
-    })
-    if (!res.ok) {
-        let isConfirmed = confirm("Delivering failure, please reload");
-        if (isConfirmed) {
-            window.location.reload();
-        }
+  let res = await fetch(`/order/deliver/${orderId}`, {
+
+    method: "put",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(orderData)
+  })
+
+  if (!res.ok) {
+    let isConfirmed = confirm("Delivering failure, please reload");
+    if (isConfirmed) {
+      window.location.reload();
     }
-    fetchOrders()
-})
-document.querySelector(`.completed${outstandingOrderId}`).addEventListener("click", async function completedOrder(e, outstandingOrderStatusId, outstandingOrderId) {
-    e.preventDefault();
-    let res = await fetch(`/order/completed/${outstandingOrderId}`, {
-        method: "post",
-        headers: {
-            "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-            order_status_id: outstandingOrderStatusId,
-            orderId: outstandingOrderId
-        })
-    })
-    if (!res.ok) {
-        let isConfirmed = confirm("Delivering failure, please reload");
-        if (isConfirmed) {
-            window.location.reload();
-        }
-    }
-    fetchOrders()
-})
+  }
+  fetchOrders()
+}
 
-    (function init() {
-        fetchOrders();
-    })();
+async function completedOrder(orderId, order_status_id) {
+
+  let orderData = {
+    orderId,
+    order_status_id
+  }
+  let res = await fetch(`/order/completed/${orderId}`, {
+    method: "put",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(orderData)
+  })
+  if (!res.ok) {
+    let isConfirmed = confirm("Complete failure, please reload");
+    if (isConfirmed) {
+      window.location.reload();
+    }
+  }
+  fetchOrders()
+}
+
+
+
+
+
+(function init() {
+  fetchOrders();
+})();
 
