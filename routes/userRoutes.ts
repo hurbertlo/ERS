@@ -1,11 +1,9 @@
 import express from "express"
 import { logger } from '../util/logger'
-// import { Memo } from '../util/model'
 import { formParsePromise } from '../util/formidable'
 import { isLoggedInAPI } from '../util/guard'
 import { client } from '../util/db'
 import { createFalse, ExpressionStatement } from "typescript"
-// import {io}from '../server'
 
 export const userRoutes = express.Router()
 

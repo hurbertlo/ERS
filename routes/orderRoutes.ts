@@ -55,6 +55,7 @@ export async function createOrder(req: express.Request, res: express.Response) {
             `SELECT created_at FROM orders WHERE id = $1`,
             [orderId]
         );
+        io.emit('new-order-received')
     } catch (error: any) {
         res.status(500).json({
             message: "[ORD001]-server error"
@@ -88,7 +89,6 @@ export async function createOrder(req: express.Request, res: express.Response) {
     // remove from Basket
     try {
         await client.query(`DELETE FROM baskets WHERE ordered_by = $1`, [userId]);
-        // socket.emit("load_receipt", { message: "New order received" })
         console.log("done");
 
         res.json({
@@ -96,30 +96,9 @@ export async function createOrder(req: express.Request, res: express.Response) {
             redirect: `/sales.html?orderId=${orderId}`,
         });
     } catch (error: any) {
-        // socket.emit("admin", "[ORD003]-server error, fail to update baskets")
         console.log(error);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -153,10 +132,28 @@ export async function deliverOrder(
     }
 }
 
+// update outstanding orders
+export async function outstandingOrder(
+    req: express.Request,
+    res: express.Response
+) {
+    try {
+        let result = await client.query(`
+        SELECT * FROM orders WHERE order_status_id !=3
+        ORDER BY created_at ASC 
+        `)
+        let outstandingOrders = result.rows
+        res.json({
 
-
-
-
+            data: outstandingOrders
+        })
+    } catch (error: any) {
+        res.status(500).json({
+            message: "[ORMGT001]-server error"
+        })
+        console.log(error);
+    }
+}
 
 // order delivered
 export async function completedOrder(
@@ -184,31 +181,6 @@ export async function completedOrder(
     } catch (error: any) {
         res.status(500).json({
             message: "[ORD005]-server error"
-        })
-        console.log(error);
-    }
-}
-
-
-
-
-export async function outstandingOrder(
-    req: express.Request,
-    res: express.Response
-) {
-    try {
-        let result = await client.query(`
-        SELECT * FROM orders WHERE order_status_id !=3
-        ORDER BY created_at ASC 
-        `)
-        let outstandingOrders = result.rows
-        res.json({
-
-            data: outstandingOrders
-        })
-    } catch (error: any) {
-        res.status(500).json({
-            message: "[ORMGT001]-server error"
         })
         console.log(error);
     }

@@ -53,8 +53,6 @@ async function fetchOrders() {
                 </td>
               </div>
            `
-
-
     }
   }
 }

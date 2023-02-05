@@ -53,7 +53,7 @@ export async function selectProductRange(req: express.Request, res: express.Resp
 
     } catch (error: any) {
         res.status(500).json({
-            message: "[ORD002]-server error"
+            message: "[PDT002]-server error"
         })
         console.log(error);
     }
@@ -83,7 +83,7 @@ export async function productDetails(req: express.Request, res: express.Response
 
     } catch (error: any) {
         res.status(500).json({
-            message: "[ORD003]-server error"
+            message: "[PDT003]-server error"
         })
         console.log(error);
     }
@@ -121,7 +121,7 @@ export async function launchProduct(req: express.Request, res: express.Response)
 
     } catch (error: any) {
         res.status(500).json({
-            message: "[ORD004] Server Error"
+            message: "[PDT004] Server Error"
         })
         console.log(error.message)
     }
@@ -141,7 +141,7 @@ export async function delistProduct(req: express.Request, res: express.Response)
             message: "Product delisted",
         });
     } catch (error: any) {
-        res.status(500).end("[PDT004] Server Error-delist fail");
+        res.status(500).end("[PDT005] Server Error-delist fail");
         console.log(error);
     }
 }
