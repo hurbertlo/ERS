@@ -96,7 +96,7 @@ export async function launchProduct(req: express.Request, res: express.Response)
         let { fields, files } = await formParsePromise(req);
         let { category_id, name, price, place_of_origin, description, image, unit_size } = fields
 
-        if (!category_id || !name || !price || !place_of_origin || !description || !image! || unit_size) {
+        if (!category_id || !name || !price || !place_of_origin || !description || !image || !unit_size) {
             res.status(400).json({
                 message: "Invalid product information"
             })
@@ -112,8 +112,8 @@ export async function launchProduct(req: express.Request, res: express.Response)
         await client.query(`
             INSERT INTO products
             (category_id,name,price,place_of_origin,description,image,unit_size)
-            VALUES($1, $2, $3, $4, $5, $6, $7, now(), now());
-            `, [category_id, name, price, place_of_origin, description, unit_size, image || ""])
+            VALUES($1, $2, $3, $4, $5, $6, $7);
+            `, [category_id, name, price, place_of_origin, description, unit_size, image])
 
         res.json({
             message: "Product launched"
@@ -145,42 +145,3 @@ export async function delistProduct(req: express.Request, res: express.Response)
         console.log(error);
     }
 }
-
-
-
-// export async function adminProducts(req: express.Request, res: express.Response) {
-//     try {
-//         let { fields, files } = await formParsePromise(req);
-//         let { name, price, description, place_of_origin, category_id } = fields
-//         console.log("fields = ", fields)
-//         console.log("files = ", files)
-//         if (!name || !price || !description || !place_of_origin || !category_id) {
-//             res.status(400).json({
-//                 message: "Invalid input"
-//             })
-//         }
-
-//         let profile_picture
-//         if (files.image) {
-//             profile_picture = files.image["newFilename"];
-//             console.log("profile pic : ", profile_picture);
-//         }
-
-//         await client.query(`
-//             INSERT INTO products
-//             ("name", price,description ,place_of_origin ,category_id,  created_at, updated_at)
-//             VALUES($1, $2, $3, $4, $5, now(), now());
-//             `, [name, price, description, place_of_origin, category_id, profile_picture])
-
-//         res.json({
-//             message: "Products Updated"
-//         })
-//     } catch (error: any) {
-//         res.status(500).json({
-//             message: "[USR001] Server Error"
-//         })
-//         console.log(error.message)
-//     }
-// }
-
-

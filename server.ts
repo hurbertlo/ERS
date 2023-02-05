@@ -18,14 +18,12 @@ import { chatRoutes } from './routes/chatRoutes';
 import { salesRoutes } from './routes/salesRoutes';
 import { User } from './util/model';
 import { warehouseRoutes } from './routes/warehouseRoutes';
-
 declare module 'express-session' {
     interface SessionData {
         visitCounter?: number
         users?: User
     }
 }
-
 
 //Socket.io Session SetUp
 const app = express();
@@ -37,7 +35,6 @@ const sessionMiddleware = expressSession({
     saveUninitialized: true,
     cookie: { secure: false },
 });
-
 
 app.use(sessionMiddleware);
 
