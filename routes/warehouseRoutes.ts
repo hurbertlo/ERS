@@ -15,7 +15,7 @@ warehouseRoutes.get("/:productId", isLoggedInAPI, specificProductQty);
 export async function allProductsQty(req: express.Request, res: express.Response) {
     try {
         let result = await client.query(`
-        SELECT product_id, category_id, name, available_quantity, warehouses.updated_at FROM warehouses 
+        SELECT product_id, category_id, name, available_quantity, unit_size, warehouses.updated_at FROM warehouses 
         INNER JOIN products ON warehouses.product_id = products.id
         `
         )
