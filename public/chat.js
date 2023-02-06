@@ -1,5 +1,5 @@
 
-const socket = io.connect();
+const socket = io.connect('192.168.23.55');
 
 let inboxChatContainer = document.querySelector('#inbox-chat-id');
 let mainMessageContainer = document.querySelector('#message-id');
@@ -57,7 +57,6 @@ async function renderChatListUI(chatList) {
 
                 <div id='chat-list-item-${chatListItem.id}' data-user-id='${chatListItem.id}' class='chat-list-item-card' onclick='onChatListItemClick(${chatListItem.id})'>
                         <div><b></b></div>
-                
                         <div class='avatar-container'>
                                 <img src='https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'></img>
                         </div>

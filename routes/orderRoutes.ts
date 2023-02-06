@@ -1,10 +1,9 @@
 import express from "express";
-import { logger } from "../util/logger";
 import { isLoggedInAPI } from "../util/guard";
 import { client } from "../util/db";
 import { error } from "winston";
-import { Console } from "console";
-import { io } from "../server";
+import { io } from "../util/socket";
+import { getUserById } from "../services/user-service";
 
 export const orderRoutes = express.Router();
 
@@ -13,27 +12,45 @@ orderRoutes.put("/deliver/:orderId", deliverOrder);
 orderRoutes.put("/completed/:orderId", completedOrder);
 orderRoutes.get("/outstanding", outstandingOrder);
 
-
-
 export async function createOrder(req: express.Request, res: express.Response) {
     let orderId: number;
     let userId = req.session["userId"];
-    let sendaddress = await client.query(
-        `select address from users where id = $1`,
-        [userId]
-    );
+    let sendaddress = (await getUserById(userId)).address;
     let address = sendaddress.rows[0]["address"];
     let checkoutItems = [];
     let n;
     let total = 0;
-    let orderDate;
 
     try {
         // create a temporary summary table of the order
         checkoutItems = (
-            await client.query(`WITH chosenItems AS(SELECT product_id, quantity FROM baskets where ordered_by = ${userId}),
-                     chosenItemDetails AS(SELECT id ,price FROM products WHERE id IN (SELECT product_id FROM baskets INNER JOIN users ON baskets.ordered_by = ${userId}))
-                     SELECT product_id, quantity, price FROM chosenItems INNER JOIN chosenItemDetails ON chosenItems.product_id = chosenItemDetails.id`)
+            await client.query(
+                `
+            
+            WITH chosen_items 
+            AS(
+                SELECT 
+                    product_id, 
+                    quantity 
+                    FROM baskets where ordered_by = $1
+                ),
+            chosenItemDetails 
+            AS(
+                    SELECT 
+                    id,
+                    price 
+                    FROM products WHERE id 
+                    IN (SELECT product_id FROM baskets INNER JOIN users ON baskets.ordered_by = $1)
+                )
+            
+            SELECT 
+            product_id, 
+            quantity, 
+            price 
+            FROM chosen_items 
+            INNER JOIN chosenItemDetails ON chosen_items.product_id = chosenItemDetails.id`,
+                [userId]
+            )
         ).rows;
 
         n = checkoutItems.length;
@@ -51,15 +68,12 @@ export async function createOrder(req: express.Request, res: express.Response) {
             [userId, address, total]
         );
         orderId = order.rows[0].id;
-        orderDate = await client.query(
-            `SELECT created_at FROM orders WHERE id = $1`,
-            [orderId]
-        );
-        io.emit('new-order-received')
+        await client.query(`SELECT created_at FROM orders WHERE id = $1`, [orderId]);
+        io.emit("new-order-received");
     } catch (error: any) {
         res.status(500).json({
-            message: "[ORD001]-server error"
-        })
+            message: "[ORD001]-server error",
+        });
         console.log(error);
         throw new Error("Order fail");
     }
@@ -80,8 +94,8 @@ export async function createOrder(req: express.Request, res: express.Response) {
         }
     } catch (error: any) {
         res.status(500).json({
-            message: "[ORD002]-server error"
-        })
+            message: "[ORD002]-server error",
+        });
         console.log(error);
         throw new Error("Order fail");
     }
@@ -100,88 +114,67 @@ export async function createOrder(req: express.Request, res: express.Response) {
     }
 }
 
-
-
 // update order on the way
-export async function deliverOrder(
-    req: express.Request,
-    res: express.Response
-) {
+export async function deliverOrder(req: express.Request, res: express.Response) {
     try {
-        let { orderId, order_status_id } = req.body
+        let { orderId, order_status_id } = req.body;
         if (order_status_id == 1) {
-            await client.query(
-                `UPDATE orders SET order_status_id = 2 where orders.id = $1`,
-                [orderId]
-            )
+            await client.query(`UPDATE orders SET order_status_id = 2 where orders.id = $1`, [orderId]);
             res.json({
                 message: "Your treasure is coming",
             });
         } else {
             res.json({
-                message: "unavailable operation"
-            })
-            console.log(error)
+                message: "unavailable operation",
+            });
+            console.log(error);
         }
-
     } catch (error: any) {
         res.status(500).json({
-            message: "[ORD004]-server error"
-        })
+            message: "[ORD004]-server error",
+        });
         console.log(error);
     }
 }
 
 // update outstanding orders
-export async function outstandingOrder(
-    req: express.Request,
-    res: express.Response
-) {
+export async function outstandingOrder(req: express.Request, res: express.Response) {
     try {
         let result = await client.query(`
         SELECT * FROM orders WHERE order_status_id !=3
         ORDER BY created_at ASC 
-        `)
-        let outstandingOrders = result.rows
+        `);
+        let outstandingOrders = result.rows;
         res.json({
-
-            data: outstandingOrders
-        })
+            data: outstandingOrders,
+        });
     } catch (error: any) {
         res.status(500).json({
-            message: "[ORMGT001]-server error"
-        })
+            message: "[ORMGT001]-server error",
+        });
         console.log(error);
     }
 }
 
 // order delivered
-export async function completedOrder(
-    req: express.Request,
-    res: express.Response
-) {
+export async function completedOrder(req: express.Request, res: express.Response) {
     try {
-        let { orderId, order_status_id } = req.body
+        let { orderId, order_status_id } = req.body;
 
         if (order_status_id == 2) {
-            await client.query(
-                `UPDATE orders SET order_status_id = 3 where orders.id = $1`,
-                [orderId]
-            )
+            await client.query(`UPDATE orders SET order_status_id = 3 where orders.id = $1`, [orderId]);
             res.json({
                 message: "May your litte darling enjoys",
             });
         } else {
             res.json({
-                message: "unavailable operation"
-            })
+                message: "unavailable operation",
+            });
         }
-
-
     } catch (error: any) {
         res.status(500).json({
-            message: "[ORD005]-server error"
-        })
+            message: "[ORD005]-server error",
+        });
         console.log(error);
     }
 }

@@ -1,78 +1,84 @@
-import express from "express"
-import { io } from "../server"
-import { client } from '../util/db'
-import { formParsePromise } from '../util/formidable'
-// import { logger } from '../util/logger'
-// import { isLoggedInAPI } from '../util/guard'
-// import { userRoutes } from "./userRoutes"
+import express from "express";
+import { client } from "../util/db";
+import { io } from "../util/socket";
 
-export const chatRoutes = express.Router()
+export const chatRoutes = express.Router();
 
-
-chatRoutes.get('/chat-list', getChatList)
-chatRoutes.get('/chats/:userId', getChatsWithAdmin)
-chatRoutes.post('/talk-to/:receiver', createMsg)
-
+chatRoutes.get("/chat-list", getChatList);
+chatRoutes.get("/chats/:userId", getChatsWithAdmin);
+chatRoutes.post("/talk-to/:receiver", createMsg);
 
 //save msg
 async function createMsg(req: express.Request, res: express.Response) {
     try {
-        let sender = req.session[`userId`]
-        let receiver = req.params.receiver
-        let { message } = req.body
+        let sender = req.session[`userId`];
+        let receiver = req.params.receiver;
+        let { message } = req.body;
         if (!message) {
             res.status(402).json({
-                message: 'not Found Msg'
-            })
-            return
+                message: "not Found Msg",
+            });
+            return;
         }
 
-        let result = await client.query(`
+        let result = await client.query(
+            `
             INSERT INTO chats
                 (sender, receiver, content, content_type)
             VALUES($1, $2, $3, $4) returning *;
-            `, [sender, receiver, message, "text"])
+            `,
+            [sender, receiver, message, "text"]
+        );
 
-        let newMessage = result.rows[0]
-        io.to(String(receiver)).emit('new-message', newMessage)
+        let newMessage = result.rows[0];
+        io.to(String(receiver)).emit("new-message", newMessage);
         res.json({
-            message: "message sent"
-        })
+            message: "message sent",
+        });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).json({
-            message: 'Server fail'
-        })
+            message: "Server fail",
+        });
     }
 }
 
 async function getChatsWithAdmin(req: express.Request, res: express.Response) {
-    let userId = Number(req.params.userId)
-    let adminUserId = req.session['userId']
-    if (!userId) {
-        res.status(400).json({
-            message: 'Invalid user ID'
-        })
-        return
-    }
+    try {
+        let userId = Number(req.params.userId);
+        let adminUserId = req.session["userId"];
+        if (!userId) {
+            res.status(400).json({
+                message: "Invalid user ID",
+            });
+            return;
+        }
 
-    let chats = (await client.query(`select 
+        let chats = (
+            await client.query(
+                `select 
                             chats.*,
                             (sender = $1) as is_self  
                             from chats 
                             where (receiver = $1 and sender = $2 ) 
                             or  (receiver = $2 and sender = $1)`,
-        [adminUserId, userId])).rows
-    res.json({
-        data: chats,
-        message: `${chats.length} record${chats.length > 1 ? 's' : ''} found`
-    })
+                [adminUserId, userId]
+            )
+        ).rows;
+        res.json({
+            data: chats,
+            message: `${chats.length} record${chats.length > 1 ? "s" : ""} found`,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Server fail",
+        });
+    }
 }
 
 async function getChatList(req: express.Request, res: express.Response) {
-    let role = req.session['role']
-    let userId = req.session['userId']
-    console.log(role);
+    let role = req.session["role"];
 
     // if (role !== 'admin') {
     //     res.status(403).json({
@@ -82,7 +88,6 @@ async function getChatList(req: express.Request, res: express.Response) {
     // }
 
     if (role === "admin") {
-
         let result = await client.query(`
         
         with 
@@ -105,18 +110,18 @@ async function getChatList(req: express.Request, res: express.Response) {
 
                 )
 
-select 
-chat_list_details.* ,
-(select content from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message,
-(select created_at  from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message_created_at
-from chat_list_details
+        select 
+        chat_list_details.* ,
+        (select content from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message,
+        (select created_at  from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message_created_at
+        from chat_list_details
 
-    `)
+    `);
 
         res.json({
             data: result.rows,
-            message: `${result.rowCount} record${result.rowCount > 1 ? 's' : ''} found`
-        })
+            message: `${result.rowCount} record${result.rowCount > 1 ? "s" : ""} found`,
+        });
     } else {
         let result = await client.query(`
         
@@ -140,36 +145,34 @@ from chat_list_details
 
                 )
 
-select 
-chat_list_details.* ,
-(select content from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message,
-(select created_at  from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message_created_at
-from chat_list_details
+            select 
+            chat_list_details.* ,
+            (select content from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message,
+            (select created_at  from chats where receiver = chat_list_details.id or sender = chat_list_details.id order by created_at desc limit 1) as last_message_created_at
+            from chat_list_details
 
-    `)
+    `);
 
         res.json({
             data: result.rows,
-            message: `${result.rowCount} record${result.rowCount > 1 ? 's' : ''} found`
-        })
+            message: `${result.rowCount} record${result.rowCount > 1 ? "s" : ""} found`,
+        });
     }
 }
 
-
-
 // Get all existing chats for current user
-chatRoutes.get('/', async (req, res, next) => {  //chatroom
+chatRoutes.get("/", async (req, res, next) => {
+    //chatroom
 
     // checking - req session user_id is saved upon successful login
-    console.log('chatRoute req.session user: ', req.session['userId'])
+    console.log("chatRoute req.session user: ", req.session["userId"]);
 
     // user_id is in req.session
     // if no req.session, response error
-    if (!req.session['userId']) {
+    if (!req.session["userId"]) {
         res.status(401).json({
-            message: 'Require user login to visit chat room page'
-        })
-        return
-    };
-})
-
+            message: "Require user login to visit chat room page",
+        });
+        return;
+    }
+});

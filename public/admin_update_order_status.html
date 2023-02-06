@@ -21,6 +21,11 @@
 </head>
 
 <body>
+
+  <h1 onclick="test()"> TEST</h1>
+  <form id="traditional-form" enctype="multipart/form-data" method="post" action="test-form">
+    <input type="submit" value="Submit">
+  </form>
   <div id="admin_header"></div>
   <script src="/admin_header.js"></script>
   <script src="/admin_update_order_status.js"></script>
@@ -67,6 +72,26 @@
   <script src="lib/easing/easing.min.js"></script>
   <script src="lib/owlcarousel/owl.carousel.min.js"></script>
   <script src="/admin_update_order_status.js"></script>
+
+
+  <script>
+
+
+    // document.querySelector('#traditional-form').addEventListener('submit', (e) => {
+
+    // })
+    async function test() {
+      let res = await fetch('test', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json '
+        },
+        body: JSON.stringify([])
+      })
+
+      let orders = await res.json()
+    } 
+  </script>
 </body>
 
 </html>
